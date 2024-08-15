@@ -1,0 +1,452 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+.chat-box {
+  padding: 10px;
+}
+
+.chat-log {
+  height: 200px;
+  overflow-y: scroll;
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+ 
+}
+
+input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+
+.navy-thumbnail-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.navy-thumbnail {
+  width: 50px;
+  /* Set the size of the thumbnail */
+  height: 50px;
+  /* Set the same size as width to make it a circle */
+  border-radius: 50%;
+  /* Make the thumbnail perfectly circular */
+  margin-right: 10px;
+  /* Space between the thumbnail and the text */
+  object-fit: cover;
+  /* Ensure the image covers the entire circle */
+}
+
+
+.navy-container {
+  position: fixed;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  width: 300px;
+  padding: 20px;
+}
+
+.help-container {
+  position: fixed;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  width: 300px;
+  padding: 0;
+  height: auto
+    display: flex;
+    justify-content: center; /* Center the help-box horizontally */
+    align-items: center; /* Center the help-box vertically */
+    
+}
+
+.help-box {
+    width: 100%; /* Make help-box take up the full width of the container */
+    height: 100%; /* Make help-box take up the full height of the container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px; /* Remove border-radius if you want sharp edges */
+    text-align: center;
+    padding: 0; /* Remove padding */
+}
+
+.help-box p {
+    margin-bottom: 7px; /* Add some space below the paragraph */
+}
+
+.help-box button {
+    margin: 5px 0; /* Add space above and below each button */
+    padding: 10px 20px; /* Optional: Add padding to the buttons */
+    background-color: #007BFF; /* Optional: Change the button background color */
+    color: white; /* Optional: Change the button text color */
+    border: none; /* Remove default button border */
+    border-radius: 5px; /* Optional: Add border-radius for rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    text-align: center; /* Ensure the button text is centered */
+}
+
+.start-btn,
+.sendbtn {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  color: white;
+}
+
+.start-btn {
+  background-color: #28a745;
+}
+
+.start-btn:focus {
+  outline: none;
+}
+
+.sendbtn {
+  background-color: #007bff;
+}
+
+.sendbtn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.message.user-message {
+  flex-direction: row-reverse;
+  /* User messages aligned to the right */
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  /* Stack sender name and message bubble vertically */
+  max-width: 70%;
+  /* Adjusts the max width of the message content */
+}
+
+.message .thumbnail {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-size: cover;
+  object-fit: cover;
+  margin-right: 10px;
+  /* Adds space between thumbnail and message content */
+}
+
+.message.user-message .thumbnail {
+  margin-left: 10px;
+  margin-right: 0;
+  /* Adjusts margin for right alignment */
+}
+
+.message .sender-name {
+  font-size: small;
+  margin-bottom: 5px;
+  font-weight: normal;
+  /* Normal font weight for sender name */
+  text-align: left;
+  /* Align the sender name with the message content */
+}
+
+.message.user-message .sender-name {
+  text-align: right;
+  /* Right align sender name for user messages */
+}
+
+.message .text {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.user-message .text {
+  background-color: #a8d5a2; /* Pastel green for user messages */
+  color: black; /* Text color set to black */
+  font-family: "Indie Flower", cursive; /* Apply the Pangolin font, with cursive as a fallback */
+  font-weight: 600; /* Regular weight */
+  font-style: normal; /* Normal style */
+  padding: 10px 30px; /* Optional: Add padding for better readability */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  font-size: 16px;
+}
+
+
+.pirate-message .text {
+  position: relative; /* Position relative for pseudo-element positioning if needed */
+  font-family: "Schoolbell", cursive; /* Apply the Schoolbell font, with cursive as a fallback */
+  font-weight: 500; /* Font weight */
+  font-size: 16px; /* Font size */
+  color: black; /* Set the text color */
+  padding: 10px 30px; /* Add padding around the text */
+  border-radius: 10px; /* Add rounded corners */
+  
+  background-color: transparent; /* Make the background color transparent */
+  background-image: url('https://cdn.pixabay.com/photo/2013/07/12/12/49/papyrus-146302_1280.png'); /* Set the background image */
+  background-size: 100% 65%; /* Make the image 20% larger than the text area */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  box-shadow: 0 0 0 10px transparent; /* Create space for the extended image without visible border */
+}
+
+
+
+
+
+
+.navy-message .text {
+  background-color: #cfe2f3;
+  font-family: "La Belle Aurore", cursive; /* Apply the Pangolin font, with cursive as a fallback */
+  font-weight: 600; /* Regular weight */
+  font-size: 18px;
+}
+
+.user-message .thumbnail {
+  background-image: url('https://cdn.pixabay.com/photo/2024/04/01/09/30/ai-generated-8668449_1280.jpg');
+}
+
+.pirate-message .thumbnail {
+  background-image: url('https://cdn.pixabay.com/photo/2024/02/19/07/54/ai-generated-8582792_1280.jpg');
+}
+
+.navy-message .thumbnail {
+  background-image: url('https://cdn.pixabay.com/photo/2024/05/08/05/45/sea-captain-8747460_1280.jpg');
+}
+
+.navy-container {
+  display: flex;
+  justify-content: center;
+  /* Center the content horizontally */
+  align-items: center;
+  /* Center the content vertically */
+  height: 100%;
+  /* Ensure the container takes up the full height */
+}
+
+
+
+.navy-thumbnail {
+  width: 50px;
+  /* Set the size of the thumbnail */
+  height: 50px;
+  /* Set the same size as width to make it a circle */
+  border-radius: 50%;
+  /* Make the thumbnail perfectly circular */
+  margin-bottom: 10px;
+  /* Space between the thumbnail and the text */
+  object-fit: cover;
+  /* Ensure the image covers the entire circle */
+}
+
+.navy-buttons {
+  margin-top: 10px;
+  /* Space between the text and the buttons */
+}
+
+.navy-buttons button {
+  margin: 5px;
+  /* Space between the buttons */
+}
+
+/* Ensure the map section takes up the entire viewport */
+.map-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  /* Ensure it appears above other content */
+}
+
+/* Ensure the map box itself is centered */
+.map-box {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+/* Ensure the map image fits within the container */
+.map-display {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  /* Ensures the image maintains aspect ratio */
+  display: block;
+}
+
+/* Position the close button at the top-right corner */
+.close-map-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  color: black;
+  /* Set the text color to black */
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Slightly transparent white background */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1001;
+  /* Ensure it appears above the map image */
+}
+
+.close-map-btn:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+
+.map-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1002;
+  /* Above the chatbox */
+}
+
+.map-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  text-align: center;
+}
+
+.map-image {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 70vh;
+  margin-bottom: 20px;
+}
+
+.close-start-map-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Slightly transparent white background */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: black;
+  z-index: 1001;
+  /* Ensure it appears above the map image */
+}
+
+.initial-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Center the items horizontally */
+    justify-content: center; /* Center the items vertically */
+    
+    text-align: center; /* Center the text inside the p elements */
+    gap: 20px;  /* Add space between the buttons */
+}
+
+.initial-message {
+    text-align: center; /* Center the text inside the p elements */
+}
+
+.initial-message p {
+    margin: 10px 0; /* Optional: Add some margin between the paragraphs */
+}
+
+
+.la-belle-aurore-regular {
+  font-family: "La Belle Aurore", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.schoolbell-regular {
+  font-family: "Schoolbell", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.indie-flower-regular {
+  font-family: "Indie Flower", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
+
+
+
+
+.hidden {
+  display: none;
+}

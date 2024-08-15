@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasure Hunt Chatbot</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Courgette&family=Covered+By+Your+Grace&family=Dancing+Script:wght@400..700&family=Gloria+Hallelujah&family=Indie+Flower&family=La+Belle+Aurore&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pacifico&family=Pangolin&family=Reenie+Beanie&family=Satisfy&family=Schoolbell&family=Seaweed+Script&family=Sedgwick+Ave&family=Zeyada&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="chat-container">
+    <div id="mainChat" class="chat-box">
+        <div id="chatLog" class="chat-log">
+            <div class="initial-message">
+                <p>Welcome to the Treasure Hunt! </p>
+                <p>Get your team together at the start location and click 'Begin Hunt' when you're ready.</p> </div>
+                <div class="initial-buttons">
+                <button id="start-btn" class="start-btn">Begin Hunt</button>
+                <button id="startmap-btn" class="start-btn">Start Map</button> <!-- New Start Map Button --> </div>
+            
+        </div>
+        <input id="userInput" type="text" placeholder="Type your answer...">
+        <button id="sendBtn" class="sendbtn">Send</button> 
+    </div>
+</div>
+
+
+<!-- New Map Box that will be shown when Start Map is clicked -->
+<div id="mapOverlay" class="map-overlay hidden"> <!-- Ensure the 'hidden' class is here -->
+    <div class="map-box">
+        <img src="your-map-image-url.jpg" alt="Map Image" class="map-image">
+        <p>Instructions: Follow the map to reach the starting location of the treasure hunt. Once there, click "Begin Hunt".</p>
+        <button id="closeStartMapBtn" class="close-start-map-btn">Close Map</button>
+    </div>
+</div>
+
+
+
+    <div id="helpSection" class="help-container hidden">
+        <div class="help-box">
+            <p>How can I help?</p>
+            <button onclick="FAQs()">FAQs</button>
+            <button onclick="changeName()">Change team name</button>
+            <button onclick="urgentHelp()">I need urgent help</button>
+            <button onclick="closeHelp()">Close</button>
+            <div id="helpLog" class="help-log"></div>
+        </div>
+    </div>
+    
+  <div id="navySection" class="help-container hidden">
+    <div class="help-box">
+        <img src="https://cdn.pixabay.com/photo/2024/05/08/05/45/sea-captain-8747460_1280.jpg" alt="Navy Thumbnail" class="navy-thumbnail">
+        <p>Did you call?</p>
+        <div class="navy-buttons">
+            <button onclick="callNavy()">Call</button>
+            <button id="insultNavy" onclick="insultNavy()">Insult</button>
+            <button onclick="closeNavy()">Close</button>
+        </div>
+        <div id="navyLog" class="help-log"></div>
+    </div>
+    </div>
+    
+  
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
