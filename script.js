@@ -91,12 +91,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatOutput = document.getElementById('chatLog');  // Use chatLog instead of mainChat
 
     if (savedChatLog) {
-        chatOutput.innerHTML = savedChatLog;  // Restore the chat log content
+        // Restore the saved chat log content inside the #chatLog container
+        document.getElementById('chatLog').innerHTML = savedChatLog;
+
+        // Hide the initial container since the chat has started
+        document.getElementById("initialContainer").style.display = "none";
     } else {
-        // Show the initial message and buttons only if there is no saved chat log
-        document.querySelector(".initial-message").style.display = "block";
-        document.querySelector(".initial-buttons").style.display = "block";
+        // No saved chat log, show the initial container
+        document.getElementById("initialContainer").style.display = "block";
     }
+
 
     if (savedStage) {
         stage = parseInt(savedStage, 10);
@@ -319,6 +323,7 @@ function saveStateAndLog() {
   function giveClue() {
     const currentClue = clues[currentClueIndex];
     displayMessage(`Here is your clue: ${currentClue.clue}`);
+    startTimer
     stage = 2;
 
     setTimeout(() => {
@@ -350,6 +355,7 @@ function saveStateAndLog() {
       const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
       displayMessage(randomResponse);
       clueMessages();
+      pauseTimer
       saveStateAndLog();
       incorrectAttempts = 0; // Reset incorrect attempts on correct answer
     } else if (input.toLowerCase().includes("hint")) {
@@ -1002,7 +1008,5 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   // Hide the map overlay when Close Map button is clicked
   document.getElementById('mapOverlay').classList.add('hidden');
 });
-
-
 
   
