@@ -71,18 +71,23 @@ function loadChatbotState() {
 
     const chatLog = document.getElementById('chatLog');  // Use chatLog instead of mainChat
 
-    if (savedChatLog && (parseInt(savedClueIndex, 10) > 0 || parseInt(savedStage, 10) > 0)) {
-        // Restore the saved chat log content inside the #chatLog container
-        chatLog.innerHTML = savedChatLog;
+    
+// Call reinitializeEventListeners after loading the chat log
+if (savedChatLog && (parseInt(savedClueIndex, 10) > 0 || parseInt(savedStage, 10) > 0)) {
+    // Restore the saved chat log content inside the #chatLog container
+    chatLog.innerHTML = savedChatLog;
 
-        // Hide the initial container since the chat has started
-        document.getElementById("initialContainer").style.display = "none";
-    } else {
-        // No saved chat log, show the initial container
-        document.getElementById("initialContainer").style.display = "block";
-        userInput.disabled = true;
-        sendBtn.disabled = true;
-    }
+    // Hide the initial container since the chat has started
+    document.getElementById("initialContainer").style.display = "none";
+
+    
+} else {
+    // No saved chat log or both clueIndex and stage are 0, show the initial container and disable inputs
+    document.getElementById("initialContainer").style.display = "block";
+    userInput.disabled = true;
+    sendBtn.disabled = true;
+}
+
 
     if (savedStage) {
         stage = parseInt(savedStage, 10);
@@ -289,6 +294,7 @@ function saveStateAndLog() {
     // Append the message element to the chat log
     chatLog.appendChild(messageElement);
     chatLog.scrollTop = chatLog.scrollHeight;
+    saveStateAndLog();
   }
 
   function askForName() {
@@ -305,18 +311,20 @@ function saveStateAndLog() {
   function readyMessage() {
     displayMessage("Are you ready for the clue? If so say aye!");
     stage = 1;
+    
   }
 
   function giveClue() {
     const currentClue = clues[currentClueIndex];
     displayMessage(`Here is your clue: ${currentClue.clue}`);
+  
     startTimer
     stage = 2;
 
     setTimeout(() => {
       displayMessage(currentClue.afterClueMessage);
     }, currentClue.delayAfterClue);
-    	saveStateAndLog();
+    	
   }
 
   let incorrectAttempts = 0; // Initialize a variable to track incorrect attempts
@@ -343,7 +351,7 @@ function saveStateAndLog() {
       displayMessage(randomResponse);
       clueMessages();
       pauseTimer
-      saveStateAndLog();
+      
       incorrectAttempts = 0; // Reset incorrect attempts on correct answer
     } else if (input.toLowerCase().includes("hint")) {
       giveHint();
@@ -363,7 +371,7 @@ function saveStateAndLog() {
       }
 
       incorrectAttempts++; // Increment incorrect attempts
-      saveStateAndLog();
+      
     }
   }
 
@@ -372,6 +380,7 @@ function saveStateAndLog() {
   function clueMessages() {
     const currentClue = clues[currentClueIndex];
     displayMessage(currentClue.explanation);
+    
 
     setTimeout(() => {
       displayMessage(currentClue.afterAnswerMessage);
@@ -558,6 +567,7 @@ function saveStateAndLog() {
     } else {
         displayMessage(input, "user");
         userInput.value = "";
+        
 
         if (stage === 0.5) {
           // Capture the user's name and greet them
@@ -995,6 +1005,5 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   // Hide the map overlay when Close Map button is clicked
   document.getElementById('mapOverlay').classList.add('hidden');
 });
-
 
   
