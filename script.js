@@ -79,9 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Default personality
     let currentPersonality = "pirate"; 
 
-    // Function to load the saved chatbot state
-    function loadChatbotState() {
-        
+ function loadChatbotState() {
         // Restore chat log if it exists
         if (savedChatLog) {
             chatOutput.innerHTML = savedChatLog;
@@ -99,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Restore userName if it exists
         if (savedUserName) {
-            userName = savedUserName; // Assign the saved userName
+            userName = savedUserName;
         }
 
         // Restore currentClueIndex if it exists
@@ -115,6 +113,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Restore elapsedMinutes if it exists
         if (savedElapsedMinutes) {
             elapsedMinutes = parseInt(savedElapsedMinutes, 10);
+        }
+
+        // Hide start button and map button if resuming from a saved state
+          if (currentClueIndex > 0 || stage > 0.5) { 
+            startBtn.style.display = 'none';
+            startMapBtn.style.display = 'none';
+            if (initialMessage) {
+                initialMessage.style.display = 'none'; // Hide the initial message div
+            }
         }
     }
 
@@ -988,8 +995,6 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   // Hide the map overlay when Close Map button is clicked
   document.getElementById('mapOverlay').classList.add('hidden');
 });
-
-
 
 
 
