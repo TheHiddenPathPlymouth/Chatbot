@@ -350,10 +350,10 @@ function saveStateAndLog() {
 
     if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
       const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
-      currentClueIndex++;
       stage = 0;
       displayMessage(randomResponse);
       clueMessages();
+     currentClueIndex++;
       
       
       incorrectAttempts = 0; // Reset incorrect attempts on correct answer
