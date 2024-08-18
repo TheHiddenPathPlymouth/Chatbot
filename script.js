@@ -60,6 +60,23 @@ const clues = [{
   }
 ];
 
+
+function saveChatbotState() {
+    localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
+    localStorage.setItem('stage', stage);
+    localStorage.setItem('navyStage', navyStage);
+    localStorage.setItem('currentClueIndex', currentClueIndex);
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('navySupported', navySupported);
+    localStorage.setItem('elapsedMinutes', elapsedMinutes);
+}
+
+
+function saveStateAndLog() {
+    saveChatbotState();
+    // Save any other state variables if needed
+}
+
 function loadChatbotState() {
     const savedChatLog = localStorage.getItem('chatLog');
     const savedStage = localStorage.getItem('stage');
@@ -133,21 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-function saveChatbotState() {
-    localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
-    localStorage.setItem('stage', stage);
-    localStorage.setItem('navyStage', navyStage);
-    localStorage.setItem('currentClueIndex', currentClueIndex);
-    localStorage.setItem('userName', userName);
-    localStorage.setItem('navySupported', navySupported);
-    localStorage.setItem('elapsedMinutes', elapsedMinutes);
-}
-
-
-function saveStateAndLog() {
-    saveChatbotState();
-    // Save any other state variables if needed
-}
 
 // Call `saveStateAndLog()` after every significant change
 
