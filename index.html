@@ -13,22 +13,29 @@
 </head>
 <body>
   <div class="chat-container">
+    <!-- Separate container for the initial message and buttons -->
+    <div id="initialContainer" class="initial-container">
+        <div class="initial-message">
+            <p>Welcome to the Treasure Hunt!</p>
+            <p>Get your team together at the start location and click 'Begin Hunt' when you're ready.</p>
+        </div>
+        <div class="initial-buttons">
+            <button id="start-btn" class="start-btn">Begin Hunt</button>
+            <button id="startmap-btn" class="start-btn">Start Map</button>
+        </div>
+    </div>
+
+    <!-- The main chat container -->
     <div id="mainChat" class="chat-box">
         <div id="chatLog" class="chat-log">
-            <div class="initial-message">
-                <p>Welcome to the Treasure Hunt! </p>
-                <p>Get your team together at the start location and click 'Begin Hunt' when you're ready.</p> </div>
-                <div class="initial-buttons">
-                <button id="start-btn" class="start-btn">Begin Hunt</button>
-                <button id="startmap-btn" class="start-btn">Start Map</button> <!-- New Start Map Button --> </div>
-            
+            <!-- Chat log content will go here -->
         </div>
         <div class="input-area">
-      <input id="userInput" type="text" placeholder="Type your answer...">
-      <button id="sendBtn" class="sendbtn">Send</button>
-    </div> 
+            <input id="userInput" type="text" placeholder="Type your answer...">
+            <button id="sendBtn" class="sendbtn">Send</button>
+        </div>
     </div>
-</div>
+  </div>
 
 
 <!-- New Map Box that will be shown when Start Map is clicked -->
