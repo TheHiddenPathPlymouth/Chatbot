@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendBtn = document.getElementById("sendBtn");
     const startBtn = document.getElementById("start-btn");
     const startMapBtn = document.getElementById("startmap-btn");
-  
+    
 
     // Default personality
     let currentPersonality = "pirate"; 
@@ -132,25 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 function saveChatbotState() {
-    // Get the chat log content
-    const chatLog = document.getElementById('chatLog');
-
-    // Clone the chat log to avoid modifying the DOM directly
-    const clonedChatLog = chatLog.cloneNode(true);
-
-    // Remove the initial message and buttons from the cloned chat log
-    const initialMessage = clonedChatLog.querySelector('.initial-message');
-    const initialButtons = clonedChatLog.querySelector('.initial-buttons');
-    
-    if (initialMessage) {
-        clonedChatLog.removeChild(initialMessage);
-    }
-    if (initialButtons) {
-        clonedChatLog.removeChild(initialButtons);
-    }
-
-    // Save the cleaned chat log content to localStorage
-    localStorage.setItem('chatLog', clonedChatLog.innerHTML);
+    localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
     localStorage.setItem('stage', stage);
     localStorage.setItem('navyStage', navyStage);
     localStorage.setItem('currentClueIndex', currentClueIndex);
@@ -607,6 +589,7 @@ function saveStateAndLog() {
   });
 
   startBtn.addEventListener("click", () => {
+  	document.getElementById("initialContainer").style.display = "none";
     startBtn.style.display = "none";
     startMapBtn.style.display = "none";
     userInput.disabled = false;
@@ -1013,7 +996,6 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   // Hide the map overlay when Close Map button is clicked
   document.getElementById('mapOverlay').classList.add('hidden');
 });
-
 
 
   
