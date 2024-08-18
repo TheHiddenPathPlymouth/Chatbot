@@ -88,11 +88,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedNavySupported = localStorage.getItem('navySupported');
     const savedElapsedMinutes = localStorage.getItem('elapsedMinutes');
 
-    // Target the correct element for the chat log
-    const chatOutput = document.getElementById('mainChat'); 
+    const chatOutput = document.getElementById('chatLog');  // Use chatLog instead of mainChat
 
     if (savedChatLog) {
         chatOutput.innerHTML = savedChatLog;  // Restore the chat log content
+    } else {
+        // Show the initial message and buttons only if there is no saved chat log
+        document.querySelector(".initial-message").style.display = "block";
+        document.querySelector(".initial-buttons").style.display = "block";
     }
 
     if (savedStage) {
@@ -124,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", function() {
     loadChatbotState();
 });
+
 
 
 
