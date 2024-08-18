@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const chatOutput = document.getElementById('chatLog');  // Use chatLog instead of mainChat
 
-    if (savedChatLog) {
+    if (currentClueIndex > 0) {
         // Restore the saved chat log content inside the #chatLog container
         document.getElementById('chatLog').innerHTML = savedChatLog;
 
