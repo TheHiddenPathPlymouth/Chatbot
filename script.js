@@ -309,17 +309,19 @@ function saveStateAndLog() {
 
 
   function readyMessage() {
-    displayMessage("Are you ready for the clue? If so say aye!");
     stage = 1;
+    displayMessage("Are you ready for the clue? If so say aye!");
+    
     
   }
 
   function giveClue() {
     const currentClue = clues[currentClueIndex];
+    stage = 2;
     displayMessage(`Here is your clue: ${currentClue.clue}`);
   
     startTimer
-    stage = 2;
+    
 
     setTimeout(() => {
       displayMessage(currentClue.afterClueMessage);
@@ -348,9 +350,11 @@ function saveStateAndLog() {
 
     if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
       const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
+      currentClueIndex++;
+      stage = 0;
       displayMessage(randomResponse);
       clueMessages();
-      pauseTimer
+      
       
       incorrectAttempts = 0; // Reset incorrect attempts on correct answer
     } else if (input.toLowerCase().includes("hint")) {
@@ -386,7 +390,7 @@ function saveStateAndLog() {
       displayMessage(currentClue.afterAnswerMessage);
     }, currentClue.delayAfterAnswer);
 
-    currentClueIndex++;
+    
 
     if (currentClueIndex < clues.length) {
       stage = 0; // reset stage to readyMessage
