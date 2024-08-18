@@ -73,31 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPersonality = "pirate"; // Default personality
 
 
-
-
-
-
-  userInput.disabled = true;
-  sendBtn.disabled = true;
-
-
-function saveChatbotState() {
-    localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
-    localStorage.setItem('stage', stage);
-    localStorage.setItem('navyStage', navyStage);
-    localStorage.setItem('currentClueIndex', currentClueIndex);
-    localStorage.setItem('userName', userName);
-    localStorage.setItem('navySupported', navySupported);
-    localStorage.setItem('elapsedMinutes', elapsedMinutes);
-}
-
-function saveStateAndLog() {
-    saveChatbotState();
-    // Save any other state variables if needed
-}
-
-// Call `saveStateAndLog()` after every significant change
-
 function loadChatbotState() {
     const savedChatLog = localStorage.getItem('chatLog');
     const savedStage = localStorage.getItem('stage');
@@ -139,6 +114,31 @@ function loadChatbotState() {
 document.addEventListener("DOMContentLoaded", function() {
     loadChatbotState();
 });
+
+
+
+
+  userInput.disabled = true;
+  sendBtn.disabled = true;
+
+
+function saveChatbotState() {
+    localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
+    localStorage.setItem('stage', stage);
+    localStorage.setItem('navyStage', navyStage);
+    localStorage.setItem('currentClueIndex', currentClueIndex);
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('navySupported', navySupported);
+    localStorage.setItem('elapsedMinutes', elapsedMinutes);
+}
+
+function saveStateAndLog() {
+    saveChatbotState();
+    // Save any other state variables if needed
+}
+
+// Call `saveStateAndLog()` after every significant change
+
 
 
 
