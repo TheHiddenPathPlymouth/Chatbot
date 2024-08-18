@@ -459,20 +459,30 @@ function saveStateAndLog() {
   }
 
   function navyMessage() {
+    // Set the navyStage to 1 as the first and overriding action
+    navyStage = 1;
+    
+    // Save the updated state right after changing navyStage
+    saveStateAndLog();
+
     // Check the conditions: currentClueIndex > 1 OR (currentClueIndex == 1 AND stage >= 2)
     if (currentClueIndex === 1 && stage >= 2) {
-      setTimeout(() => {
-        switchPersonality("navy"); // Switch to Navy personality
-        displayMessageWithPersonality("Attention! This is the Navy captain speaking. I trust you're ready to cooperate with honor.");
+        setTimeout(() => {
+            switchPersonality("navy"); // Switch to Navy personality
+            displayMessageWithPersonality("Attention! This is the Navy captain speaking. I trust you're ready to cooperate with honor.");
 
-        navyStage = 1;
-        switchPersonality("pirate"); // Switch back to Pirate personality after the Navy message is sent
-      }, 3000); // Wait for 3 seconds before sending the message
+            switchPersonality("pirate"); // Switch back to Pirate personality after the Navy message is sent
+        }, 3000); // Wait for 3 seconds before sending the message
     }
-    saveStateAndLog();
-  }
+}
 
   function navyMessage2() {
+    // Set navyStage to 3 as the first and overriding action
+    navyStage = 3;
+    
+    // Save the updated state right after changing navyStage
+    saveStateAndLog();
+
     // Check the conditions: currentClueIndex === 2 AND stage >= 2
     if (currentClueIndex === 2 && stage >= 2) {
 
@@ -486,7 +496,6 @@ function saveStateAndLog() {
         setTimeout(() => {
           switchPersonality("pirate"); // Switch back to Pirate personality
           displayMessageWithPersonality("The navy sucks. All is not lost though! Betray them.");
-          navyStage = 3; // Update navyStage to 3
         }, 6000); // Staggered by 3 more seconds (total of 6 seconds)
 
       } else {
@@ -500,11 +509,11 @@ function saveStateAndLog() {
           switchPersonality("navy");
           displayMessageWithPersonality("We'll plunder the seas together!");
           switchPersonality("pirate");
-          navyStage = 3; // Update navyStage to 3
         }, 6000); // Staggered by 3 more seconds (total of 6 seconds)
       }
     }
-  }
+}
+
 
 
 
