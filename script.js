@@ -68,7 +68,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendBtn = document.getElementById("sendBtn");
     const startBtn = document.getElementById("start-btn");
     const startMapBtn = document.getElementById("startmap-btn");
-    
+    const savedChatLog = localStorage.getItem('chatLog');
+        const savedStage = localStorage.getItem('stage');
+        const savedNavyStage = localStorage.getItem('navyStage');
+        const savedUserName = localStorage.getItem('userName');
+        const savedClueIndex = localStorage.getItem('currentClueIndex');
+        const savedNavySupported = localStorage.getItem('navySupported');
+        const savedElapsedMinutes = localStorage.getItem('elapsedMinutes');
 
     // Default personality
     let currentPersonality = "pirate"; 
@@ -996,6 +1002,7 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   // Hide the map overlay when Close Map button is clicked
   document.getElementById('mapOverlay').classList.add('hidden');
 });
+
 
 
   
