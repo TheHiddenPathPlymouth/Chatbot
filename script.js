@@ -7,6 +7,8 @@ let userName = ""; // Variable to store the user's name
 let timerInterval;
 let elapsedMinutes = 0;
 let isPaused = false;
+const savedChatLog = localStorage.getItem('chatLog');
+const chatLog = document.getElementById('chatLog');  // Use chatLog instead of mainChat
  
 
 
@@ -69,7 +71,7 @@ function loadChatbotState() {
 
     const chatLog = document.getElementById('chatLog');  // Use chatLog instead of mainChat
 
-    if (savedChatLog) {
+    if (savedChatLog && (parseInt(savedClueIndex, 10) > 0 || parseInt(savedStage, 10) > 0)) {
         // Restore the saved chat log content inside the #chatLog container
         chatLog.innerHTML = savedChatLog;
 
