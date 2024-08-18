@@ -8,18 +8,23 @@ body {
   background-color: #f4f4f4;
 }
 
-.chat-box {
-  padding: 10px;
-}
-
-.chat-log {
-  height: 200px;
-  overflow-y: scroll;
+..chat-log {
+  flex: 1; /* Allow chat-log to grow and fill available space */
+  overflow-y: auto; /* Enable scrolling */
   border-bottom: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
- 
 }
+
+
+.chat-log {
+  flex: 1; /* Allow chat-log to grow and fill available space */
+  overflow-y: auto; /* Enable scrolling */
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
 
 input[type="text"] {
   width: 80%;
@@ -151,10 +156,15 @@ button:hover {
 .chat-container {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  max-height: 400px;
-  overflow-y: auto;
+  justify-content: center; /* Center the content vertically */
+  align-items: center; /* Center the content horizontally */
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+  padding: 20px; /* Optional: Add some padding */
+  box-sizing: border-box; /* Ensure padding is included in the width/height */
+  overflow-y: auto; /* Allow scrolling if content overflows */
 }
+
 
 .message {
   display: flex;
@@ -229,15 +239,15 @@ button:hover {
   font-weight: 500; /* Font weight */
   font-size: 16px; /* Font size */
   color: black; /* Set the text color */
-  padding: 10px 30px; /* Add padding around the text */
-  border-radius: 10px; /* Add rounded corners */
+  padding: 6px 20px; /* Add padding around the text */
+  border-radius: 0px; /* Add rounded corners */
   
   background-color: transparent; /* Make the background color transparent */
-  background-image: url('https://cdn.pixabay.com/photo/2013/07/12/12/49/papyrus-146302_1280.png'); /* Set the background image */
-  background-size: 100% 65%; /* Make the image 20% larger than the text area */
+  background-image: url('https://cdn.pixabay.com/photo/2012/04/14/16/57/scroll-34606_1280.png'); /* Set the background image */
+  background-size: 100% 110%; /* Make the image 20% larger than the text area */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
-  box-shadow: 0 0 0 10px transparent; /* Create space for the extended image without visible border */
+  
 }
 
 
