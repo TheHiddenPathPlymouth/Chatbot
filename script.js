@@ -702,6 +702,7 @@ function changeName() {
 
     if (newName) {
       userName = newName; // Update the userName variable
+      saveStateAndLog();
       helpLog.innerHTML = "";
       helpLog.innerHTML += `<p>Team name has been changed to "${userName}".</p>`; // Display a confirmation message
 
@@ -949,16 +950,18 @@ function callNavy() {
 
 function handleBetrayal(choice) {
   if (choice === 'navy') {
+   navyStage = 4;
     navySupported = false;
+   saveStateAndLog();
     navyLog.innerHTML += `<p>Fool! The fury of the Navy will rain down upon you</p>`;
   } else if (choice === 'pirates') {
+    navyStage = 4;
     navySupported = true;
+   saveStateAndLog();
     navyLog.innerHTML += `<p>A wise choice! I never doubted your knowledge of the glory and might of The Navy, forever now your ally!</p>`;
   }
 
-  // Update the navyStage or any other relevant variables as needed
-  navyStage = 4; // Example: Moving to the next stage
-  // Add additional logic for further gameplay progression here if needed
+  
 }
 
 
@@ -972,9 +975,6 @@ function confirmation() {
     navyLog.innerHTML += `<p>You chose deception! We'll see where this leads...</p>`;
   }
 
-  // Reset navyStage if needed or proceed with further interactions
-  navyStage = 2; // Update navyStage to 2 after confirmation
-  // Further code for handling the confirmation stage can go here...
 }
 
 let lastNavyResponse = ""; // Variable to store the last response
