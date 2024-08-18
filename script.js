@@ -80,39 +80,60 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentPersonality = "pirate"; 
 
     // Function to load the saved chatbot state
-     function loadChatbotState() {
-        // Restore the last 5 messages from localStorage
-        const savedMessages = JSON.parse(localStorage.getItem('lastMessages')) || [];
-        savedMessages.forEach(msg => {
-            displayMessage(msg.message, msg.sender);
-        });
+    function loadChatbotState() {
+        
+        // Restore chat log if it exists
+        if (savedChatLog) {
+            chatOutput.innerHTML = savedChatLog;
+        }
 
-        // Restore state variables
-        stage = parseInt(localStorage.getItem('stage'), 10) || 0;
-        navyStage = parseInt(localStorage.getItem('navyStage'), 10) || 0;
-        userName = localStorage.getItem('userName') || "";
-        currentClueIndex = parseInt(localStorage.getItem('currentClueIndex'), 10) || 0;
-        navySupported = (localStorage.getItem('navySupported') === 'true') || false;
-        elapsedMinutes = parseInt(localStorage.getItem('elapsedMinutes'), 10) || 0;
+        // Restore stage if it exists
+        if (savedStage) {
+            stage = parseInt(savedStage, 10);
+        }
+
+        // Restore navyStage if it exists
+        if (savedNavyStage) {
+            navyStage = parseInt(savedNavyStage, 10);
+        }
+
+        // Restore userName if it exists
+        if (savedUserName) {
+            userName = savedUserName; // Assign the saved userName
+        }
+
+        // Restore currentClueIndex if it exists
+        if (savedClueIndex) {
+            currentClueIndex = parseInt(savedClueIndex, 10);
+        }
+
+        // Restore navySupported if it exists
+        if (savedNavySupported) {
+            navySupported = (savedNavySupported === 'true');
+        }
+
+        // Restore elapsedMinutes if it exists
+        if (savedElapsedMinutes) {
+            elapsedMinutes = parseInt(savedElapsedMinutes, 10);
+        }
     }
 
-    // Function to save the last 5 messages and other state variables
-    function saveChatbotState() {
-        // Save only the last 5 messages
-        const messages = Array.from(chatOutput.children).slice(-5).map(msg => ({
-            message: msg.querySelector('.text').textContent,
-            sender: msg.querySelector('.sender-name').textContent
-        }));
-        localStorage.setItem('lastMessages', JSON.stringify(messages));
 
-        // Save state variables
-        localStorage.setItem('stage', stage);
-        localStorage.setItem('navyStage', navyStage);
-        localStorage.setItem('currentClueIndex', currentClueIndex);
-        localStorage.setItem('userName', userName);
-        localStorage.setItem('navySupported', navySupported);
-        localStorage.setItem('elapsedMinutes', elapsedMinutes);
-    }
+
+
+  userInput.disabled = true;
+  sendBtn.disabled = true;
+
+
+function saveChatbotState() {
+    localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
+    localStorage.setItem('stage', stage);
+    localStorage.setItem('navyStage', navyStage);
+    localStorage.setItem('currentClueIndex', currentClueIndex);
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('navySupported', navySupported);
+    localStorage.setItem('elapsedMinutes', elapsedMinutes);
+}
 
 function saveStateAndLog() {
     saveChatbotState();
@@ -122,8 +143,7 @@ function saveStateAndLog() {
 // Call `saveStateAndLog()` after every significant change
 
 
-userInput.disabled = true;
-  sendBtn.disabled = true;
+
 
 
 
@@ -968,3 +988,9 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   // Hide the map overlay when Close Map button is clicked
   document.getElementById('mapOverlay').classList.add('hidden');
 });
+
+
+
+
+
+  
