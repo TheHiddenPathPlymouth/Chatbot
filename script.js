@@ -7,6 +7,7 @@ let userName = ""; // Variable to store the user's name
 let timerInterval;
 let elapsedMinutes = 0;
 let isPaused = false;
+ 
 
 
 
@@ -57,29 +58,7 @@ const clues = [{
   }
 ];
 
-
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Get references to DOM elements
-    const chatOutput = document.getElementById("mainChat");
-    const userInput = document.getElementById("userInput");
-    const sendBtn = document.getElementById("sendBtn");
-    const startBtn = document.getElementById("start-btn");
-    const startMapBtn = document.getElementById("startmap-btn");
-    const savedChatLog = localStorage.getItem('chatLog');
-        const savedStage = localStorage.getItem('stage');
-        const savedNavyStage = localStorage.getItem('navyStage');
-        const savedUserName = localStorage.getItem('userName');
-        const savedClueIndex = localStorage.getItem('currentClueIndex');
-        const savedNavySupported = localStorage.getItem('navySupported');
-        const savedElapsedMinutes = localStorage.getItem('elapsedMinutes');
-
-    // Default personality
-    let currentPersonality = "pirate"; 
-
- function loadChatbotState() {
+function loadChatbotState() {
     const savedChatLog = localStorage.getItem('chatLog');
     const savedStage = localStorage.getItem('stage');
     const savedNavyStage = localStorage.getItem('navyStage');
@@ -88,19 +67,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedNavySupported = localStorage.getItem('navySupported');
     const savedElapsedMinutes = localStorage.getItem('elapsedMinutes');
 
-    const chatOutput = document.getElementById('chatLog');  // Use chatLog instead of mainChat
+    const chatLog = document.getElementById('chatLog');  // Use chatLog instead of mainChat
 
-    if (currentClueIndex > 0) {
+    if (savedChatLog) {
         // Restore the saved chat log content inside the #chatLog container
-        document.getElementById('chatLog').innerHTML = savedChatLog;
+        chatLog.innerHTML = savedChatLog;
 
         // Hide the initial container since the chat has started
         document.getElementById("initialContainer").style.display = "none";
     } else {
         // No saved chat log, show the initial container
         document.getElementById("initialContainer").style.display = "block";
+        userInput.disabled = true;
+        sendBtn.disabled = true;
     }
-
 
     if (savedStage) {
         stage = parseInt(savedStage, 10);
@@ -127,18 +107,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 }
 
-// Call `loadChatbotState()` when the page is loaded
-document.addEventListener("DOMContentLoaded", function() {
-    loadChatbotState();
-});
+// Call `loadChatbotState()` immediately as the script runs
+loadChatbotState();
 
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    // Get references to DOM elements
+    const chatOutput = document.getElementById("mainChat");
+    const userInput = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const startBtn = document.getElementById("start-btn");
+    const startMapBtn = document.getElementById("startmap-btn");
+   
 
+    // Default personality
+    let currentPersonality = "pirate"; 
 
-
-  userInput.disabled = true;
-  sendBtn.disabled = true;
 
 
 function saveChatbotState() {
@@ -1008,5 +993,6 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   // Hide the map overlay when Close Map button is clicked
   document.getElementById('mapOverlay').classList.add('hidden');
 });
+
 
   
