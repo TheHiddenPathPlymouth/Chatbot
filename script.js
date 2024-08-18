@@ -828,6 +828,7 @@ function closeNavy() {
   document.getElementById('navyLog').innerHTML = "";
   userInput.disabled = false;
   sendBtn.disabled = false;
+  saveStateAndLog();
 
 }
 
@@ -950,19 +951,22 @@ function callNavy() {
 
 function handleBetrayal(choice) {
   if (choice === 'navy') {
-   navyStage = 4;
+    navyStage = 4;
     navySupported = false;
-   saveStateAndLog();
+    saveStateAndLog();
     navyLog.innerHTML += `<p>Fool! The fury of the Navy will rain down upon you</p>`;
+    
   } else if (choice === 'pirates') {
     navyStage = 4;
     navySupported = true;
-   saveStateAndLog();
+    saveStateAndLog();
     navyLog.innerHTML += `<p>A wise choice! I never doubted your knowledge of the glory and might of The Navy, forever now your ally!</p>`;
+    
   }
-
-  
 }
+
+
+
 
 
 function confirmation() {
@@ -974,6 +978,8 @@ function confirmation() {
   } else {
     navyLog.innerHTML += `<p>You chose deception! We'll see where this leads...</p>`;
   }
+
+ saveStateAndLog();
 
 }
 
