@@ -459,14 +459,12 @@ function saveStateAndLog() {
   }
 
   function navyMessage() {
-    // Set the navyStage to 1 as the first and overriding action
-    navyStage = 1;
     
-    // Save the updated state right after changing navyStage
-    saveStateAndLog();
 
     // Check the conditions: currentClueIndex > 1 OR (currentClueIndex == 1 AND stage >= 2)
     if (currentClueIndex === 1 && stage >= 2) {
+      navyStage = 1;
+     saveStateAndLog();
         setTimeout(() => {
             switchPersonality("navy"); // Switch to Navy personality
             displayMessageWithPersonality("Attention! This is the Navy captain speaking. I trust you're ready to cooperate with honor.");
@@ -477,17 +475,15 @@ function saveStateAndLog() {
 }
 
   function navyMessage2() {
-    // Set navyStage to 3 as the first and overriding action
-    navyStage = 3;
-    
-    // Save the updated state right after changing navyStage
-    saveStateAndLog();
-
     // Check the conditions: currentClueIndex === 2 AND stage >= 2
     if (currentClueIndex === 2 && stage >= 2) {
 
-      // Check if the navy is supported
-      if (navySupported === true) {
+        // Update navyStage to 3 only when conditions are met
+        navyStage = 3;
+        saveStateAndLog();  // Save the updated state after changing navyStage
+
+        // Check if the navy is supported
+        if (navySupported === true) {
         setTimeout(() => {
           switchPersonality("navy"); // Switch to Navy personality
           displayMessageWithPersonality("You're clever, you supported the navy.");
