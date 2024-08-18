@@ -81,6 +81,22 @@ document.addEventListener("DOMContentLoaded", () => {
   sendBtn.disabled = true;
 
 
+function saveChatbotState() {
+    localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
+    localStorage.setItem('stage', stage);
+    localStorage.setItem('navyStage', navyStage);
+    localStorage.setItem('currentClueIndex', currentClueIndex);
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('navySupported', navySupported);
+    localStorage.setItem('elapsedMinutes', elapsedMinutes);
+}
+
+function saveStateAndLog() {
+    saveChatbotState();
+    // Save any other state variables if needed
+}
+
+// Call `saveStateAndLog()` after every significant change
 
 
 
@@ -227,6 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function askForName() {
     displayMessage("Ahoy! What's your name, matey?");
     stage = 0.5; // Set a special stage for name input
+    saveStateAndLog();
 
   }
 
@@ -247,6 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       displayMessage(currentClue.afterClueMessage);
     }, currentClue.delayAfterClue);
+    	saveStateAndLog();
   }
 
   let incorrectAttempts = 0; // Initialize a variable to track incorrect attempts
@@ -272,6 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
       displayMessage(randomResponse);
       clueMessages();
+      saveStateAndLog();
       incorrectAttempts = 0; // Reset incorrect attempts on correct answer
     } else if (input.toLowerCase().includes("hint")) {
       giveHint();
@@ -291,6 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       incorrectAttempts++; // Increment incorrect attempts
+      saveStateAndLog();
     }
   }
 
@@ -344,6 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Stop the timer permanently
     stopTimer();
+    saveStateAndLog();
   }
 
 
@@ -382,6 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
         switchPersonality("pirate"); // Switch back to Pirate personality after the Navy message is sent
       }, 3000); // Wait for 3 seconds before sending the message
     }
+    saveStateAndLog();
   }
 
   function navyMessage2() {
@@ -456,19 +478,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
       userInput.value = ""; // Clear the input field after handling the response
     } else {
-      // Handle other stages
-      if (input.toLowerCase().includes("help")) {
+    // Handle other stages
+    if (input.toLowerCase().includes("help")) {
         openHelp();
         userInput.value = "";
-      } else if (input.toLowerCase().includes("navy") && navyStage >= 1) {
+    } else if (input.toLowerCase().includes("ahoy") && navyStage >= 1) {
         if (document.getElementById('helpSection').classList.contains('hidden')) {
-          openNavy();
-          userInput.value = "";
+            openNavy();
+            userInput.value = "";
         }
-      } else if (input.toLowerCase() === "map") {
+    } else if (input.toLowerCase().includes("map")) {
         showMap();
         userInput.value = ""; // Clear the input field after showing the map
-      } else {
+    } else if (input.toLowerCase() === "resetcode1234") {
+        // Reset the chatbot state
+        stage = 0;
+        navyStage = 0;
+        currentClueIndex = 0;
+        navySupported = false;
+        elapsedMinutes = 0;
+        userInput.value = ""; // Clear the input field
+        // You may also want to clear any messages or logs if needed
+        document.getElementById('chatLog').innerHTML = ""; // Clear the chat log (optional)
+        askForName(); // Reset and ask for the team name again
+        startTimer();
+    } else {
         displayMessage(input, "user");
         userInput.value = "";
 
