@@ -80,50 +80,51 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentPersonality = "pirate"; 
 
  function loadChatbotState() {
-        // Restore chat log if it exists
-        if (savedChatLog) {
-            chatOutput.innerHTML = savedChatLog;
-        }
+    const savedChatLog = localStorage.getItem('chatLog');
+    const savedStage = localStorage.getItem('stage');
+    const savedNavyStage = localStorage.getItem('navyStage');
+    const savedUserName = localStorage.getItem('userName');
+    const savedClueIndex = localStorage.getItem('currentClueIndex');
+    const savedNavySupported = localStorage.getItem('navySupported');
+    const savedElapsedMinutes = localStorage.getItem('elapsedMinutes');
 
-        // Restore stage if it exists
-        if (savedStage) {
-            stage = parseInt(savedStage, 10);
-        }
+    // Target the correct element for the chat log
+    const chatOutput = document.getElementById('mainChat'); 
 
-        // Restore navyStage if it exists
-        if (savedNavyStage) {
-            navyStage = parseInt(savedNavyStage, 10);
-        }
-
-        // Restore userName if it exists
-        if (savedUserName) {
-            userName = savedUserName;
-        }
-
-        // Restore currentClueIndex if it exists
-        if (savedClueIndex) {
-            currentClueIndex = parseInt(savedClueIndex, 10);
-        }
-
-        // Restore navySupported if it exists
-        if (savedNavySupported) {
-            navySupported = (savedNavySupported === 'true');
-        }
-
-        // Restore elapsedMinutes if it exists
-        if (savedElapsedMinutes) {
-            elapsedMinutes = parseInt(savedElapsedMinutes, 10);
-        }
-
-        // Hide start button and map button if resuming from a saved state
-          if (currentClueIndex > 0 || stage > 0.5) { 
-            startBtn.style.display = 'none';
-            startMapBtn.style.display = 'none';
-            if (initialMessage) {
-                initialMessage.style.display = 'none'; // Hide the initial message div
-            }
-        }
+    if (savedChatLog) {
+        chatOutput.innerHTML = savedChatLog;  // Restore the chat log content
     }
+
+    if (savedStage) {
+        stage = parseInt(savedStage, 10);
+    }
+
+    if (savedNavyStage) {
+        navyStage = parseInt(savedNavyStage, 10);
+    }
+
+    if (savedUserName) {
+        userName = savedUserName;  // Fixed: userName is likely a string, not an integer
+    }
+
+    if (savedClueIndex) {
+        currentClueIndex = parseInt(savedClueIndex, 10);
+    }
+
+    if (savedNavySupported) {
+        navySupported = (savedNavySupported === 'true');
+    }
+
+    if (savedElapsedMinutes) {
+        elapsedMinutes = parseInt(savedElapsedMinutes, 10);
+    }
+}
+
+// Call `loadChatbotState()` when the page is loaded
+document.addEventListener("DOMContentLoaded", function() {
+    loadChatbotState();
+});
+
 
 
 
