@@ -8,13 +8,7 @@ let timerInterval;
 let elapsedMinutes = 0;
 let isPaused = false;
 
-const savedChatLog = localStorage.getItem('chatLog');
-        const savedStage = localStorage.getItem('stage');
-        const savedNavyStage = localStorage.getItem('navyStage');
-        const savedUserName = localStorage.getItem('userName');
-        const savedClueIndex = localStorage.getItem('currentClueIndex');
-        const savedNavySupported = localStorage.getItem('navySupported');
-        const savedElapsedMinutes = localStorage.getItem('elapsedMinutes');
+
 
 
 
@@ -74,6 +68,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const sendBtn = document.getElementById("sendBtn");
     const startBtn = document.getElementById("start-btn");
     const startMapBtn = document.getElementById("startmap-btn");
+    const savedChatLog = localStorage.getItem('chatLog');
+        const savedStage = localStorage.getItem('stage');
+        const savedNavyStage = localStorage.getItem('navyStage');
+        const savedUserName = localStorage.getItem('userName');
+        const savedClueIndex = localStorage.getItem('currentClueIndex');
+        const savedNavySupported = localStorage.getItem('navySupported');
+        const savedElapsedMinutes = localStorage.getItem('elapsedMinutes');
 
     // Default personality
     let currentPersonality = "pirate"; 
