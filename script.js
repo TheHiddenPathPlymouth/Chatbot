@@ -856,16 +856,24 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
 
 function reloadPageAndClearStorage() {
     // Clear all local storage
-    localStorage.clear();
+    stage = 0;
+        navyStage = 0;
+        currentClueIndex = 0;
+        navySupported = false;
+        elapsedMinutes = 0;
+        userInput.value = ""; // Clear the input field
+        // You may also want to clear any messages or logs if needed
+        document.getElementById('chatLog').innerHTML = ""; // Clear the chat log (optional)
 
     // Introduce a slight delay before reloading the page to ensure storage is cleared
     setTimeout(() => {
         location.reload();
-        document.getElementById('initialContainer');
-    }, 500); // 100 milliseconds delay
-    
-    
-    
+    }, 100); // 100 milliseconds delay
+
+    // Event listener to show the initial container after the page has loaded
+    window.addEventListener('load', () => {
+        document.getElementById('initialContainer').style.display = 'block';
+    });
 }
 
 
