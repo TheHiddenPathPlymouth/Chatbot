@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
     stage = 2;
     displayMessage(`Here is your clue: ${currentClue.clue}`);
   
-    startTimer
+    startTimer();
     
 
     setTimeout(() => {
