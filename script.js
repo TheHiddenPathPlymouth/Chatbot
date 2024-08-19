@@ -9,6 +9,11 @@ let elapsedMinutes = 0;
 let isPaused = false;
 const savedChatLog = localStorage.getItem('chatLog');
 const chatLog = document.getElementById('chatLog');  // Use chatLog instead of mainChat
+const chatOutput = document.getElementById("mainChat");
+const userInput = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
+const startBtn = document.getElementById("start-btn");
+const startMapBtn = document.getElementById("startmap-btn");
 
 const clues = [{
     clue: "I speak without a mouth and hear without ears. I have no body, but I come alive with wind.",
@@ -62,6 +67,7 @@ function saveChatbotState() {
     localStorage.setItem('userName', userName);
     localStorage.setItem('navySupported', navySupported);
     localStorage.setItem('elapsedMinutes', elapsedMinutes);
+    localStorage.setItem('hintsRequested', clues[currentClueIndex].hintsRequested);
 }
 
 function saveStateAndLog() {
@@ -79,6 +85,7 @@ function loadChatbotState() {
     const savedElapsedMinutes = localStorage.getItem('elapsedMinutes');
 
     const chatLog = document.getElementById('chatLog');  // Use chatLog instead of mainChat
+    const savedHintsRequested = localStorage.getItem('hintsRequested');
 
     // Call reinitializeEventListeners after loading the chat log
     if (savedChatLog && (parseInt(savedClueIndex, 10) > 0 || parseInt(savedStage, 10) > 0)) {
@@ -117,16 +124,15 @@ function loadChatbotState() {
     if (savedElapsedMinutes) {
         elapsedMinutes = parseInt(savedElapsedMinutes, 10);
     }
+      if (savedHintsRequested) {
+        clues[currentClueIndex].hintsRequested = parseInt(savedHintsRequested, 10);
+    }
 }
 
 // Call `loadChatbotState()` immediately as the script runs
 loadChatbotState();
 
-const chatOutput = document.getElementById("mainChat");
-const userInput = document.getElementById("userInput");
-const sendBtn = document.getElementById("sendBtn");
-const startBtn = document.getElementById("start-btn");
-const startMapBtn = document.getElementById("startmap-btn");
+
 
 // Default personality
 let currentPersonality = "pirate"; 
@@ -137,7 +143,7 @@ const inactivityLimit = 60000; // 1 minute in milliseconds
 
 function startInactivityTimer() {
     // Start the timer only if the stage is 1 or 2
-    if (stage === 1) {
+    if (stage === 2) {
         // Clear any existing timer to prevent multiple intervals
         clearTimeout(inactivityTimer);
 
@@ -1009,5 +1015,3 @@ sendBtn.addEventListener("click", () => {
     startTimer();
     askForName(); // Ask for the user's name when the start button is clicked
   });
-
-
