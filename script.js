@@ -855,13 +855,19 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
 });
 
 function reloadPageAndClearStorage() {
-    
-
-    // Reload the page
-    location.reload();
+    // Clear all local storage
     localStorage.clear();
-    document.getElementById('initialContainer').style.display = 'block';
+
+    // Introduce a slight delay before reloading the page to ensure storage is cleared
+    setTimeout(() => {
+        location.reload();
+        document.getElementById('initialContainer');
+    }, 500); // 100 milliseconds delay
+    
+    
+    
 }
+
 
 
 
