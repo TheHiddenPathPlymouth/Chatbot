@@ -855,11 +855,13 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
 function reloadPageAndClearStorage() {
     // Clear all local storage
     localStorage.clear();
-    document.getElementById('chatLog').innerHTML = "";
 
-    // Reload the page
-    location.reload();
+    // Introduce a slight delay before reloading the page to ensure storage is cleared
+    setTimeout(() => {
+        location.reload();
+    }, 100); // 100 milliseconds delay
 }
+
 
 
 
