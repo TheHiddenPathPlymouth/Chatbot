@@ -794,6 +794,8 @@ function handleBetrayal(choice) {
     navyLog.innerHTML += `<p>A wise choice! I never doubted your knowledge of the glory and might of The Navy, forever now your ally!</p>`;
     
   }
+  document.getElementById('betrayNavyBtn').style.display = 'none';
+    document.getElementById('betrayPiratesBtn').style.display = 'none';
 }
 
 
@@ -853,12 +855,18 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
 });
 
 function reloadPageAndClearStorage() {
-    // Clear all local storage
-    localStorage.clear();
+    
 
     // Reload the page
     location.reload();
-     localStorage.clear();
+    localStorage.clear();
+    document.getElementById('initialContainer').style.display = 'block';
+}
+
+
+
+
+
 
 
 
