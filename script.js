@@ -856,11 +856,9 @@ function reloadPageAndClearStorage() {
     // Clear all local storage
     localStorage.clear();
 
-    // Introduce a slight delay before reloading the page to ensure storage is cleared
-    setTimeout(() => {
-        location.reload();
-    }, 100); // 100 milliseconds delay
-}
+    // Reload the page
+    location.reload();
+     localStorage.clear();
 
 
 
