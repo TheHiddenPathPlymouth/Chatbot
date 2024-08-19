@@ -1,7 +1,6 @@
 let navySupported = false;
 let navyStage = 0;
 let currentClueIndex = 0;
-let resetRequested = false;
 let stage = 0;
 let userName = ""; // Variable to store the user's name
 let timerInterval;
@@ -337,9 +336,11 @@ function displayMessage(message, sender = currentPersonality) {
     if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
       const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
       stage = 0;
+      pauseTimer ();
       displayMessage(randomResponse);
       clueMessages();
      currentClueIndex++;
+     
       
       
       incorrectAttempts = 0; // Reset incorrect attempts on correct answer
@@ -447,9 +448,10 @@ function displayMessage(message, sender = currentPersonality) {
 
 function openHelp() {
   document.getElementById('helpSection').classList.remove('hidden');
-  closeNavy()
+  closeNavy();
   userInput.disabled = true;
   sendBtn.disabled = true;
+  pauseTimer();
 }
 
 function closeHelp() {
@@ -457,6 +459,7 @@ function closeHelp() {
   document.getElementById('helpLog').innerHTML = "";
   userInput.disabled = false;
   sendBtn.disabled = false;
+  startTimer();
 
 }
 
@@ -849,6 +852,16 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   document.getElementById('mapOverlay').classList.add('hidden');
 });
 
+function reloadPageAndClearStorage() {
+    // Clear all local storage
+    localStorage.clear();
+    document.getElementById('chatLog').innerHTML = "";
+
+    // Reload the page
+    location.reload();
+}
+
+
 
 
 
@@ -961,7 +974,7 @@ sendBtn.addEventListener("click", () => {
     } else if (input.toLowerCase().includes("map")) {
         showMap();
         userInput.value = ""; // Clear the input field after showing the map
-    } else if (input.toLowerCase() === "resetcode1234") {
+     } else if (input.toLowerCase() === "resetcode1234") {
         // Reset the chatbot state
         stage = 0;
         navyStage = 0;
@@ -972,7 +985,10 @@ sendBtn.addEventListener("click", () => {
         // You may also want to clear any messages or logs if needed
         document.getElementById('chatLog').innerHTML = ""; // Clear the chat log (optional)
         askForName(); // Reset and ask for the team name again
-        startTimer();
+        
+    } else if (input.toLowerCase() === "resetcode9999") {
+        // Call the function to clear storage and reload the page
+        reloadPageAndClearStorage();
     } else {
         displayMessage(input, "user");
         userInput.value = "";
@@ -1012,6 +1028,6 @@ sendBtn.addEventListener("click", () => {
     startMapBtn.style.display = "none";
     userInput.disabled = false;
     sendBtn.disabled = false;
-    startTimer();
+  
     askForName(); // Ask for the user's name when the start button is clicked
   });
