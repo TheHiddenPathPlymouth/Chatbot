@@ -26,7 +26,7 @@ const clues = [{
     afterAnswerMessage: "Echoes are fascinating, aren't they? Sound bouncing back to you.",
     hintsRequested: 0,
     delayAfterClue: 2000, // Delay in milliseconds
-    delayAfterAnswer: 2000
+    delayAfterAnswer: 3000
   },
   {
     clue: "I am not alive, but I grow; I don't have lungs, but I need air; I don't have a mouth, but water kills me.",
@@ -40,7 +40,7 @@ const clues = [{
     afterAnswerMessage: "Fire can be both a friend and a foe in the wilderness.",
     hintsRequested: 0,
     delayAfterClue: 3000, // Delay in milliseconds
-    delayAfterAnswer: 2000
+    delayAfterAnswer: 3000
   },
   {
     clue: "I have cities, but no houses; forests, but no trees; and rivers, but no water.",
@@ -54,7 +54,7 @@ const clues = [{
     afterAnswerMessage: "Maps are essential for explorers and adventurers.",
     hintsRequested: 0,
     delayAfterClue: 2500, // Delay in milliseconds
-    delayAfterAnswer: 2000
+    delayAfterAnswer: 3000
   }
 ];
 
@@ -68,6 +68,7 @@ function saveChatbotState() {
     localStorage.setItem('elapsedMinutes', elapsedMinutes);
     localStorage.setItem('hintsRequested', clues[currentClueIndex].hintsRequested);
 }
+
 
 function saveStateAndLog() {
     saveChatbotState();
@@ -378,7 +379,7 @@ function displayMessage(message, sender = currentPersonality) {
 
     
 
-    if (currentClueIndex < clues.length) {
+    if (currentClueIndex < clues.length - 1) {
       stage = 0; // reset stage to readyMessage
       setTimeout(readyMessage, 6000); // Adjusted to 1000ms as this seems to be the intended delay.
     } else {
@@ -876,30 +877,18 @@ function reloadPageAndClearStorage() {
     });
 }
 
-window.addEventListener('load', () => {
-    // Check if the timer should start
-    if (timerInterval) {
-        startInactivityTimer();
-    }
-
-    // Check the stage and currentclueindex conditions
-    if (stage === 0 && currentclueindex > 0) {
-        readyMessage();
-    }
-});
-
-
 // On page load, check if we need to show the initial container
 window.addEventListener('load', () => {
     // Check if the timer should start
     if (timerInterval) {
         startInactivityTimer();
     }
+     // Check the stage and currentclueindex conditions
+    if (stage === 0 && currentClueIndex > 0 && currentClueIndex < clues.length - 1) {
+    readyMessage();
+}
 
-    // Check the stage and currentclueindex conditions
-    if (stage === 0 && currentClueIndex > 0) {
-        readyMessage();
-    }
+   
 
     // Check if we need to show the initial container
     if (localStorage.getItem('showInitialContainer') === 'true') {
@@ -923,6 +912,7 @@ window.addEventListener('load', () => {
         localStorage.removeItem('showInitialContainer');
     }
 });
+
 
 
 
@@ -1101,3 +1091,4 @@ sendBtn.addEventListener("click", () => {
   
     askForName(); // Ask for the user's name when the start button is clicked
   });
+
