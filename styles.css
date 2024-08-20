@@ -229,7 +229,7 @@ button:hover {
   font-family: "Indie Flower", cursive; /* Apply the Pangolin font, with cursive as a fallback */
   font-weight: 600; /* Regular weight */
   font-style: normal; /* Normal style */
-  padding: 7px 15px; /* Optional: Add padding for better readability */
+  padding: 9px 15px; /* Optional: Add padding for better readability */
   border-radius: 0px; /* Optional: Add rounded corners */
   font-size: 16px;
   background-color: transparent; /* Make the background color transparent */
@@ -532,6 +532,45 @@ button:hover {
   background: rgba(0, 0, 0, 0.2); /* Use a semi-transparent color for the thumb */
   border-radius: 10px; /* Make the scrollbar handle rounded */
 }
+
+/* Basic styles for the map section */
+.map-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    z-index: 1000;
+    
+   
+}
+
+
+
+.map-section .map-image {
+    max-width: 90%;
+    max-height: 90%;
+    border: 5px solid white;
+}
+
+/* Close button style */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+
+ 
 
 
 
