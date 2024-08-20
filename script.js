@@ -74,6 +74,7 @@ function saveStateAndLog() {
     // Save any other state variables if needed
 }
 
+
 function loadChatbotState() {
     const savedChatLog = localStorage.getItem('chatLog');
     const savedStage = localStorage.getItem('stage');
@@ -93,6 +94,8 @@ function loadChatbotState() {
 
         // Hide the initial container since the chat has started
         document.getElementById("initialContainer").style.display = "none";
+          // Scroll to the bottom of the chat log
+        chatLog.scrollTop = chatLog.scrollHeight;
     } else {
         // No saved chat log or both clueIndex and stage are 0, show the initial container and disable inputs
         document.getElementById("initialContainer").style.display = "block";
@@ -172,11 +175,7 @@ function sendInactivityMessage() {
 document.getElementById('userInput').addEventListener('input', startInactivityTimer);
 
 // Initialize the inactivity timer when the page loads
-window.addEventListener('load', () => {
-    if (timerInterval) { // Ensure the timer is running
-        startInactivityTimer();
-    }
-});
+
 
 function displayMessageWithPersonality(message) {
     displayMessage(message, currentPersonality);
@@ -854,6 +853,7 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
   document.getElementById('mapOverlay').classList.add('hidden');
 });
 
+// Function to reload the page and clear all storage
 function reloadPageAndClearStorage() {
     // Clear all local storage
     stage = 0;
@@ -875,6 +875,54 @@ function reloadPageAndClearStorage() {
         document.getElementById('initialContainer').style.display = 'block';
     });
 }
+
+window.addEventListener('load', () => {
+    // Check if the timer should start
+    if (timerInterval) {
+        startInactivityTimer();
+    }
+
+    // Check the stage and currentclueindex conditions
+    if (stage === 0 && currentclueindex > 0) {
+        readyMessage();
+    }
+});
+
+
+// On page load, check if we need to show the initial container
+window.addEventListener('load', () => {
+    // Check if the timer should start
+    if (timerInterval) {
+        startInactivityTimer();
+    }
+
+    // Check the stage and currentclueindex conditions
+    if (stage === 0 && currentClueIndex > 0) {
+        readyMessage();
+    }
+
+    // Check if we need to show the initial container
+    if (localStorage.getItem('showInitialContainer') === 'true') {
+        // Show the initial container
+        const initialContainer = document.getElementById('initialContainer');
+        if (initialContainer) {
+            initialContainer.style.display = 'block';
+        }
+
+        // Optionally, disable the user input and send button
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        if (userInput) {
+            userInput.disabled = true;
+        }
+        if (sendBtn) {
+            sendBtn.disabled = true;
+        }
+
+        // Remove the flag
+        localStorage.removeItem('showInitialContainer');
+    }
+});
 
 
 
