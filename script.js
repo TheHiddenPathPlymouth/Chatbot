@@ -336,10 +336,11 @@ function displayMessage(message, sender = currentPersonality) {
     if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
       const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
       stage = 0;
+      currentClueIndex++;
       pauseTimer ();
       displayMessage(randomResponse);
       clueMessages();
-     currentClueIndex++;
+     
      
       
       
@@ -369,27 +370,31 @@ function displayMessage(message, sender = currentPersonality) {
 
 
   function clueMessages() {
-    const currentClue = clues[currentClueIndex];
-    displayMessage(currentClue.explanation);
+    // Determine the previous clue index
+    const previousClueIndex = currentClueIndex > 0 ? currentClueIndex - 1 : 0;
+    const previousClue = clues[previousClueIndex];
     
+    // Display the explanation from the previous clue
+    displayMessage(previousClue.explanation);
 
+    // Set a timeout to display the after-answer message from the previous clue
     setTimeout(() => {
-      displayMessage(currentClue.afterAnswerMessage);
-    }, currentClue.delayAfterAnswer);
+        displayMessage(previousClue.afterAnswerMessage);
+    }, previousClue.delayAfterAnswer);
 
-    
-
+    // Logic for advancing to the next clue or ending the game
     if (currentClueIndex < clues.length - 1) {
-      stage = 0; // reset stage to readyMessage
-      setTimeout(readyMessage, 6000); // Adjusted to 1000ms as this seems to be the intended delay.
+        stage = 0; // Reset stage to readyMessage
+        setTimeout(readyMessage, 6000); // 6-second delay before moving to the next stage
     } else {
-      setTimeout(() => {
-        congratulations();
-        stage = 3;
-      }, 6000); // 6-second delay before displaying the final message.
-      stage = 0; // reset stage if needed to replay
+        setTimeout(() => {
+            congratulations(); // Display final congratulations message
+            stage = 3;
+        }, 6000); // 6-second delay before displaying the final message
+        stage = 0; // Reset stage if needed to replay
     }
-  }
+}
+
 
 
 
@@ -1091,4 +1096,5 @@ sendBtn.addEventListener("click", () => {
   
     askForName(); // Ask for the user's name when the start button is clicked
   });
+
 
