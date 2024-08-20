@@ -489,8 +489,8 @@ button:hover {
   height: 100%;
   width: 100%;
   max-width: 500px; /* Optional: Limit the max width on larger screens */
-  padding: 10px;
-  box-sizing: cover;
+  padding: 0px;
+  box-sizing: border-box;
   
   background-image: url('https://images.pexels.com/photos/326333/pexels-photo-326333.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
   background-position: center; /* Center the image */
