@@ -224,14 +224,19 @@ button:hover {
 }
 
 .user-message .text {
-  background-color: #a8d5a2; /* Pastel green for user messages */
+  
   color: black; /* Text color set to black */
   font-family: "Indie Flower", cursive; /* Apply the Pangolin font, with cursive as a fallback */
   font-weight: 600; /* Regular weight */
   font-style: normal; /* Normal style */
-  padding: 10px 30px; /* Optional: Add padding for better readability */
-  border-radius: 5px; /* Optional: Add rounded corners */
+  padding: 7px 15px; /* Optional: Add padding for better readability */
+  border-radius: 0px; /* Optional: Add rounded corners */
   font-size: 16px;
+  background-color: transparent; /* Make the background color transparent */
+  background-image: url('https://i.ibb.co/6n46nP5/parchment-scroll.png" alt="parchment-scroll'); /* Set the background image */
+  background-size: 100% 110%; /* Make the image 20% larger than the text area */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
 }
 
 
@@ -258,10 +263,16 @@ button:hover {
 
 
 .navy-message .text {
-  background-color: #cfe2f3;
   font-family: "La Belle Aurore", cursive; /* Apply the Pangolin font, with cursive as a fallback */
   font-weight: 600; /* Regular weight */
   font-size: 18px;
+  padding: 10px 20px;
+  background-color: transparent; /* Make the background color transparent */
+  background-image: url('https://i.ibb.co/Kztg4fb/papyrus-146302-1280.png'); /* Set the background image */
+  background-size: 100% 100%; /* Make the image 20% larger than the text area */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  text-align: center
 }
 
 .user-message .thumbnail {
@@ -427,7 +438,10 @@ button:hover {
 
 .initial-message {
     text-align: center; /* Center the text inside the p elements */
+    color: white; /* Make the text color white */
+    font-weight: bold; /* Make the text bold */
 }
+
 
 .initial-message p {
     margin: 10px 0; /* Optional: Add some margin between the paragraphs */
