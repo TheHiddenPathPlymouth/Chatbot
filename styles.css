@@ -15,6 +15,7 @@ body {
   border-bottom: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
+  
 }
 
 
@@ -183,14 +184,15 @@ button:hover {
   border-radius: 50%;
   background-size: cover;
   object-fit: cover;
-  margin-right: 10px;
-  /* Adds space between thumbnail and message content */
+  margin-right: 10px; /* Adds space between thumbnail and message content */
+  border: 1px solid white; /* Adds a white border */
 }
 
 .message.user-message .thumbnail {
   margin-left: 10px;
   margin-right: 0;
   /* Adjusts margin for right alignment */
+  
 }
 
 .message .sender-name {
@@ -198,6 +200,8 @@ button:hover {
   margin-bottom: 5px;
   font-weight: normal;
   /* Normal font weight for sender name */
+  color: white;
+  
   text-align: left;
   /* Align the sender name with the message content */
 }
@@ -231,12 +235,12 @@ button:hover {
   font-weight: 500; /* Font weight */
   font-size: 16px; /* Font size */
   color: black; /* Set the text color */
-  padding: 6px 20px; /* Add padding around the text */
+  padding: 10px 20px; /* Add padding around the text */
   border-radius: 0px; /* Add rounded corners */
   
   background-color: transparent; /* Make the background color transparent */
   background-image: url('https://cdn.pixabay.com/photo/2012/04/14/16/57/scroll-34606_1280.png'); /* Set the background image */
-  background-size: 100% 110%; /* Make the image 20% larger than the text area */
+  background-size: 100% 127%; /* Make the image 20% larger than the text area */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
   
@@ -450,7 +454,7 @@ button:hover {
   align-items: center;
   position: sticky;
   bottom: 0;
-  background-color: #f4f4f4; /* Match background color */
+  background-color: transparent;
   padding: 10px;
  
   width: 100%;
@@ -485,9 +489,37 @@ button:hover {
   height: 100%;
   width: 100%;
   max-width: 500px; /* Optional: Limit the max width on larger screens */
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
+  
+  background-image: url('https://images.pexels.com/photos/326333/pexels-photo-326333.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+  background-position: center; /* Center the image */
+   background-size: 120%;
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+   scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+ 
 }
+
+/* Target the scrollbar */
+.chat-box::-webkit-scrollbar {
+  width: 4px; /* Make the scrollbar thinner */
+}
+
+/* Track */
+.chat-box::-webkit-scrollbar-track {
+  background: transparent; /* Make the track invisible */
+}
+
+/* Handle */
+.chat-box::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2); /* Use a semi-transparent color for the thumb */
+  border-radius: 10px; /* Make the scrollbar handle rounded */
+}
+
+
+
+
 
 
 
