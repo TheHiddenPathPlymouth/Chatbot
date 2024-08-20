@@ -490,11 +490,11 @@ button:hover {
   width: 100%;
   max-width: 500px; /* Optional: Limit the max width on larger screens */
   padding: 10px;
-  box-sizing: border-box;
+  box-sizing: cover;
   
   background-image: url('https://images.pexels.com/photos/326333/pexels-photo-326333.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
   background-position: center; /* Center the image */
-   background-size: 120%;
+   background-size: cover;
   background-repeat: no-repeat; /* Prevent the image from repeating */
    scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
