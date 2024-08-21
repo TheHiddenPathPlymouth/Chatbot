@@ -336,10 +336,11 @@ function displayMessage(message, sender = currentPersonality) {
     if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
       const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
       stage = 0;
-      currentClueIndex++;
+     
       pauseTimer ();
       displayMessage(randomResponse);
       clueMessages();
+      currentClueIndex++;
      
      
       
@@ -369,18 +370,13 @@ function displayMessage(message, sender = currentPersonality) {
 
 
 
-  function clueMessages() {
-    // Determine the previous clue index
-    const previousClueIndex = currentClueIndex > 0 ? currentClueIndex - 1 : 0;
-    const previousClue = clues[previousClueIndex];
-    
-    // Display the explanation from the previous clue
-    displayMessage(previousClue.explanation);
+ function clueMessages() {
+    const currentClue = clues[currentClueIndex];
+    displayMessage(currentClue.explanation);
 
-    // Set a timeout to display the after-answer message from the previous clue
     setTimeout(() => {
-        displayMessage(previousClue.afterAnswerMessage);
-    }, previousClue.delayAfterAnswer);
+      displayMessage(currentClue.afterAnswerMessage);
+    }, currentClue.delayAfterAnswer);
 
     // Logic for advancing to the next clue or ending the game
     if (currentClueIndex < clues.length - 1) {
@@ -1100,5 +1096,3 @@ sendBtn.addEventListener("click", () => {
   
     askForName(); // Ask for the user's name when the start button is clicked
   });
-
-
