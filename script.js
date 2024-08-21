@@ -995,51 +995,8 @@ sendBtn.addEventListener("click", () => {
     const input = userInput.value.trim();
     if (!input) return;
 
-    if (stage === 3) {
-      // Handle responses for stage 3
-      if (input.toLowerCase().includes("help")) {
-        openHelp(); // Maintain the function of 'help' even in stage 3
-      } else {
-        const navyResponses = [
-          "Thank you for your support! The treasure is ours, and so is the victory!",
-          "Splendid work! Your help has led us to triumph!",
-          "Cheers to your contribution! We’ve found the treasure and it’s all thanks to you!",
-          "A job well done! With your help, the treasure has been secured!"
-        ];
-
-        const pirateResponses = [
-          "Arrr! Thanks for your help, matey! The treasure’s ours and it’s a grand day!",
-          "Yarrr! We’ve struck gold and it’s all thanks to ye!",
-          "Shiver me timbers! Your help made it happen. The treasure be ours!",
-          "Yo ho ho! We’ve got the loot, and it’s all because of ye! Thanks, matey!"
-        ];
-
-        if (navySupported) {
-          // Navy personality
-          const randomNavyResponse = navyResponses[Math.floor(Math.random() * navyResponses.length)];
-          displayMessage(randomNavyResponse, "navy");
-        } else {
-          // Pirate personality
-          const randomPirateResponse = pirateResponses[Math.floor(Math.random() * pirateResponses.length)];
-          displayMessage(randomPirateResponse, "pirate");
-        }
-      }
-
-      userInput.value = ""; // Clear the input field after handling the response
-    } else {
-    // Handle other stages
-    if (input.toLowerCase().includes("help")) {
-        openHelp();
-        userInput.value = "";
-    } else if (input.toLowerCase().includes("ahoy") && navyStage >= 1) {
-        if (document.getElementById('helpSection').classList.contains('hidden')) {
-            openNavy();
-            userInput.value = "";
-        }
-    } else if (input.toLowerCase().includes("map")) {
-        showMap();
-        userInput.value = ""; // Clear the input field after showing the map
-     } else if (input.toLowerCase() === "resetcode1234") {
+    // Check for reset codes before anything else
+    if (input.toLowerCase() === "resetcode1234") {
         // Reset the chatbot state
         stage = 0;
         navyStage = 0;
@@ -1050,35 +1007,82 @@ sendBtn.addEventListener("click", () => {
         // You may also want to clear any messages or logs if needed
         document.getElementById('chatLog').innerHTML = ""; // Clear the chat log (optional)
         askForName(); // Reset and ask for the team name again
-        
+        return; // Exit the function to prevent further processing
     } else if (input.toLowerCase() === "resetcode9999") {
         // Call the function to clear storage and reload the page
         reloadPageAndClearStorage();
-    } else {
-        displayMessage(input, "user");
-        userInput.value = "";
-        
-
-        if (stage === 0.5) {
-          // Capture the user's name and greet them
-          userName = input;
-          greetUser();
-        } else if (stage === 1) {
-          if (input.toLowerCase().includes("aye")) {
-            giveClue();
-            navyMessage();
-            navyMessage2();
-          } else if (input.toLowerCase().includes("yes")) {
-            displayMessage("Be more pirate!");
-          } else {
-            displayMessage("I'll wait until you say aye.");
-          }
-        } else if (stage === 2) {
-          checkAnswer(input);
-        }
-      }
+        return; // Exit the function to prevent further processing
     }
-  });
+
+    // Check for help command
+    if (input.toLowerCase().includes("help")) {
+        openHelp();
+        userInput.value = ""; // Clear the input field after showing help
+        return; // Exit the function to prevent further processing
+    }
+
+    if (stage === 3) {
+        // Handle responses for stage 3
+        const navyResponses = [
+            "Thank you for your support! The treasure is ours, and so is the victory!",
+            "Splendid work! Your help has led us to triumph!",
+            "Cheers to your contribution! We’ve found the treasure and it’s all thanks to you!",
+            "A job well done! With your help, the treasure has been secured!"
+        ];
+
+        const pirateResponses = [
+            "Arrr! Thanks for your help, matey! The treasure’s ours and it’s a grand day!",
+            "Yarrr! We’ve struck gold and it’s all thanks to ye!",
+            "Shiver me timbers! Your help made it happen. The treasure be ours!",
+            "Yo ho ho! We’ve got the loot, and it’s all because of ye! Thanks, matey!"
+        ];
+
+        if (navySupported) {
+            // Navy personality
+            const randomNavyResponse = navyResponses[Math.floor(Math.random() * navyResponses.length)];
+            displayMessage(randomNavyResponse, "navy");
+        } else {
+            // Pirate personality
+            const randomPirateResponse = pirateResponses[Math.floor(Math.random() * pirateResponses.length)];
+            displayMessage(randomPirateResponse, "pirate");
+        }
+
+        userInput.value = ""; // Clear the input field after handling the response
+    } else {
+        // Handle other stages
+        if (input.toLowerCase().includes("ahoy") && navyStage >= 1) {
+            if (document.getElementById('helpSection').classList.contains('hidden')) {
+                openNavy();
+                userInput.value = "";
+            }
+        } else if (input.toLowerCase().includes("map")) {
+            showMap();
+            userInput.value = ""; // Clear the input field after showing the map
+        } else {
+            displayMessage(input, "user");
+            userInput.value = "";
+
+            if (stage === 0.5) {
+                // Capture the user's name and greet them
+                userName = input;
+                greetUser();
+            } else if (stage === 1) {
+                if (input.toLowerCase().includes("aye")) {
+                    giveClue();
+                    navyMessage();
+                    navyMessage2();
+                } else if (input.toLowerCase().includes("yes")) {
+                    displayMessage("Be more pirate!");
+                } else {
+                    displayMessage("I'll wait until you say aye.");
+                }
+            } else if (stage === 2) {
+                checkAnswer(input);
+            }
+        }
+    }
+});
+
 
 
   userInput.addEventListener("keypress", (e) => {
