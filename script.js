@@ -77,6 +77,9 @@ function executePendingActions() {
     if (action === 'navyMessage2') {
       navyMessage2();
     }
+    if (action === 'giveClue') {
+      giveClue();
+    }
   });
 
   // Clear all pending actions after execution
@@ -172,8 +175,11 @@ function loadChatbotState() {
 }
 
 // Call `loadChatbotState()` immediately as the script runs
+
 loadChatbotState();
 executePendingActions();
+
+
 
 
 
@@ -988,13 +994,12 @@ function navyMessage() {
   navyStage = 1;
   saveStateAndLog();
   
-  setTimeout(() => {
-    switchPersonality("navy"); // Switch to Navy personality
-    displayMessageWithPersonality("Attention! This is the Navy captain speaking. I trust you're ready to cooperate with honor.");
-
-    switchPersonality("pirate"); // Switch back to Pirate personality after the Navy message is sent
-  }); // Wait for 7 seconds before sending the message
+  switchPersonality("navy"); // Switch to Navy personality
+  displayMessageWithPersonality("Attention! This is the Navy captain speaking. I trust you're ready to cooperate with honor.");
+  
+  switchPersonality("pirate"); // Switch back to Pirate personality after the Navy message is sent
 }
+
 
 
 function navyMessage2() {
@@ -1032,7 +1037,6 @@ function navyMessage2() {
 
 
 
-
 sendBtn.addEventListener("click", () => {
   const input = userInput.value.trim();
   if (!input) return;
@@ -1046,11 +1050,11 @@ sendBtn.addEventListener("click", () => {
     navySupported = false;
     totalPausedTime = 0;
     userInput.value = ""; // Clear the input field
-    // You may also want to clear any messages or logs if needed
     document.getElementById('chatLog').innerHTML = ""; // Clear the chat log (optional)
     askForName(); // Reset and ask for the team name again
     return; // Exit the function to prevent further processing
-  } 
+  }
+
   if (input.toLowerCase() === "resetcode9999") {
     // Call the function to clear storage and reload the page
     localStorage.clear();
@@ -1085,36 +1089,37 @@ sendBtn.addEventListener("click", () => {
     userName = input;
     greetUser();
     userInput.value = "";
-} else if (stage === 1) {
+  } else if (stage === 1) {
     displayMessage(input, "user");
 
     if (input.toLowerCase().includes("aye")) {
-        if (currentClueIndex === 0) {
-            startTimer();  // Start the timer if it's the first clue
-        }
-        giveClue();
+      if (currentClueIndex === 0) {
+        startTimer();  // Start the timer if it's the first clue
+      }
+      giveClue();
 
-        // Add navyMessage to pending actions only if conditions are met
-        if (currentClueIndex === 1 && stage >= 2 && navyStage === 0) {
-            addPendingAction('navyMessage');
-        }
-
-        // Add navyMessage2 to pending actions only if conditions are met
-        if (currentClueIndex === 2 && stage >= 2) {
-            addPendingAction('navyMessage2');
-        }
-
-        // Delay the execution of pending actions by 5 seconds
+      // Add navyMessage to pending actions only if conditions are met
+      if (currentClueIndex === 1 && stage >= 2 && navyStage === 0) {
+        addPendingAction('navyMessage');
         setTimeout(() => {
-            executePendingActions();
-        }, 7000); // 5-second delay
+          executePendingActions();
+        }, 6000); // 6-second delay for navyMessage
+      }
+
+      // Add navyMessage2 to pending actions only if conditions are met
+      if (currentClueIndex === 2 && stage >= 2) {
+        addPendingAction('navyMessage2');
+        setTimeout(() => {
+          executePendingActions();
+        }, 1000); // 5-second delay for navyMessage2
+      }
     } else if (input.toLowerCase().includes("yes")) {
-        displayMessage("Be more pirate!");
+      displayMessage("Be more pirate!");
     } else {
-        displayMessage("I'll wait until you say aye.");
+      displayMessage("I'll wait until you say aye.");
     }
     userInput.value = "";
-} else if (stage === 2) {
+  } else if (stage === 2) {
     displayMessage(input, "user");
     checkAnswer(input);
     userInput.value = "";
@@ -1156,6 +1161,7 @@ sendBtn.addEventListener("click", () => {
 
 
 
+
 userInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     sendBtn.click();
@@ -1169,6 +1175,7 @@ startBtn.addEventListener("click", () => {
   userInput.disabled = false;
   sendBtn.disabled = false;
   startTimer();
+  
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
