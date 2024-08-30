@@ -7,7 +7,6 @@ let startTime; // Save the start time of the treasure hunt
 let totalPausedTime = 0; // Total paused time in milliseconds
 let pauseStartTime; // Time when the game was last paused
 let isPaused = false;
-// Default personality
 let currentPersonality = "pirate";
 
 // Call `saveStateAndLog()` after every significant change
@@ -182,8 +181,10 @@ function loadChatbotState() {
 
 // Call `loadChatbotState()` immediately as the script runs
 
+
 loadChatbotState();
 executePendingActions();
+
 
 
 
@@ -1097,7 +1098,10 @@ sendBtn.addEventListener("click", () => {
       if (currentClueIndex === 0) {
         startTimer();  // Start the timer if it's the first clue
       }
-      giveClue();
+      addPendingAction('giveClue');
+        setTimeout(() => {
+          executePendingActions();
+        }, 3000); 
 
       // Add navyMessage to pending actions only if conditions are met
       if (currentClueIndex === 1 && stage >= 2 && navyStage === 0) {
@@ -1112,7 +1116,7 @@ sendBtn.addEventListener("click", () => {
         addPendingAction('navyMessage2');
         setTimeout(() => {
           executePendingActions();
-        }, 1000); // 5-second delay for navyMessage2
+        }, 8000); // 5-second delay for navyMessage2
       }
     } else if (input.toLowerCase().includes("yes")) {
       displayMessage("Be more pirate!");
@@ -1180,5 +1184,6 @@ startBtn.addEventListener("click", () => {
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
+
 
 
