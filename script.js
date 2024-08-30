@@ -900,10 +900,6 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
 // Function to reload the page and clear all storage
 function reloadPageAndClearStorage() {
   // Clear all local storage
-  stage = 0;
-  navyStage = 0;
-  currentClueIndex = 0;
-  navySupported = false;
   
   userInput.value = ""; // Clear the input field
   // You may also want to clear any messages or logs if needed
@@ -1041,7 +1037,7 @@ sendBtn.addEventListener("click", () => {
     navyStage = 0;
     currentClueIndex = 0;
     navySupported = false;
-    
+    totalPausedTime = 0;
     userInput.value = ""; // Clear the input field
     // You may also want to clear any messages or logs if needed
     document.getElementById('chatLog').innerHTML = ""; // Clear the chat log (optional)
@@ -1051,6 +1047,7 @@ sendBtn.addEventListener("click", () => {
   } 
   if (input.toLowerCase() === "resetcode9999") {
     // Call the function to clear storage and reload the page
+    localStorage.clear();
     reloadPageAndClearStorage();
     return; // Exit the function to prevent further processing
   }
@@ -1152,3 +1149,4 @@ startBtn.addEventListener("click", () => {
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
+
