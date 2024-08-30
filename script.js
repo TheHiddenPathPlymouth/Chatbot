@@ -1042,7 +1042,6 @@ sendBtn.addEventListener("click", () => {
     // You may also want to clear any messages or logs if needed
     document.getElementById('chatLog').innerHTML = ""; // Clear the chat log (optional)
     askForName(); // Reset and ask for the team name again
-    startTimer();
     return; // Exit the function to prevent further processing
   } 
   if (input.toLowerCase() === "resetcode9999") {
@@ -1079,19 +1078,23 @@ sendBtn.addEventListener("click", () => {
     userName = input;
     greetUser();
     userInput.value = "";
-  } else if (stage === 1) {
+} else if (stage === 1) {
     displayMessage(input, "user");
+
     if (input.toLowerCase().includes("aye")) {
-      giveClue();
-      navyMessage();
-      navyMessage2();
+        if (currentClueIndex === 0) {
+            startTimer();  // Start the timer if it's the first clue
+        }
+        giveClue();
+        navyMessage();
+        navyMessage2();
     } else if (input.toLowerCase().includes("yes")) {
-      displayMessage("Be more pirate!");
+        displayMessage("Be more pirate!");
     } else {
-      displayMessage("I'll wait until you say aye.");
+        displayMessage("I'll wait until you say aye.");
     }
     userInput.value = "";
-  } else if (stage === 2) {
+} else if (stage === 2) {
     displayMessage(input, "user");
     checkAnswer(input);
     userInput.value = "";
