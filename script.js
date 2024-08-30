@@ -133,7 +133,7 @@ function loadChatbotState() {
 }
 
 // Call `loadChatbotState()` immediately as the script runs
-loadChatbotState();
+
 
 
 
