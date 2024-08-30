@@ -59,6 +59,31 @@ const clues = [{
   }
 ];
 
+// Declare the pendingActions array globally
+let pendingActions = JSON.parse(localStorage.getItem('pendingActions')) || [];
+
+// Function to add a pending action
+function addPendingAction(action) {
+  pendingActions.push(action);
+  localStorage.setItem('pendingActions', JSON.stringify(pendingActions));
+}
+
+function executePendingActions() {
+  pendingActions.forEach((action) => {
+    if (action === 'navyMessage') {
+      navyMessage();
+    }
+
+    if (action === 'navyMessage2') {
+      navyMessage2();
+    }
+  });
+
+  // Clear all pending actions after execution
+  pendingActions = [];
+  localStorage.removeItem('pendingActions');
+}
+
 function saveChatbotState() {
   localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
   localStorage.setItem('stage', stage);
@@ -98,7 +123,7 @@ function loadChatbotState() {
   const savedHintsRequested = localStorage.getItem('hintsRequested');
 
   // Call reinitializeEventListeners after loading the chat log
-  if (savedChatLog && (parseInt(savedClueIndex, 10) > 0 || parseInt(savedStage, 10) > 0)) {
+  if (savedChatLog && savedUserName) {
     // Restore the saved chat log content inside the #chatLog container
     chatLog.innerHTML = savedChatLog;
 
@@ -148,6 +173,7 @@ function loadChatbotState() {
 
 // Call `loadChatbotState()` immediately as the script runs
 loadChatbotState();
+executePendingActions();
 
 
 
@@ -958,69 +984,50 @@ window.addEventListener('load', () => {
 
 
 
-
-
-
-
-
-
-
-
 function navyMessage() {
+  navyStage = 1;
+  saveStateAndLog();
+  
+  setTimeout(() => {
+    switchPersonality("navy"); // Switch to Navy personality
+    displayMessageWithPersonality("Attention! This is the Navy captain speaking. I trust you're ready to cooperate with honor.");
 
-
-  // Check the conditions: currentClueIndex > 1 OR (currentClueIndex == 1 AND stage >= 2)
-  if (currentClueIndex === 1 && stage >= 2) {
-    navyStage = 1;
-    saveStateAndLog();
-    setTimeout(() => {
-      switchPersonality("navy"); // Switch to Navy personality
-      displayMessageWithPersonality("Attention! This is the Navy captain speaking. I trust you're ready to cooperate with honor.");
-
-      switchPersonality("pirate"); // Switch back to Pirate personality after the Navy message is sent
-    }, 3000); // Wait for 3 seconds before sending the message
-  }
+    switchPersonality("pirate"); // Switch back to Pirate personality after the Navy message is sent
+  }); // Wait for 7 seconds before sending the message
 }
+
 
 function navyMessage2() {
-  // Check the conditions: currentClueIndex === 2 AND stage >= 2
-  if (currentClueIndex === 2 && stage >= 2) {
+  // Update navyStage to 3
+  navyStage = 3;
+  saveStateAndLog(); // Save the updated state after changing navyStage
 
-    // Update navyStage to 3 only when conditions are met
-    navyStage = 3;
-    saveStateAndLog(); // Save the updated state after changing navyStage
+  // Check if the navy is supported
+  if (navySupported === true) {
+    setTimeout(() => {
+      switchPersonality("navy"); // Switch to Navy personality
+      displayMessageWithPersonality("You're clever, you supported the navy.");
+    }); // Wait for 3 seconds before sending the first message
 
-    // Check if the navy is supported
-    if (navySupported === true) {
-      setTimeout(() => {
-        switchPersonality("navy"); // Switch to Navy personality
-        displayMessageWithPersonality("You're clever, you supported the navy.");
-      }, 3000); // Wait for 3 seconds before sending the first message
+    setTimeout(() => {
+      switchPersonality("pirate"); // Switch back to Pirate personality
+      displayMessageWithPersonality("The navy sucks. All is not lost though! Betray them.");
+    }, 3000); // Staggered by 3 more seconds (total of 6 seconds)
 
-      setTimeout(() => {
-        switchPersonality("pirate"); // Switch back to Pirate personality
-        displayMessageWithPersonality("The navy sucks. All is not lost though! Betray them.");
-      }, 6000); // Staggered by 3 more seconds (total of 6 seconds)
+  } else {
+    // If the navy is not supported, provide a different set of messages
+    setTimeout(() => {
+      switchPersonality("pirate"); // Switch to Pirate personality
+      displayMessageWithPersonality("You've chosen wisely to side with the pirates. The Navy is no match for us!");
+    }); // Wait for 3 seconds before sending the first message
 
-    } else {
-      // If the navy is not supported, provide a different set of messages
-      setTimeout(() => {
-        switchPersonality("pirate"); // Switch to Pirate personality
-        displayMessageWithPersonality("You've chosen wisely to side with the pirates. The Navy is no match for us!");
-      }, 3000); // Wait for 3 seconds before sending the first message
-
-      setTimeout(() => {
-        switchPersonality("navy");
-        displayMessageWithPersonality("We'll plunder the seas together!");
-        switchPersonality("pirate");
-      }, 6000); // Staggered by 3 more seconds (total of 6 seconds)
-    }
+    setTimeout(() => {
+      switchPersonality("navy");
+      displayMessageWithPersonality("We'll plunder the seas together!");
+      switchPersonality("pirate");
+    }, 3000); // Staggered by 3 more seconds (total of 6 seconds)
   }
 }
-
-
-
-
 
 
 
@@ -1086,8 +1093,21 @@ sendBtn.addEventListener("click", () => {
             startTimer();  // Start the timer if it's the first clue
         }
         giveClue();
-        navyMessage();
-        navyMessage2();
+
+        // Add navyMessage to pending actions only if conditions are met
+        if (currentClueIndex === 1 && stage >= 2 && navyStage === 0) {
+            addPendingAction('navyMessage');
+        }
+
+        // Add navyMessage2 to pending actions only if conditions are met
+        if (currentClueIndex === 2 && stage >= 2) {
+            addPendingAction('navyMessage2');
+        }
+
+        // Delay the execution of pending actions by 5 seconds
+        setTimeout(() => {
+            executePendingActions();
+        }, 7000); // 5-second delay
     } else if (input.toLowerCase().includes("yes")) {
         displayMessage("Be more pirate!");
     } else {
@@ -1152,4 +1172,5 @@ startBtn.addEventListener("click", () => {
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
+
 
