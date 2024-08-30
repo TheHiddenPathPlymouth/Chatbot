@@ -66,13 +66,19 @@ function saveChatbotState() {
   localStorage.setItem('currentClueIndex', currentClueIndex);
   localStorage.setItem('userName', userName);
   localStorage.setItem('navySupported', navySupported);
-  
+  localStorage.setItem('totalPausedTime', totalPausedTime);
+  localStorage.setItem('pauseStartTime', pauseStartTime);
   localStorage.setItem('hintsRequested', clues[currentClueIndex].hintsRequested);
 }
 
 
 function saveStateAndLog() {
   saveChatbotState();
+  const currentTime = new Date().getTime(); // Get the current time as the end time
+
+  // Calculate the total time excluding the paused time
+  const totalCurrentTime = currentTime - startTime - totalPausedTime;
+  console.log(`Total elapsed time: ${formatTime(totalCurrentTime)}`);
   // Save any other state variables if needed
 }
 
@@ -84,6 +90,8 @@ function loadChatbotState() {
   const savedUserName = localStorage.getItem('userName');
   const savedClueIndex = localStorage.getItem('currentClueIndex');
   const savedNavySupported = localStorage.getItem('navySupported');
+  const savedTotalPausedTime = localStorage.getItem('totalPausedTime');
+  const savedPauseStartTime = localStorage.getItem('pauseStartTime');
  
 
   const chatLog = document.getElementById('chatLog'); // Use chatLog instead of mainChat
@@ -123,9 +131,16 @@ function loadChatbotState() {
 
   if (savedNavySupported) {
     navySupported = (savedNavySupported === 'true');
+   }
+
+  // Handle loading of totalPausedTime and pauseStartTime
+  if (savedTotalPausedTime) {
+    totalPausedTime = parseFloat(savedTotalPausedTime); // Use parseFloat for time which may have decimal values
   }
 
-  
+  if (savedPauseStartTime) {
+    pauseStartTime = new Date(parseInt(savedPauseStartTime, 10)); // Assuming savedPauseStartTime is a timestamp
+  }
   if (savedHintsRequested) {
     clues[currentClueIndex].hintsRequested = parseInt(savedHintsRequested, 10);
   }
