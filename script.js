@@ -7,6 +7,12 @@ let startTime; // Save the start time of the treasure hunt
 let totalPausedTime = 0; // Total paused time in milliseconds
 let pauseStartTime; // Time when the game was last paused
 let isPaused = false;
+// Default personality
+let currentPersonality = "pirate";
+
+// Call `saveStateAndLog()` after every significant change
+let inactivityTimer;
+const inactivityLimit = 60000; // 1 minute in milliseconds
 const savedChatLog = localStorage.getItem('chatLog');
 const chatLog = document.getElementById('chatLog'); // Use chatLog instead of mainChat
 const chatOutput = document.getElementById("mainChat");
@@ -183,12 +189,7 @@ executePendingActions();
 
 
 
-// Default personality
-let currentPersonality = "pirate";
 
-// Call `saveStateAndLog()` after every significant change
-let inactivityTimer;
-const inactivityLimit = 60000; // 1 minute in milliseconds
 
 function startInactivityTimer() {
   // Start the timer only if the stage is 1 or 2
