@@ -21,7 +21,8 @@ const sendBtn = document.getElementById("sendBtn");
 const startBtn = document.getElementById("start-btn");
 const startMapBtn = document.getElementById("startmap-btn");
 
-const clues = [{
+const clues = [
+  {
     clue: "I speak without a mouth and hear without ears. I have no body, but I come alive with wind.",
     hint: "It's related to sound.",
     hint2: "Think about something you hear but cannot see.",
@@ -50,20 +51,49 @@ const clues = [{
     delayAfterAnswer: 3000
   },
   {
-    clue: "I have cities, but no houses; forests, but no trees; and rivers, but no water.",
-    hint: "You can hold me in your hand.",
-    hint2: "It's a tool that helps people navigate the world.",
+    clue: "I have cities, but no houses; mountains, but no trees; and seas, but no water.",
+    hint: "It's something that helps people find their way.",
+    hint2: "It's a tool used in navigation.",
     answer: "atlas",
     mistakenAnswer: "globe",
     mistakenAnswerResponse: "close",
-    explanation: "A map represents geographical features like cities, forests, and rivers.",
+    explanation: "A map represents geographical features like cities, mountains, and seas.",
     afterClueMessage: "Think of something flat and informative.",
     afterAnswerMessage: "Maps are essential for explorers and adventurers.",
     hintsRequested: 0,
     delayAfterClue: 2500, // Delay in milliseconds
     delayAfterAnswer: 3000
+  },
+  {
+    clue: "The more you take, the more you leave behind. What am I?",
+    hint: "It's something you do while walking.",
+    hint2: "It's related to footprints.",
+    answer: "footsteps",
+    mistakenAnswer: "time",
+    mistakenAnswerResponse: "not quite",
+    explanation: "As you walk, you leave behind more footsteps.",
+    afterClueMessage: "Consider the physical marks you leave while moving.",
+    afterAnswerMessage: "Footsteps are the trace of your journey.",
+    hintsRequested: 0,
+    delayAfterClue: 3000, // Delay in milliseconds
+    delayAfterAnswer: 3000
+  },
+  {
+    clue: "I can be cracked, made, told, and played. What am I?",
+    hint: "It's something that can make you laugh.",
+    hint2: "It's often shared among friends.",
+    answer: "joke",
+    mistakenAnswer: "story",
+    mistakenAnswerResponse: "close",
+    explanation: "A joke can be cracked, made, told, and played for amusement.",
+    afterClueMessage: "Think of something light-hearted and humorous.",
+    afterAnswerMessage: "Jokes are a universal way to bring joy and laughter.",
+    hintsRequested: 0,
+    delayAfterClue: 3000, // Delay in milliseconds
+    delayAfterAnswer: 3000
   }
 ];
+
 
 // Declare the pendingActions array globally
 let pendingActions = JSON.parse(localStorage.getItem('pendingActions')) || [];
@@ -222,10 +252,8 @@ executePendingActions();
 
 
 
-
-
 function startInactivityTimer() {
-  // Start the timer only if the stage is 1 or 2
+  // Start the timer only if the stage is 2
   if (stage === 2) {
     // Clear any existing timer to prevent multiple intervals
     clearTimeout(inactivityTimer);
@@ -240,6 +268,15 @@ function startInactivityTimer() {
   }
 }
 
+function stopInactivityTimer() {
+  // Clear the existing timer to stop the inactivity check
+  clearTimeout(inactivityTimer);
+
+  // Optionally, log or take other actions to confirm the timer has been stopped
+  console.log("Inactivity timer stopped.");
+}
+
+
 function sendInactivityMessage() {
   // Check the value of navySupported and send appropriate message
   if (navySupported) {
@@ -252,10 +289,7 @@ function sendInactivityMessage() {
   }
 }
 
-// Attach event listeners to user input fields
 document.getElementById('userInput').addEventListener('input', startInactivityTimer);
-
-// Initialize the inactivity timer when the page loads
 
 
 function displayMessageWithPersonality(message) {
@@ -418,6 +452,7 @@ function giveClue() {
   const currentClue = clues[currentClueIndex];
   stage = 2;
   displayMessage(`Here is your clue: ${currentClue.clue}`);
+  startInactivityTimer();
 
   resumeTimer();
 
@@ -435,7 +470,7 @@ function giveClue() {
   }
 
   // Add navyMessage2 logic if conditions are met
-  if (currentClueIndex === 2 && stage >= 2) {
+  if (currentClueIndex === 3 && stage >= 2) {
   		addPendingAction('navyMessage2');
       removePendingAction ('giveClue');
     setTimeout(() => {
@@ -473,6 +508,7 @@ function checkAnswer(input) {
 if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
     const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
     stage = 0;
+    stopInactivityTimer();
     pauseTimer();
     addPendingAction('clueMessages');
 
@@ -553,6 +589,7 @@ function clueMessages() {
 
 function congratulations() {
   stage = 3;
+  navyStage = 4;
   const endTime = new Date().getTime(); // Get the current time as the end time
 
   // Calculate the total time excluding the paused time
@@ -975,6 +1012,7 @@ function handleBetrayal(choice) {
 
 function confirmation() {
   const navyLog = document.getElementById('navyLog');
+  navyStage = 2;
   navyLog.innerHTML = ""; // Clear the navy log
 
   if (navySupported) {
@@ -1048,7 +1086,7 @@ function reloadPageAndClearStorage() {
 // On page load, check if we need to show the initial container
 window.addEventListener('load', () => {
   // Check if the timer should start
-  if (stage > 0 && startTime) {
+  if (startTime && stage === 2) {
     startInactivityTimer();
   }
  
@@ -1267,3 +1305,4 @@ startBtn.addEventListener("click", () => {
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
+
