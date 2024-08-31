@@ -149,6 +149,7 @@ function loadChatbotState() {
   const savedNavySupported = localStorage.getItem('navySupported');
   const savedTotalPausedTime = localStorage.getItem('totalPausedTime');
   const savedPauseStartTime = localStorage.getItem('pauseStartTime');
+  const savedStartTime = localStorage.getItem('startTime');
 
 
   const chatLog = document.getElementById('chatLog'); // Use chatLog instead of mainChat
@@ -197,6 +198,9 @@ function loadChatbotState() {
 
   if (savedPauseStartTime) {
     pauseStartTime = new Date(parseInt(savedPauseStartTime, 10)); // Assuming savedPauseStartTime is a timestamp
+  }
+  if (savedStartTime) {
+    startTime = new Date(parseInt(savedStartTime, 10)); // Assuming savedPauseStartTime is a timestamp
   }
   if (savedHintsRequested) {
     clues[currentClueIndex].hintsRequested = parseInt(savedHintsRequested, 10);
@@ -1247,7 +1251,7 @@ startBtn.addEventListener("click", () => {
   startMapBtn.style.display = "none";
   userInput.disabled = false;
   sendBtn.disabled = false;
-  startTimer();
+  
 
 
   askForName(); // Ask for the user's name when the start button is clicked
