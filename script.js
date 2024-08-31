@@ -110,6 +110,9 @@ function executePendingActions() {
      if (action === 'readyMessage') {
       readyMessage();
     }
+     if (action === 'congratulations') {
+      congratulations();
+    }
   });
 
   // Clear all pending actions after execution
@@ -533,11 +536,11 @@ function clueMessages() {
     addPendingAction('readyMessage');
     readyMessage();
   } else {
+    addPendingAction('congratulations');
     setTimeout(() => {
       congratulations(); // Display final congratulations message
-      stage = 3;
     }, 6000); // 6-second delay before displaying the final message
-    stage = 0; // Reset stage if needed to replay
+    
   }
   
   removePendingAction('clueMessages');
@@ -549,6 +552,7 @@ function clueMessages() {
 
 
 function congratulations() {
+  stage = 3;
   const endTime = new Date().getTime(); // Get the current time as the end time
 
   // Calculate the total time excluding the paused time
@@ -581,6 +585,7 @@ function congratulations() {
 
   // Stop the timer permanently
   stopTimer();
+  removePendingAction('congratulations');
   saveStateAndLog();
 }
 
