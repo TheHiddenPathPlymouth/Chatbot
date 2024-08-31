@@ -71,7 +71,11 @@ let pendingActions = JSON.parse(localStorage.getItem('pendingActions')) || [];
 function addPendingAction(action) {
   pendingActions.push(action);
   localStorage.setItem('pendingActions', JSON.stringify(pendingActions));
+  
+  // Log the current state of pendingActions
+  console.log('Pending actions:', pendingActions);
 }
+
 
 function removePendingAction(action) {
   // Find the index of the action in the pendingActions array
@@ -82,6 +86,7 @@ function removePendingAction(action) {
     pendingActions.splice(actionIndex, 1);
     localStorage.setItem('pendingActions', JSON.stringify(pendingActions));
   }
+  console.log('Pending actions after removal:', pendingActions);
 }
 
 
@@ -94,8 +99,15 @@ function executePendingActions() {
     if (action === 'navyMessage2') {
       navyMessage2();
     }
-    if (action === 'giveClue') {
+   
+     if (action === 'giveClue') {
       giveClue();
+    }
+     if (action === 'clueMessages') {
+      clueMessages();
+    }
+     if (action === 'readyMessage') {
+      readyMessage();
     }
   });
 
@@ -137,7 +149,7 @@ function loadChatbotState() {
   const savedNavySupported = localStorage.getItem('navySupported');
   const savedTotalPausedTime = localStorage.getItem('totalPausedTime');
   const savedPauseStartTime = localStorage.getItem('pauseStartTime');
- 
+
 
   const chatLog = document.getElementById('chatLog'); // Use chatLog instead of mainChat
   const savedHintsRequested = localStorage.getItem('hintsRequested');
@@ -176,7 +188,7 @@ function loadChatbotState() {
 
   if (savedNavySupported) {
     navySupported = (savedNavySupported === 'true');
-   }
+  }
 
   // Handle loading of totalPausedTime and pauseStartTime
   if (savedTotalPausedTime) {
@@ -249,72 +261,72 @@ function switchPersonality(personality) {
 
 
 function loadTimer() {
-    // Load saved start time, total paused time, and pause state
-    startTime = parseInt(localStorage.getItem('startTime'));
-    totalPausedTime = parseInt(localStorage.getItem('totalPausedTime')) || 0;
-    const savedIsPaused = localStorage.getItem('isPaused');
-    pauseStartTime = parseInt(localStorage.getItem('pauseStartTime'));
+  // Load saved start time, total paused time, and pause state
+  startTime = parseInt(localStorage.getItem('startTime'));
+  totalPausedTime = parseInt(localStorage.getItem('totalPausedTime')) || 0;
+  const savedIsPaused = localStorage.getItem('isPaused');
+  pauseStartTime = parseInt(localStorage.getItem('pauseStartTime'));
 
-    if (startTime) {
-        // The game has already started
-        if (savedIsPaused === 'true' && pauseStartTime) {
-            isPaused = true;
-        } 
-        // No need to explicitly resume the timer; the timer will keep running as long as it's not paused
-    } else {
-        // If no start time is saved, this is the first time starting the timer
-        startTime = new Date().getTime();
-        localStorage.setItem('startTime', startTime.toString());
+  if (startTime) {
+    // The game has already started
+    if (savedIsPaused === 'true' && pauseStartTime) {
+      isPaused = true;
     }
+  
+  } else {
+    // If no start time is saved, this is the first time starting the timer
+    startTime = new Date().getTime();
+    localStorage.setItem('startTime', startTime.toString());
+  }
 }
 
 function startTimer() {
-    // This function should only be called at the beginning of the game
-    startTime = new Date().getTime();
-    localStorage.setItem('startTime', startTime.toString());
-    isPaused = false;
-    localStorage.setItem('isPaused', 'false');
+  // This function should only be called at the beginning of the game
+  startTime = new Date().getTime();
+  localStorage.setItem('startTime', startTime.toString());
+  isPaused = false;
+  localStorage.setItem('isPaused', 'false');
 }
 
 function pauseTimer() {
-    if (!isPaused) {
-        pauseStartTime = new Date().getTime();
-        isPaused = true;
-        localStorage.setItem('isPaused', 'true');
-        localStorage.setItem('pauseStartTime', pauseStartTime.toString());
-    }
+  if (!isPaused) {
+    pauseStartTime = new Date().getTime();
+    isPaused = true;
+    localStorage.setItem('isPaused', 'true');
+    localStorage.setItem('pauseStartTime', pauseStartTime.toString());
+  }
 }
 
 function resumeTimer() {
-    if (isPaused && pauseStartTime) {
-        // Calculate the time that the game was paused
-        const currentPauseDuration = new Date().getTime() - pauseStartTime;
-        totalPausedTime += currentPauseDuration;
-        localStorage.setItem('totalPausedTime', totalPausedTime.toString());
-        isPaused = false;
-        localStorage.setItem('isPaused', 'false');
-        localStorage.removeItem('pauseStartTime'); // Clear the pause start time as it's no longer needed
-    }
+  if (isPaused && pauseStartTime) {
+    // Calculate the time that the game was paused
+    const currentPauseDuration = new Date().getTime() - pauseStartTime;
+    totalPausedTime += currentPauseDuration;
+    localStorage.setItem('totalPausedTime', totalPausedTime.toString());
+    isPaused = false;
+    localStorage.setItem('isPaused', 'false');
+    localStorage.removeItem('pauseStartTime'); // Clear the pause start time as it's no longer needed
+  }
 }
 
 function stopTimer() {
-    const endTime = new Date().getTime();
-    const totalTime = endTime - startTime - totalPausedTime;
-    console.log(`Total time: ${formatTime(totalTime)}`); // Display or use the total time as needed
+  const endTime = new Date().getTime();
+  const totalTime = endTime - startTime - totalPausedTime;
+  console.log(`Total time: ${formatTime(totalTime)}`); // Display or use the total time as needed
 
-    // Clear all saved values (optional)
-    localStorage.removeItem('startTime');
-    localStorage.removeItem('totalPausedTime');
-    localStorage.removeItem('pauseStartTime');
-    localStorage.setItem('isPaused', 'true');
+  // Clear all saved values (optional)
+  localStorage.removeItem('startTime');
+  localStorage.removeItem('totalPausedTime');
+  localStorage.removeItem('pauseStartTime');
+  localStorage.setItem('isPaused', 'true');
 }
 
 function formatTime(milliseconds) {
-    const totalSeconds = Math.floor(milliseconds / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-    return `${minutes}:${formattedSeconds}`;
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+  return `${minutes}:${formattedSeconds}`;
 }
 
 
@@ -372,11 +384,27 @@ function askForName() {
 
 
 function readyMessage() {
-  stage = 1;
-  displayMessage("Are you ready for the clue? If so say aye!");
+    stage = 1;
 
+    if (currentClueIndex > 0) {
+        const message = currentClueIndex === clues.length - 1 
+            ? "Are you ready for your final clue?" 
+            : "Are you ready for the next clue? If so say aye!";
 
+        setTimeout(() => {
+            displayMessage(message);
+            removePendingAction('readyMessage');
+        }, 6000); // 6-second delay if currentClueIndex > 0
+    } else {
+        setTimeout(() => {
+            displayMessage("Are you ready for your first clue?");
+            removePendingAction('readyMessage');
+        }, 2000); // 2-second delay if currentClueIndex = 0
+    }
+
+    
 }
+
 
 function giveClue() {
   const currentClue = clues[currentClueIndex];
@@ -385,12 +413,35 @@ function giveClue() {
 
   resumeTimer();
 
+  // Add navyMessage logic if conditions are met
+  if (currentClueIndex === 1 && stage >= 2 && navyStage === 0) {
+  		addPendingAction('navyMessage');
+    setTimeout(() => {
+      removePendingAction ('giveClue');
+    }, 3050);
+     
+    setTimeout(() => {
+      navyMessage();
+      removePendingAction('navyMessage');
+    }, 6000); // 6-second delay for navyMessage
+  }
 
+  // Add navyMessage2 logic if conditions are met
+  if (currentClueIndex === 2 && stage >= 2) {
+  		addPendingAction('navyMessage2');
+      removePendingAction ('giveClue');
+    setTimeout(() => {
+      navyMessage2();
+      removePendingAction('navyMessage2');
+    }, 8000); // 8-second delay for navyMessage2
+  }
+
+  // Display the after clue message after a delay (This is the last thing in the function)
   setTimeout(() => {
     displayMessage(currentClue.afterClueMessage);
   }, currentClue.delayAfterClue);
-
 }
+
 
 let incorrectAttempts = 0; // Initialize a variable to track incorrect attempts
 
@@ -411,19 +462,25 @@ function checkAnswer(input) {
     "Nay, that be not the answer. Give it another go!"
   ];
 
-  if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
+if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
     const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
     stage = 0;
 
     pauseTimer();
-    displayMessage(randomResponse);
-    clueMessages();
-    currentClueIndex++;
+    addPendingAction('clueMessages');
+
+    setTimeout(() => {
+        displayMessage(randomResponse);
+       
+        clueMessages();
+        
+    }, 2000); // 2-second delay before executing displayMessage and clueMessages
+
+    
 
 
 
 
-    incorrectAttempts = 0; // Reset incorrect attempts on correct answer
   } else if (input.toLowerCase().includes("hint")) {
     giveHint();
   } else {
@@ -459,7 +516,10 @@ function clueMessages() {
   // Logic for advancing to the next clue or ending the game
   if (currentClueIndex < clues.length - 1) {
     stage = 0; // Reset stage to readyMessage
-    setTimeout(readyMessage, 6000); // 6-second delay before moving to the next stage
+    incorrectAttempts = 0;
+    currentClueIndex++;
+    addPendingAction('readyMessage');
+    readyMessage();
   } else {
     setTimeout(() => {
       congratulations(); // Display final congratulations message
@@ -467,6 +527,10 @@ function clueMessages() {
     }, 6000); // 6-second delay before displaying the final message
     stage = 0; // Reset stage if needed to replay
   }
+  
+  removePendingAction('clueMessages');
+ 
+  
 }
 
 
@@ -531,7 +595,8 @@ function giveHint() {
 
 function greetUser() {
   displayMessage(`Welcome aboard, ${userName}!`);
-  setTimeout(readyMessage, 1000); // Proceed to readyMessage after greeting
+  addPendingAction('readyMessage'); // Proceed to readyMessage after greeting
+  readyMessage();
 }
 
 
@@ -946,10 +1011,10 @@ document.getElementById('closeStartMapBtn').addEventListener('click', () => {
 // Function to reload the page and clear all storage
 function reloadPageAndClearStorage() {
   // Clear all local storage
-  
+
   userInput.value = ""; // Clear the input field
   // You may also want to clear any messages or logs if needed
-  document.getElementById('chatLog').innerHTML = ""; 
+  document.getElementById('chatLog').innerHTML = "";
 
   // Introduce a slight delay before reloading the page to ensure storage is cleared
   setTimeout(() => {
@@ -1007,10 +1072,10 @@ window.addEventListener('load', () => {
 function navyMessage() {
   navyStage = 1;
   saveStateAndLog();
-  
+
   switchPersonality("navy"); // Switch to Navy personality
   displayMessageWithPersonality("Attention! This is the Navy captain speaking. I trust you're ready to cooperate with honor.");
-  
+
   switchPersonality("pirate"); // Switch back to Pirate personality after the Navy message is sent
 }
 
@@ -1108,37 +1173,25 @@ sendBtn.addEventListener("click", () => {
 
     if (input.toLowerCase().includes("aye")) {
       if (currentClueIndex === 0) {
-        startTimer();  // Start the timer if it's the first clue
+        startTimer(); // Start the timer if it's the first clue
       }
+
+      // Add giveClue to pending actions
       addPendingAction('giveClue');
-        setTimeout(() => {
-          giveClue();
-          removePendingAction ('giveClue');
-        }, 3000); 
+      setTimeout(() => {
+        giveClue();
+        removePendingAction('giveClue');
+      }, 3000); // 3-second delay for giveClue
 
-      // Add navyMessage to pending actions only if conditions are met
-      if (currentClueIndex === 1 && stage >= 2 && navyStage === 0) {
-        addPendingAction('navyMessage');
-        setTimeout(() => {
-          navyMessage();
-          removePendingAction ('navyMessage');
-        }, 6000); // 6-second delay for navyMessage
-      }
-
-      // Add navyMessage2 to pending actions only if conditions are met
-      if (currentClueIndex === 2 && stage >= 2) {
-        addPendingAction('navyMessage2');
-        setTimeout(() => {
-          navyMessage2();
-          removePendingAction ('navyMessage2');
-        }, 8000); // 5-second delay for navyMessage2
-      }
     } else if (input.toLowerCase().includes("yes")) {
       displayMessage("Be more pirate!");
     } else {
       displayMessage("I'll wait until you say aye.");
     }
+
     userInput.value = "";
+
+
   } else if (stage === 2) {
     displayMessage(input, "user");
     checkAnswer(input);
@@ -1195,9 +1248,7 @@ startBtn.addEventListener("click", () => {
   userInput.disabled = false;
   sendBtn.disabled = false;
   startTimer();
-  
+
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
-
-
