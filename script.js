@@ -73,6 +73,18 @@ function addPendingAction(action) {
   localStorage.setItem('pendingActions', JSON.stringify(pendingActions));
 }
 
+function removePendingAction(action) {
+  // Find the index of the action in the pendingActions array
+  const actionIndex = pendingActions.indexOf(action);
+
+  // If the action is found, remove it from the array
+  if (actionIndex !== -1) {
+    pendingActions.splice(actionIndex, 1);
+    localStorage.setItem('pendingActions', JSON.stringify(pendingActions));
+  }
+}
+
+
 function executePendingActions() {
   pendingActions.forEach((action) => {
     if (action === 'navyMessage') {
@@ -1100,14 +1112,16 @@ sendBtn.addEventListener("click", () => {
       }
       addPendingAction('giveClue');
         setTimeout(() => {
-          executePendingActions();
+          giveClue();
+          removePendingAction ('giveClue');
         }, 3000); 
 
       // Add navyMessage to pending actions only if conditions are met
       if (currentClueIndex === 1 && stage >= 2 && navyStage === 0) {
         addPendingAction('navyMessage');
         setTimeout(() => {
-          executePendingActions();
+          navyMessage();
+          removePendingAction ('navyMessage');
         }, 6000); // 6-second delay for navyMessage
       }
 
@@ -1115,7 +1129,8 @@ sendBtn.addEventListener("click", () => {
       if (currentClueIndex === 2 && stage >= 2) {
         addPendingAction('navyMessage2');
         setTimeout(() => {
-          executePendingActions();
+          navyMessage2();
+          removePendingAction ('navyMessage2');
         }, 8000); // 5-second delay for navyMessage2
       }
     } else if (input.toLowerCase().includes("yes")) {
@@ -1184,6 +1199,5 @@ startBtn.addEventListener("click", () => {
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
-
 
 
