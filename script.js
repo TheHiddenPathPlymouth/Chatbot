@@ -8,6 +8,7 @@ let totalPausedTime = 0; // Total paused time in milliseconds
 let pauseStartTime; // Time when the game was last paused
 let isPaused = false;
 let currentPersonality = "pirate";
+let incorrectAttempts = 0; // Initialize a variable to track incorrect attempts
 
 // Call `saveStateAndLog()` after every significant change
 let inactivityTimer;
@@ -447,7 +448,7 @@ function giveClue() {
 }
 
 
-let incorrectAttempts = 0; // Initialize a variable to track incorrect attempts
+
 
 function checkAnswer(input) {
   const currentClue = clues[currentClueIndex];
@@ -469,7 +470,6 @@ function checkAnswer(input) {
 if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
     const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
     stage = 0;
-
     pauseTimer();
     addPendingAction('clueMessages');
 
@@ -507,21 +507,29 @@ if (input.toLowerCase().includes(currentClue.answer.toLowerCase())) {
   }
 }
 
-
-
 function clueMessages() {
+   
   const currentClue = clues[currentClueIndex];
-  displayMessage(currentClue.explanation);
+ 
+  setTimeout(() => {
+   
+    displayMessage(currentClue.explanation);
+    
+  }, 1000);
 
   setTimeout(() => {
+   
     displayMessage(currentClue.afterAnswerMessage);
+    
   }, currentClue.delayAfterAnswer);
+
 
   // Logic for advancing to the next clue or ending the game
   if (currentClueIndex < clues.length - 1) {
     stage = 0; // Reset stage to readyMessage
     incorrectAttempts = 0;
     currentClueIndex++;
+    saveStateAndLog();
     addPendingAction('readyMessage');
     readyMessage();
   } else {
@@ -1038,10 +1046,8 @@ window.addEventListener('load', () => {
   if (stage > 0 && startTime) {
     startInactivityTimer();
   }
-  // Check the stage and currentclueindex conditions
-  if (stage === 0 && currentClueIndex > 0 && currentClueIndex < clues.length - 1) {
-    readyMessage();
-  }
+ 
+
 
 
 
