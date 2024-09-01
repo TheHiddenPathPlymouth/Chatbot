@@ -606,25 +606,70 @@ function congratulations() {
 
   if (navySupported) {
     switchPersonality("navy"); // Set the current personality to the Navy
-    message = `Congratulations, you found the treasure, ${userName}! As a true member of the Queen's Navy, you have proven your loyalty and wit! Your final time was ${finalTime}.`;
+    let message = `Congratulations, you found the treasure, ${userName}! As a true member of the Queen's Navy, you have proven your loyalty and wit! Your final time was ${finalTime}.`;
     displayMessageWithPersonality(message);
-    switchPersonality("pirate");
-    message = `Scupper me kippers you betrayed me to the Navy!`;
-    displayMessageWithPersonality(message);
-  } else {
+
+    // Delay before switching to Pirate personality and displaying the next message
+    setTimeout(() => {
+        switchPersonality("pirate");
+        message = `Scupper me kippers you betrayed me to the Navy!`;
+        displayMessageWithPersonality(message);
+    }, 4000); // 4-second delay
+
+} else {
     switchPersonality("pirate"); // Set the current personality to the Pirate
-    message = `Ahoy, ${userName}! Ye found the treasure! Ye've got the cunning of a true pirate, and the spoils are yours! Yarrr! Your final time was ${finalTime}.`;
+    let message = `Ahoy, ${userName}! Ye found the treasure! Ye've got the cunning of a true pirate, and the spoils are yours! Yarrr! Your final time was ${finalTime}.`;
     displayMessageWithPersonality(message);
-    switchPersonality("navy"); // Set the current personality to the Navy
-    message = `Curses be upon you, ${userName}! The Navy shall never forgive you for this!`;
-    displayMessageWithPersonality(message);
-  }
+
+    // Delay before switching to Navy personality and displaying the next message
+    setTimeout(() => {
+        switchPersonality("navy"); // Set the current personality to the Navy
+        message = `Curses be upon you, ${userName}! The Navy shall never forgive you for this!`;
+        displayMessageWithPersonality(message);
+    }, 4000); // 4-second delay
+}
+
 
   // Stop the timer permanently
   stopTimer();
   removePendingAction('congratulations');
+  startCoinEffect();
   saveStateAndLog();
 }
+
+let coinInterval;
+const coinDuration = 10000; // Duration for which coins should fall (10 seconds)
+const coinIntervalTime = 200; // Interval between creating new coins
+
+function createCoin() {
+    const coin = document.createElement('div');
+    coin.classList.add('coin');
+
+    // Randomize the starting position of each coin
+    coin.style.left = Math.random() * 100 + 'vw';
+    
+    // Randomize the duration of the fall animation
+    coin.style.animationDuration = Math.random() * 3 + 2 + 's';
+
+    document.getElementById('coin-container').appendChild(coin);
+
+    // Remove the coin after the animation ends to prevent too many elements
+    setTimeout(() => {
+        coin.remove();
+    }, 5000); // Adjust this value to match the longest animation duration
+}
+
+function startCoinEffect() {
+    // Create new coins at intervals
+    coinInterval = setInterval(createCoin, coinIntervalTime);
+
+    // Stop the coin effect after the specified duration
+    setTimeout(() => {
+        clearInterval(coinInterval);
+    }, coinDuration);
+}
+
+
 
 
 
@@ -648,15 +693,16 @@ function giveHint() {
 
 
 function greetUser() {
-  displayMessage(`Welcome aboard, ${userName}!`);
   addPendingAction('readyMessage'); // Proceed to readyMessage after greeting
+  displayMessage(`Welcome aboard, ${userName}!`);
+  showPirateFlag();
+ 
   readyMessage();
 }
 
 
 function openHelp() {
   document.getElementById('helpSection').classList.remove('hidden');
-  closeNavy();
   userInput.disabled = true;
   sendBtn.disabled = true;
   pauseTimer();
@@ -868,8 +914,35 @@ function closeNavy() {
   userInput.disabled = false;
   sendBtn.disabled = false;
   saveStateAndLog();
-
+  
+  if (navySupported === false) {
+  showPirateFlag();
+} else if (navySupported === true) {
+  showNavyFlag();
 }
+
+
+  // Check if stage is less than 3
+  if (stage < 3) {
+    // Define pirate responses
+    const pirateResponses = [
+      'Was that the Navy I heard?',
+      'Blimey! I think I heard the Navy approaching!',
+      'Arrr! Did I catch a glimpse of the Navy?',
+      'Yarrr! Could it be the Navy lurking nearby?'
+    ];
+
+    // Randomly select a response
+    const randomResponse = pirateResponses[Math.floor(Math.random() * pirateResponses.length)];
+
+    // Set a timeout before displaying the message
+    setTimeout(() => {
+      switchPersonality("pirate");
+      displayMessage(randomResponse);
+    }, 1000); // 1-second delay
+  }
+}
+
 
 let lastHappyResponse = ""; // Variable to store the last happy response
 let lastDoubtfulResponse = ""; // Variable to store the last doubtful response
@@ -1166,6 +1239,61 @@ function navyMessage2() {
   }
 }
 
+function showPirateFlag() {
+  const pirateFlag = document.getElementById('pirateFlag');
+  const navyFlag = document.getElementById('navyFlag');
+
+  // Fade out navy flag if it's visible
+  if (navyFlag.classList.contains('show')) {
+    navyFlag.classList.remove('show');
+    setTimeout(() => {
+      navyFlag.style.display = 'none';
+      pirateFlag.style.display = 'block';
+      
+      // Use setTimeout with 10ms to ensure the browser re-renders
+      setTimeout(() => {
+        pirateFlag.classList.add('show');
+      }, 10);
+      
+    }, 1000); // Match the CSS transition duration
+  } else {
+    pirateFlag.style.display = 'block';
+    
+    // Use setTimeout with 10ms to ensure the browser re-renders
+    setTimeout(() => {
+      pirateFlag.classList.add('show');
+    }, 10);
+  }
+}
+
+function showNavyFlag() {
+  const pirateFlag = document.getElementById('pirateFlag');
+  const navyFlag = document.getElementById('navyFlag');
+
+  // Fade out pirate flag if it's visible
+  if (pirateFlag.classList.contains('show')) {
+    pirateFlag.classList.remove('show');
+    setTimeout(() => {
+      pirateFlag.style.display = 'none';
+      navyFlag.style.display = 'block';
+      
+      // Use setTimeout with 10ms to ensure the browser re-renders
+      setTimeout(() => {
+        navyFlag.classList.add('show');
+      }, 10);
+      
+    }, 1000); // Match the CSS transition duration
+  } else {
+    navyFlag.style.display = 'block';
+    
+    // Use setTimeout with 10ms to ensure the browser re-renders
+    setTimeout(() => {
+      navyFlag.classList.add('show');
+    }, 10);
+  }
+}
+
+
 
 
 
@@ -1184,6 +1312,15 @@ sendBtn.addEventListener("click", () => {
     userInput.value = ""; // Clear the input field
     document.getElementById('chatLog').innerHTML = ""; // Clear the chat log (optional)
     askForName(); // Reset and ask for the team name again
+    return; // Exit the function to prevent further processing
+  }
+  
+  if (input.toLowerCase() === "resetcoderet1") {
+    // Reset the chatbot state
+    currentClueIndex --;
+    userInput.value = ""; // Clear the input field
+    switchPersonality ("pirate");
+    readyMessage();
     return; // Exit the function to prevent further processing
   }
 
@@ -1305,4 +1442,6 @@ startBtn.addEventListener("click", () => {
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
+
+
 
