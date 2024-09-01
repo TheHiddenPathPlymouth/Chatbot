@@ -128,18 +128,19 @@ button:hover {
 #navySection {
     width: 300px;
     background-image: url('https://i.postimg.cc/vZMzBqLT/navybackgroundship.png');
-    background-size: cover; /* Ensure the entire image is visible within the section */
+    background-size: contain; 
     background-position: center; /* Center the image in the section */
     background-repeat: no-repeat; /* Prevent the image from repeating */
     padding: 20px;
     border-radius: 0px;
     border: 2px solid black;
-    height: 450px; 
+    height: 448px; 
 }
 
 
 #navySection .help-box {
   background-color: transparent;
+  justify-content: flex-start;
 }
 
 
