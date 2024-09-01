@@ -142,7 +142,8 @@ button:hover {
 #navySection .help-box {
   background-color: transparent;
   justify-content: flex-start;
-  padding-top: 20px
+  width: 260px;
+  margin: 0 auto;
 }
 
 
