@@ -121,34 +121,34 @@ function removePendingAction(action) {
 }
 
 
+// Define a mapping of action names to functions
+const actionMap = {
+  'navyMessage': navyMessage,
+  'navyMessage2': navyMessage2,
+  'giveClue': giveClue,
+  'clueMessages': clueMessages,
+  'readyMessage': readyMessage,
+  'congratulations': congratulations,
+  'greetUser': greetUser
+};
+
 function executePendingActions() {
   pendingActions.forEach((action) => {
-    if (action === 'navyMessage') {
-      navyMessage();
-    }
-
-    if (action === 'navyMessage2') {
-      navyMessage2();
-    }
-   
-     if (action === 'giveClue') {
-      giveClue();
-    }
-     if (action === 'clueMessages') {
-      clueMessages();
-    }
-     if (action === 'readyMessage') {
-      readyMessage();
-    }
-     if (action === 'congratulations') {
-      congratulations();
+    const actionFunction = actionMap[action];
+    if (actionFunction) {
+      actionFunction();
     }
   });
 
   // Clear all pending actions after execution
   pendingActions = [];
   localStorage.removeItem('pendingActions');
+  
+  // Optional: Add any additional logic if needed
+  console.log('All pending actions executed and cleared.');
 }
+
+
 
 function saveChatbotState() {
   localStorage.setItem('chatLog', document.getElementById('chatLog').innerHTML);
@@ -245,7 +245,9 @@ function loadChatbotState() {
 
 
 loadChatbotState();
+updateFlag();
 executePendingActions();
+
 
 
 
@@ -693,8 +695,10 @@ function giveHint() {
 
 
 function greetUser() {
+  addPendingAction('greetUser');
   addPendingAction('readyMessage'); // Proceed to readyMessage after greeting
-  displayMessage(`Welcome aboard, ${userName}!`);
+  displayMessage(`Welcome to the crew, Team ${userName}!`);
+  removePendingAction('greetUser');
   showPirateFlag();
  
   readyMessage();
@@ -823,15 +827,14 @@ function urgentHelp() {
   helpLog.innerHTML = "";
 
   // Add the new message, reset button, and show answer button
-  helpLog.innerHTML += `<p>If you're having serious problems with the game, you can reset and start again or call us on 123123.</p>`;
-  helpLog.innerHTML += `<button id="resetBtn">Reset</button>`;
+  helpLog.innerHTML += `<p>If you're really stuck, press the button below to reveal your answer.</p>`;
+  
   helpLog.innerHTML += `<button id="showAnswerBtn">Show Answer</button>`;
+  helpLog.innerHTML += `<p>If you're having serious problems with the game, you can call us for help on 123123123.</p>`;
+  
+  
 
-  // Attach event listener to the reset button
-  document.getElementById('resetBtn').addEventListener('click', () => {
-    resetGame(); // Call the reset function
-    helpLog.innerHTML += `<p>Game has been reset. You can start again.</p>`; // Optional message to confirm the reset
-  });
+ 
 
   // Attach event listener to the show answer button
   document.getElementById('showAnswerBtn').addEventListener('click', () => {
@@ -908,18 +911,28 @@ function openNavy() {
 
 }
 
+function updateFlag() {
+  // Check if startTime or username is missing or invalid
+  if (!startTime || !userName) {
+    return; // Exit the function early
+  }
+
+  if (navySupported === false) {
+    showPirateFlag();
+  } else if (navySupported === true) {
+    showNavyFlag();
+  }
+}
+
+
 function closeNavy() {
   document.getElementById('navySection').classList.add('hidden');
   document.getElementById('navyLog').innerHTML = "";
   userInput.disabled = false;
   sendBtn.disabled = false;
   saveStateAndLog();
-  
-  if (navySupported === false) {
-  showPirateFlag();
-} else if (navySupported === true) {
-  showNavyFlag();
-}
+  updateFlag();
+ 
 
 
   // Check if stage is less than 3
@@ -1021,17 +1034,18 @@ function callNavy() {
 
     // Check if navyStage is 3
   } else if (navyStage === 3) {
+   navyLog.innerHTML += `<p>It's time to decide where your loyalties lie</p>`;
     // Create two buttons for 'betrayNavy' and 'betrayPirates'
     if (navySupported) {
-      navyLog.innerHTML += `
-                <button id="betrayNavyBtn">Betray Navy</button>
-                <button id="betrayPiratesBtn">Stick with Navy</button>
-            `;
+        navyLog.innerHTML += `
+            <button class="betrayBtn" id="betrayNavyBtn">Betray Navy</button>
+            <button class="betrayBtn" id="betrayPiratesBtn">Stick with Navy</button>
+        `;
     } else {
-      navyLog.innerHTML += `
-                <button id="betrayNavyBtn">Stick with Pirates</button>
-                <button id="betrayPiratesBtn">Switch to Navy</button>
-            `;
+        navyLog.innerHTML += `
+            <button class="betrayBtn" id="betrayNavyBtn">Stick with Pirates</button>
+            <button class="betrayBtn" id="betrayPiratesBtn">Switch to Navy</button>
+        `;
     }
 
     // Attach event listeners to the buttons
@@ -1066,12 +1080,14 @@ function handleBetrayal(choice) {
     navyStage = 4;
     navySupported = false;
     saveStateAndLog();
+    navyLog.innerHTML = '';
     navyLog.innerHTML += `<p>Fool! The fury of the Navy will rain down upon you</p>`;
 
   } else if (choice === 'pirates') {
     navyStage = 4;
     navySupported = true;
     saveStateAndLog();
+    navyLog.innerHTML = '';
     navyLog.innerHTML += `<p>A wise choice! I never doubted your knowledge of the glory and might of The Navy, forever now your ally!</p>`;
 
   }
@@ -1442,6 +1458,7 @@ startBtn.addEventListener("click", () => {
 
   askForName(); // Ask for the user's name when the start button is clicked
 });
+
 
 
 
