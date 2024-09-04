@@ -90,21 +90,36 @@ button:hover {
   border-radius: 10px;
   width: 300px;
   padding: 0;
-  height: auto
-    display: flex;
-    justify-content: center; /* Center the help-box horizontally */
-    align-items: center; /* Center the help-box vertically */
+  height: auto;
+  display: flex;
+  justify-content: center; /* Center the help-box horizontally */
+  align-items: center; /* Center the help-box vertically */
     
 }
 
+#urgentHelpButton {
+   font-weight: bold; /* Make text bold */
+
+ 
+}
+
+#helpSection .help-box {
+  background-image: url('https://cdn.pixabay.com/photo/2013/07/13/12/52/floating-ring-160536_1280.png');
+    background-color: lightblue;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-weight: bold; /* Make text bold */
+
+}
+
 .help-box {
-    width: 100%; /* Make help-box take up the full width of the container */
-    height: 100%; /* Make help-box take up the full height of the container */
+    width: 300px;
+    height: 425px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: white;
     border-radius: 10px; /* Remove border-radius if you want sharp edges */
     text-align: center;
     padding: 0; /* Remove padding */
@@ -117,7 +132,7 @@ button:hover {
 .help-box button {
     margin: 5px 0; /* Add space above and below each button */
     padding: 10px 20px; /* Optional: Add padding to the buttons */
-    background-color: #007BFF; /* Optional: Change the button background color */
+    background-color: #007bff; /* Optional: Change the button background color */
     color: white; /* Optional: Change the button text color */
     border: none; /* Remove default button border */
     border-radius: 5px; /* Optional: Add border-radius for rounded corners */
@@ -127,6 +142,7 @@ button:hover {
 
 #navySection {
     width: 300px;
+    height: 425px;
     background-image: url('https://i.postimg.cc/vZMzBqLT/navybackgroundship.png');
     background-size: 100% 100%; /* Stretch the image to fill the entire background */
     background-position: center; /* Center the image in the section */
@@ -134,17 +150,38 @@ button:hover {
     padding: 20px;
     border-radius: 0px;
     border: 2px solid black;
-    height: 425px;
+    
+    
+
+    
 }
 
 
 
 #navySection .help-box {
   background-color: transparent;
-  justify-content: flex-start;
   width: 260px;
   margin: 0 auto;
+  padding-top: 10px;
+  display: flex; /* Enable flexbox */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: flex-start; /* Center all items vertically */
+  align-items: center; /* Center all items horizontally */
+ 
+  
 }
+
+.help-box .betrayBtn {
+    background-color: red; /* Red background */
+    
+}
+
+.help-box .betrayBtn:hover {
+    background-color: darkred; /* Dark red background on hover */
+}
+
+
+
 
 
 
@@ -310,15 +347,6 @@ button:hover {
   background-image: url('https://cdn.pixabay.com/photo/2024/05/08/05/45/sea-captain-8747460_1280.jpg');
 }
 
-.navy-container {
-  display: flex;
-  justify-content: center;
-  /* Center the content horizontally */
-  align-items: center;
-  /* Center the content vertically */
-  height: 100%;
-  /* Ensure the container takes up the full height */
-}
 
 
 
@@ -329,7 +357,7 @@ button:hover {
   /* Set the same size as width to make it a circle */
   border-radius: 50%;
   /* Make the thumbnail perfectly circular */
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   /* Space between the thumbnail and the text */
   object-fit: cover;
   /* Ensure the image covers the entire circle */
@@ -606,21 +634,23 @@ button:hover {
   top: 0;
   right: 0;
   width: 100px; /* Adjust as needed */
-  height: auto;
+  height: 380px; /* Adjust height to 80px so that only 80px of the flag is visible */
+  overflow: hidden; /* Ensure anything outside this container is hidden */
   z-index: -10;
 }
 
 /* Base styles for the flags */
 .flagImage {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
+  top: -7px; /* Move the flag up by 20px so the top part is outside the container */
+  right: 8px;
+  width: 70%;
   height: auto;
   opacity: 0; /* Hidden by default */
   transition: opacity 1s; /* Smooth transition for fading */
   display: none; /* Hidden from the DOM initially */
 }
+
 
 #coin-container {
     position: fixed;
@@ -677,4 +707,5 @@ button:hover {
 .hidden {
   display: none;
 }
+
 
