@@ -53,8 +53,8 @@
   </div>
   
   <div id="flagContainer">
-  <img id="pirateFlag" class="flagImage" src="https://i.postimg.cc/vT7rD5Wb/pirateflag.png" alt="Pirate Flag">
-  <img id="navyFlag" class="flagImage" src="https://i.postimg.cc/DZ8hb2Jm/ukflag.png" alt="Navy Flag">
+  <img id="pirateFlag" class="flagImage" src="https://i.postimg.cc/dVz3xq7w/pirateflagdown.png" alt="Pirate Flag">
+  <img id="navyFlag" class="flagImage" src="https://i.postimg.cc/7CyLpLsb/navyflagdown.png" alt="Navy Flag">
 </div>
 
 <div id="coin-container"></div>
@@ -66,7 +66,7 @@
             <p>How can I help?</p>
             <button onclick="FAQs()">FAQs</button>
             <button onclick="changeName()">Change team name</button>
-            <button onclick="urgentHelp()">I need urgent help</button>
+            <button id="urgentHelpButton" onclick="urgentHelp()">I need urgent help</button>
             <button onclick="closeHelp()">Close</button>
             <div id="helpLog" class="help-log"></div>
         </div>
@@ -75,11 +75,11 @@
   <div id="navySection" class="help-container hidden">
     <div class="help-box">
         <img src="https://cdn.pixabay.com/photo/2024/05/08/05/45/sea-captain-8747460_1280.jpg" alt="Navy Thumbnail" class="navy-thumbnail">
-        <p>Did you call?</p>
+        
         <div class="navy-buttons">
-            <button onclick="callNavy()">Call</button>
+            <button onclick="callNavy()">Speak to the Navy</button>
             <button id="insultNavy" onclick="insultNavy()">Insult</button>
-            <button onclick="closeNavy()">Close</button>
+            <button onclick="closeNavy()">Return to chat</button>
         </div>
         <div id="navyLog" class="help-log"></div>
     </div>
@@ -92,6 +92,7 @@
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
   
