@@ -99,19 +99,33 @@ button:hover {
 
 #urgentHelpButton {
    font-weight: bold; /* Make text bold */
+   
 
  
 }
 
 #helpSection .help-box {
-  background-image: url('https://cdn.pixabay.com/photo/2013/07/13/12/52/floating-ring-160536_1280.png');
-    background-color: lightblue;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    font-weight: bold; /* Make text bold */
-
+  position: relative; /* Ensure the pseudo-element is positioned correctly */
+  padding: 0 20px; /* Padding for text */
+  overflow: hidden; /* Ensure the pseudo-element does not overflow */
 }
+
+#helpSection .help-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://cdn.pixabay.com/photo/2013/07/13/12/52/floating-ring-160536_1280.png');
+  background-color: lightblue;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.75; /* Adjust opacity of the background */
+  z-index: -1; /* Ensure it is behind the text */
+}
+
 
 .help-box {
     width: 300px;
@@ -122,7 +136,8 @@ button:hover {
     justify-content: center;
     border-radius: 10px; /* Remove border-radius if you want sharp edges */
     text-align: center;
-    padding: 0; /* Remove padding */
+    padding: 0;
+    z-index: 1000;
 }
 
 .help-box p {
@@ -156,13 +171,43 @@ button:hover {
     
 }
 
+/* The new bottom box */
+.bottom-box {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  background-color: transparent;
+  padding: 10px;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  box-sizing: border-box;
+  z-index: 9999;
+  
+}
+
+/* Grid layout for the text in two columns */
+.option-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.option-grid div {
+  font-weight: normal;
+  font-size: small;
+}
+
+.navy-line {
+  grid-column: span 2; /* Make this line span across both columns */
+  text-align: center; /* Center the text */
+}
 
 
 #navySection .help-box {
   background-color: transparent;
   width: 260px;
   margin: 0 auto;
-  padding-top: 10px;
+  padding-top: 15px;
   display: flex; /* Enable flexbox */
   flex-direction: column; /* Stack items vertically */
   justify-content: flex-start; /* Center all items vertically */
@@ -681,6 +726,15 @@ button:hover {
 }
 
 
+.typing-message {
+    text-align: center;
+    display: none; /* Initially hidden */
+    font-size: small;
+    color: white;
+    z-index: -1;
+    
+   
+}
 
 
 
@@ -707,5 +761,4 @@ button:hover {
 .hidden {
   display: none;
 }
-
 
