@@ -132,7 +132,8 @@ const actionMap = {
   'pirateIntro': pirateIntro,
   'askForName': askForName,
   'roles': roles, 
-  'rolesConfirmation': rolesConfirmation
+  'rolesConfirmation': rolesConfirmation,
+  'instructions' : instructions
 };
 
 function executePendingActions() {
@@ -209,7 +210,7 @@ function loadChatbotState() {
   }
 
   if (savedStage) {
-    stage = parseInt(savedStage, 10);
+    stage = parseFloat(savedStage, 10);
   }
 
   if (savedNavyStage) {
@@ -437,10 +438,11 @@ function pirateIntro() {
   displayMessage("Ahoy there! Captain Ida Patch speakin', foulest and richest pirate in these 'ere Plymouth waters.", "pirate");
   setTimeout(() => {
     displayMessage("What have we got here? A scraggy bunch of treasure-seeking miscreants lookin' to join my crew? Well, you're in luck, I happen to have a few openings available for crewmates with sharp eyes and sharp brains. That sound like you?", "pirate");
+    saveStateAndLog();
     removePendingAction('pirateIntro');
   }, 3000);
 
-  saveStateAndLog();
+  
 }
 
 function pirateIntroResponse(input) {
@@ -491,7 +493,6 @@ function greetUser() {
   addPendingAction('greetUser');
   displayMessage(`Welcome to the crew, ${userName}! You're all now officially pirates!`, "pirate");
   addPendingAction('roles'); // Add pending action for roles
-
   // Remove greetUser pending action after the message
   removePendingAction('greetUser');
   showPirateFlag();
@@ -499,7 +500,6 @@ function greetUser() {
   // Set a 2-second timeout before triggering the roles function
   setTimeout(() => {
     roles();
-    removePendingAction('roles'); // Remove pending action for roles
   }, 2000);
 
 }
@@ -519,8 +519,11 @@ function roles() {
   setTimeout(() => {
     displayMessage("And finally, we'll need some Look Outs with keen eyes to look out for clues and help solve the riddles.", "pirate");
     addPendingAction('rolesConfirmation');
+    removePendingAction('roles'); // Remove pending action for roles
     rolesConfirmation();
   }, 9000);
+  
+ 
 
 
 }
@@ -528,7 +531,7 @@ function roles() {
 function rolesConfirmation() {
   setTimeout(() => {
     displayMessage("Got your roles sorted? Once you have, say 'aye!'", "pirate");
-    stage = 0.3;
+    stage = 0.7;
     startInactivityTimer();
     removePendingAction('rolesConfirmation');
   }, 5000);
@@ -1477,9 +1480,10 @@ sendBtn.addEventListener("click", () => {
   const input = userInput.value.trim();
   if (!input) return;
 
+  console.log("Stage before input:", stage); // Debug log to check stage
+
   // Check for reset codes before anything else
   if (input.toLowerCase() === "resetcode1234") {
-    // Reset the chatbot state
     stage = 0;
     navyStage = 0;
     currentClueIndex = 0;
@@ -1492,7 +1496,6 @@ sendBtn.addEventListener("click", () => {
   }
 
   if (input.toLowerCase() === "resetcoderet1") {
-    // Reset the chatbot state
     currentClueIndex--;
     userInput.value = ""; // Clear the input field
     switchPersonality("pirate");
@@ -1501,46 +1504,42 @@ sendBtn.addEventListener("click", () => {
   }
 
   if (input.toLowerCase() === "resetcode9999") {
-    // Call the function to clear storage and reload the page
     localStorage.clear();
     reloadPageAndClearStorage();
-    return; // Exit the function to prevent further processing
+    return;
   }
 
-  // Check for help command
   if (input.toLowerCase().includes("help")) {
     openHelp();
     userInput.value = ""; // Clear the input field after showing help
-    return; // Exit the function to prevent further processing
+    return;
   }
 
-  // Handle commands that should work at all stages
   if (input.toLowerCase().includes("ahoy") && navyStage >= 1) {
     if (document.getElementById('helpSection').classList.contains('hidden')) {
       openNavy();
       userInput.value = "";
-      return; // Exit the function to prevent further processing
+      return;
     }
   } else if (input.toLowerCase().includes("map")) {
     showMap();
     userInput.value = ""; // Clear the input field after showing the map
-    return; // Exit the function to prevent further processing
+    return;
   }
 
   // Handle stage-based logic
   if (stage === 0.2) {
-
     // Trigger pirateIntroResponse if stage is 0.2
     pirateIntroResponse(input);
-    userInput.value = "";
-  } else if (stage === 0.3) {
-    pirateIntroResponse2(input);
     userInput.value = "";
   } else if (stage === 0.5) {
     // Capture the user's name and greet them
     displayMessage(input, "user");
     userName = input;
+    userInput.value = "";
     greetUser();
+  } else if (stage === 0.7) {
+    pirateIntroResponse2(input);
     userInput.value = "";
   } else if (stage === 1) {
     displayMessage(input, "user");
@@ -1550,7 +1549,6 @@ sendBtn.addEventListener("click", () => {
         startTimer(); // Start the timer if it's the first clue
       }
 
-      // Add giveClue to pending actions
       addPendingAction('giveClue');
       setTimeout(() => {
         giveClue();
@@ -1564,14 +1562,11 @@ sendBtn.addEventListener("click", () => {
     }
 
     userInput.value = "";
-
-
   } else if (stage === 2) {
     displayMessage(input, "user");
     checkAnswer(input);
     userInput.value = "";
   } else if (stage === 3) {
-    // Handle responses for stage 3
     const navyResponses = [
       "Thank you for your support! The treasure is ours, and so is the victory!",
       "Splendid work! Your help has led us to triumph!",
@@ -1587,21 +1582,21 @@ sendBtn.addEventListener("click", () => {
     ];
 
     if (navySupported) {
-      // Navy personality
       const randomNavyResponse = navyResponses[Math.floor(Math.random() * navyResponses.length)];
       displayMessage(randomNavyResponse, "navy");
     } else {
-      // Pirate personality
       const randomPirateResponse = pirateResponses[Math.floor(Math.random() * pirateResponses.length)];
       displayMessage(randomPirateResponse, "pirate");
     }
 
-    userInput.value = ""; // Clear the input field after handling the response
+    userInput.value = "";
   } else {
     // Handle all other inputs
     displayMessage(input, "user");
     userInput.value = "";
   }
+
+  console.log("Stage after input:", stage); // Debug log to check if stage changes
 });
 
 
@@ -1626,7 +1621,6 @@ startBtn.addEventListener("click", () => {
 
   pirateIntro(); // Ask for the user's name when the start button is clicked
 });
-
 
 
 
