@@ -30,6 +30,11 @@
         <div id="chatLog" class="chat-log">
             <!-- Chat log content will go here -->
         </div>
+        
+        <div id="typingMessage" class="typing-message">
+            <!-- Typing message will be injected here -->
+        </div>
+       
         <div class="input-area">
             <input id="userInput" type="text" placeholder="Type your answer...">
             <button id="sendBtn" class="sendbtn">Send</button>
@@ -62,15 +67,27 @@
 
 
     <div id="helpSection" class="help-container hidden">
-        <div class="help-box">
-            <p>How can I help?</p>
-            <button onclick="FAQs()">FAQs</button>
-            <button onclick="changeName()">Change team name</button>
-            <button id="urgentHelpButton" onclick="urgentHelp()">I need urgent help</button>
-            <button onclick="closeHelp()">Close</button>
-            <div id="helpLog" class="help-log"></div>
-        </div>
+    <div class="help-box">
+        <button onclick="FAQs()">FAQs</button>
+        <button onclick="changeName()">Change team name</button>
+        <button id="urgentHelpButton" onclick="urgentHelp()">I need urgent help</button>
+        <button onclick="closeHelp()">Close</button>
+        <div id="helpLog" class="help-log"></div>
     </div>
+    
+    <!-- New fixed box for displaying the text -->
+    <div class="bottom-box">
+        <div class="option-grid">
+            <div>Hint = show hint</div>
+            <div>Map = show map</div>
+            <div class="navy-line hidden">Ahoy = talk to the Navy</div>
+            
+        </div>
+            
+       
+    </div>
+</div>
+
     
   <div id="navySection" class="help-container hidden">
     <div class="help-box">
@@ -92,6 +109,7 @@
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
