@@ -22,6 +22,8 @@ const startBtn = document.getElementById("start-btn");
 const startMapBtn = document.getElementById("startmap-btn");
 const navyLine = document.querySelector('.navy-line');
 const bottomBox = document.querySelector('.bottom-box');
+const helpButton = document.getElementById('help-btn');
+
 
 const clues = [{
     clue: "I speak without a mouth and hear without ears. I have no body, but I come alive with wind.",
@@ -98,6 +100,11 @@ const clues = [{
 
 // Declare the pendingActions array globally
 let pendingActions = JSON.parse(localStorage.getItem('pendingActions')) || [];
+// Select the help button by its ID
+
+
+
+
 
 // Function to add a pending action
 function addPendingAction(action) {
@@ -110,16 +117,20 @@ function addPendingAction(action) {
 
 
 function removePendingAction(action) {
-  // Find the index of the action in the pendingActions array
-  const actionIndex = pendingActions.indexOf(action);
+  setTimeout(() => {
+    // Find the index of the action in the pendingActions array
+    const actionIndex = pendingActions.indexOf(action);
 
-  // If the action is found, remove it from the array
-  if (actionIndex !== -1) {
-    pendingActions.splice(actionIndex, 1);
-    localStorage.setItem('pendingActions', JSON.stringify(pendingActions));
-  }
-  console.log('Pending actions after removal:', pendingActions);
+    // If the action is found, remove it from the array
+    if (actionIndex !== -1) {
+      pendingActions.splice(actionIndex, 1);
+      localStorage.setItem('pendingActions', JSON.stringify(pendingActions));
+    }
+
+    console.log('Pending actions after removal:', pendingActions);
+  }, 2000); // 2-second timeout
 }
+
 
 
 // Define a mapping of action names to functions
@@ -133,11 +144,14 @@ const actionMap = {
   'greetUser': greetUser,
   'pirateIntro': pirateIntro,
   'askForName': askForName,
-  'roles': roles, 
+  'roles': roles,
   'rolesConfirmation': rolesConfirmation,
   'navyInstructions': navyInstructions,
-  'instructions' : instructions
-  
+  'navyReminder' : navyReminder,
+  'afterClueMessage' : afterClueMessage,
+  'clueReminder' : clueReminder,
+  'instructions': instructions
+
 };
 
 function executePendingActions() {
@@ -394,34 +408,36 @@ function formatTime(milliseconds) {
 
 // Function to show typing message
 function showTypingMessage(sender) {
-    const typingMessageDiv = document.getElementById('typingMessage');
-    
-    // Set the message based on the sender
-    if (sender === 'pirate') {
-        typingMessageDiv.textContent = 'Capt. I. Patch is typing...';
-    } else if (sender === 'navy') {
-        typingMessageDiv.textContent = 'Capt. Drake is typing...';
-    }
+  const typingMessageDiv = document.getElementById('typingMessage');
 
-    // Make the typing message visible
-    typingMessageDiv.style.display = 'block';
+  // Set the message based on the sender
+  if (sender === 'pirate') {
+    typingMessageDiv.textContent = 'Capt. I. Patch is typing...';
+  } else if (sender === 'navy') {
+    typingMessageDiv.textContent = 'Capt. Drake is typing...';
+  }
+
+  // Make the typing message visible
+  typingMessageDiv.style.display = 'block';
 }
 
 // Function to hide typing message
 function hideTypingMessage() {
-    const typingMessageDiv = document.getElementById('typingMessage');
-    
-    // Hide the typing message
-    typingMessageDiv.style.display = 'none';
+  const typingMessageDiv = document.getElementById('typingMessage');
+
+  // Hide the typing message
+  typingMessageDiv.style.display = 'none';
 }
 
 
 
 // Additional logic, functions, and event listeners...
-
-function displayMessage(message, sender = currentPersonality) {
+function displayMessage(message, sender = currentPersonality, isClue = false) {
   const messageElement = document.createElement("div");
-  messageElement.className = `message ${sender}-message`;
+
+  // Apply both pirate-message and clue if isClue is true
+  const messageClass = isClue ? `message pirate-message clue` : `message ${sender}-message`;
+  messageElement.className = messageClass;
 
   const thumbnailElement = document.createElement("div");
   thumbnailElement.className = "thumbnail";
@@ -453,6 +469,7 @@ function displayMessage(message, sender = currentPersonality) {
   messageElement.appendChild(thumbnailElement);
   messageElement.appendChild(messageContentElement);
 
+  // Append the message element to the chat log with proper typing effect handling
   if (sender === "pirate" || sender === "navy") {
     showTypingMessage(sender);
     setTimeout(() => {
@@ -466,32 +483,32 @@ function displayMessage(message, sender = currentPersonality) {
     chatLog.scrollTop = chatLog.scrollHeight;
     saveStateAndLog();
   }
-
-  // Append the message element to the chat log
-  
-  
 }
+
+
+
+
 
 function pirateIntro() {
   stage = 0.2;
   startInactivityTimer();
   addPendingAction('pirateIntro');
-  
+
   displayMessage("Ahoy there! Captain Ida Patch speakin', foulest and richest pirate in these 'ere Plymouth waters.", "pirate");
-  
+
   setTimeout(() => {
     displayMessage("What have we got here? A scraggy bunch of treasure-seeking miscreants lookin' to join my crew? Well, you're in luck, I happen to have a few openings available for crewmates with sharp eyes and sharp brains. That sound like you?", "pirate");
     saveStateAndLog();
     removePendingAction('pirateIntro');
   }, 3000);
 
-  
+
 }
 
 function pirateIntroResponse(input) {
   displayMessage(input, "user");
   addPendingAction('askForName');
-  
+
 
 
   // Convert input to lowercase for case-insensitive comparison
@@ -508,7 +525,7 @@ function pirateIntroResponse(input) {
     setTimeout(() => {
       displayMessage("That'll do for now. Let's get treasure hunting!", "pirate");
     }, 1000);
-  } else if (lowerInput.includes('no')) {
+  } else  {
     setTimeout(() => {
       displayMessage("That's ok, there's room for foolish deck skivvies on this ship too! Now let's get treasure hunting!", "pirate");
     }, 1000);
@@ -517,7 +534,7 @@ function pirateIntroResponse(input) {
 
   setTimeout(() => {
     askForName();
-    
+
   }, 5000);
 }
 
@@ -534,13 +551,14 @@ function askForName() {
 
 
 function greetUser() {
+  stage = 0.6;
   addPendingAction('greetUser');
   displayMessage(`Welcome to the crew, ${userName}! You're all now officially pirates!`, "pirate");
   addPendingAction('roles'); // Add pending action for roles
   // Remove greetUser pending action after the message
   removePendingAction('greetUser');
   showPirateFlag();
-  
+
 
   // Set a 2-second timeout before triggering the roles function
   setTimeout(() => {
@@ -551,29 +569,29 @@ function greetUser() {
 
 function roles() {
   displayMessage("Now everyone chips in 'n' helps out on this crew, but if you'd like, you can now choose your roles...", "pirate");
-   
-  
+
+
 
   // Set a 2-second gap before each role message
   setTimeout(() => {
     displayMessage("We'll need a First Lieutenant, a leader to be in charge of reading out clues and giving the answer...", "pirate");
-     
+
   }, 3000);
 
   setTimeout(() => {
     displayMessage("A Navigator, an incredibly important job. You'll be in charge of the map and getting this ship where it needs to go...", "pirate");
-     
+
   }, 6000);
 
   setTimeout(() => {
     displayMessage("And finally, we'll need some Look Outs with keen eyes to look out for clues and help solve the riddles.", "pirate");
-     
+
     addPendingAction('rolesConfirmation');
     removePendingAction('roles'); // Remove pending action for roles
     rolesConfirmation();
   }, 9000);
-  
- 
+
+
 
 
 }
@@ -606,7 +624,7 @@ function pirateIntroResponse2(input) {
     setTimeout(() => {
       displayMessage("You're pirates m'hearties, say 'aye!'", "pirate");
     }, 1000);
-  } else  {
+  } else {
     setTimeout(() => {
       displayMessage("Just say 'aye!' when you've dished out your jobs", "pirate");
     }, 1000);
@@ -630,13 +648,25 @@ function instructions() {
     displayMessage("If you lose a crewmate overboard or need help with anything else, just type 'help' and we'll throw you a rubber ring!", "pirate");
 
     // Remove the 'instructions' pending action and add 'readyMessage' pending action
+    addPendingAction ('readyMessage')
     removePendingAction('instructions');
-    addPendingAction('readyMessage');
-
-    // Call the readyMessage function
     readyMessage();
+    
+   
   }, 9000);
 }
+
+function navyReminder() {
+  if (navyStage === 2) {
+   addPendingAction ('navyReminder')
+    setTimeout(() => {
+      displayMessage("I hear whispers in the wind that you've confirmed the answer to your clue. Shout 'ahoy!' if you have some information for me.", "navy");
+      removePendingAction('navyReminder');
+    }, 15000); // 15-second delay
+  }
+}
+
+
 
 
 
@@ -644,6 +674,7 @@ function instructions() {
 
 function readyMessage() {
   stage = 1;
+  navyReminder();
 
   if (currentClueIndex > 0) {
     const message = currentClueIndex === clues.length - 1 ?
@@ -651,12 +682,14 @@ function readyMessage() {
       "Are you ready for the next clue? If so say aye!";
 
     setTimeout(() => {
-      displayMessage(message, "pirate");
+      displayMessage(message, "pirate", true);
+      saveCheckpointState();
       removePendingAction('readyMessage');
     }, 6000); // 6-second delay if currentClueIndex > 0
   } else {
     setTimeout(() => {
-      displayMessage("OK, that's it. Are you ready for your first clue?", "pirate");
+      displayMessage("OK, that's it. Are you ready for your first clue?", "pirate", true);
+      saveCheckpointState();
       removePendingAction('readyMessage');
     }, 2000); // 2-second delay if currentClueIndex = 0
   }
@@ -667,17 +700,19 @@ function readyMessage() {
 function giveClue() {
   const currentClue = clues[currentClueIndex];
   stage = 2;
-  displayMessage(`Here is your clue: ${currentClue.clue}`, "pirate");
   startInactivityTimer();
-
   resumeTimer();
+  displayMessage(`Here is your clue: ${currentClue.clue}`, "pirate", true);
+  
+
+  addPendingAction('afterClueMessage');
+  removePendingAction('giveClue');
+  afterClueMessage();
+ 
 
   // Add navyMessage logic if conditions are met
   if (currentClueIndex === 1 && stage >= 2 && navyStage === 0) {
     addPendingAction('navyMessage');
-    setTimeout(() => {
-      removePendingAction('giveClue');
-    }, 3050);
 
     setTimeout(() => {
       navyMessage();
@@ -688,19 +723,27 @@ function giveClue() {
   // Add navyMessage2 logic if conditions are met
   if (currentClueIndex === 3 && stage >= 2) {
     addPendingAction('navyMessage2');
-    removePendingAction('giveClue');
+    
     setTimeout(() => {
       navyMessage2();
+     
       removePendingAction('navyMessage2');
     }, 8000); // 8-second delay for navyMessage2
   }
+  
 
-  // Display the after clue message after a delay (This is the last thing in the function)
-  setTimeout(() => {
-    displayMessage(currentClue.afterClueMessage, "pirate");
-  }, currentClue.delayAfterClue);
+  
+  
 }
 
+function afterClueMessage (){
+const currentClue = clues[currentClueIndex];
+setTimeout(() => {
+    displayMessage(currentClue.afterClueMessage, "pirate");
+    removePendingAction('afterClueMessage')
+  }, currentClue.delayAfterClue);
+  
+  }
 
 
 
@@ -770,7 +813,36 @@ function clueMessages() {
 
   const currentClue = clues[currentClueIndex];
 
+  
+
+  // Logic for advancing to the next clue or ending the game
+  if (currentClueIndex < clues.length - 1) {
+    
+    setTimeout(() => {
+
+    displayMessage(currentClue.explanation, "pirate");
+  
+
+  }, 3000);
+
   setTimeout(() => {
+
+    displayMessage(currentClue.afterAnswerMessage, "pirate");
+    
+    addPendingAction('readyMessage');
+    removePendingAction('clueMessages');
+    incorrectAttempts = 0;
+    currentClueIndex++;
+    readyMessage();
+
+  }, currentClue.delayAfterAnswer);
+
+    
+   
+    
+    
+  } else {
+    setTimeout(() => {
 
     displayMessage(currentClue.explanation, "pirate");
 
@@ -779,19 +851,10 @@ function clueMessages() {
   setTimeout(() => {
 
     displayMessage(currentClue.afterAnswerMessage, "pirate");
+    removePendingAction('clueMessages');
 
   }, currentClue.delayAfterAnswer);
 
-
-  // Logic for advancing to the next clue or ending the game
-  if (currentClueIndex < clues.length - 1) {
-    stage = 0; // Reset stage to readyMessage
-    incorrectAttempts = 0;
-    currentClueIndex++;
-    saveStateAndLog();
-    addPendingAction('readyMessage');
-    readyMessage();
-  } else {
     addPendingAction('congratulations');
     setTimeout(() => {
       congratulations(); // Display final congratulations message
@@ -799,7 +862,7 @@ function clueMessages() {
 
   }
 
-  removePendingAction('clueMessages');
+   saveStateAndLog();
 
 
 }
@@ -809,7 +872,7 @@ function clueMessages() {
 
 function congratulations() {
   stage = 3;
-  navyStage = 5;
+  navyStage = 6;
   const endTime = new Date().getTime(); // Get the current time as the end time
 
   // Calculate the total time excluding the paused time
@@ -839,7 +902,7 @@ function congratulations() {
   } else {
 
     let message = `Ahoy, ${userName}! Ye found the treasure! Ye've got the cunning of a true pirate, and the spoils are yours! Yarrr! Your final time was ${finalTime}.`;
-    displayMessage(message, "pirate");
+    displayMessage(message, "pirate", true);
 
     // Delay before switching to Navy personality and displaying the next message
     setTimeout(() => {
@@ -922,7 +985,7 @@ function openHelp() {
   userInput.disabled = true;
   sendBtn.disabled = true;
   pauseTimer();
-  
+
   // Check if the global navyStage variable is >= 1
   if (navyStage >= 1) {
     document.querySelector('.navy-line').classList.remove('hidden');
@@ -1157,28 +1220,76 @@ function closeNavy() {
   saveStateAndLog();
   updateFlag();
 
-
-
   // Check if stage is less than 3
   if (stage < 3) {
-    // Define pirate responses
-    const pirateResponses = [
-      'Was that the Navy I heard?',
-      'Blimey! I think I heard the Navy approaching!',
-      'Arrr! Did I catch a glimpse of the Navy?',
-      'Yarrr! Could it be the Navy lurking nearby?'
-    ];
+    // Define pirate responses for navyStage <= 2
+    if (navyStage <= 2) {
+      const pirateResponses = [
+        'That was the Navy I heard. Don’t trust them!',
+        'I heard the Navy approaching. Make sure they don’t get wind of what we’re doing!',
+        'I caught a glimpse of the Navy. They may try to contact you, be careful!',
+        'The Navy is lurking nearby. Don’t let them know our plans!'
+      ];
 
-    // Randomly select a response
-    const randomResponse = pirateResponses[Math.floor(Math.random() * pirateResponses.length)];
+      // Randomly select a response
+      const randomResponse = pirateResponses[Math.floor(Math.random() * pirateResponses.length)];
 
-    // Set a timeout before displaying the message
+      // Set a 1-second timeout before displaying the message
+      setTimeout(() => {
+        displayMessage(randomResponse, "pirate");
+      }, 1000); // 1-second delay
+    }
+
+    // Define pirate responses for navyStage == 3
+    if (navyStage === 3) {
+      // If navySupported is true
+      if (navySupported) {
+        const closeNavyResponses = [
+          'My sources tell me the Navy is very close. Lie low!',
+          'It appears the Navy knows what we’re up to. They lurk in these waters!',
+          'The Navy is too close for comfort. I suspect we may have been betrated. Stay hidden, matey!'
+        ];
+
+        // Randomly select a response
+        const randomResponse = closeNavyResponses[Math.floor(Math.random() * closeNavyResponses.length)];
+
+        // Set a 1-second timeout before displaying the message
+        setTimeout(() => {
+          displayMessage(randomResponse, "pirate");
+        }, 1000); // 1-second delay
+      } else {
+        // If navySupported is false
+        const farNavyResponses = [
+          'That was close. I thought I saw the Navy, but sources tell me they’re sailing away.',
+          'The Navy passed by, but they’re heading in the other direction. We’re in the clear for now.',
+          'I spotted the Navy, but they seem to be moving away. Keep your wits about you!'
+        ];
+
+        // Randomly select a response
+        const randomResponse = farNavyResponses[Math.floor(Math.random() * farNavyResponses.length)];
+
+        // Set a 1-second timeout before displaying the message
+        setTimeout(() => {
+          displayMessage(randomResponse, "pirate");
+        }, 1000); // 1-second delay
+      }
+    }
+
+    // Set a 3-second timeout for the isPaused logic
     setTimeout(() => {
-
-      displayMessage(randomResponse, "pirate");
-    }, 1000); // 1-second delay
+      // Check if the game is paused
+      if (stage === 1) {
+        // If paused, display the reminder message
+        displayMessage("Remember to say 'aye' when you're ready for your next clue", "pirate", true);
+      }
+      if (navyStage > 3) {
+        // If paused, display the reminder message
+        clueReminder();
+      }
+    }, 3000); // 3-second delay for paused message
   }
 }
+
 
 
 let lastHappyResponse = ""; // Variable to store the last happy response
@@ -1439,37 +1550,18 @@ function navyMessage() {
   navyStage = 1;
   saveStateAndLog();
 
-  displayMessage("Attention! You are being hailed by Admiral Freddy Drake of the King's Navy. Best be on guard. Pirates roam these waters.", "navy");
-  
+  displayMessage("Attention! You are being hailed by Admiral Frankie Drake of the King's Navy. Best be on guard. Pirates roam these waters.", "navy");
+
   setTimeout(() => {
-  displayMessage("The King will pay a high price to any who report on the whereabouts of pirates, or the treasure they are rumoured to be searching for. You wouldn't happen to know anything about that would you?", "navy");
-  navyResponse1();
-    }, 3000);
-  
- 
+    displayMessage("The King will pay a high price to any who report on the whereabouts of pirates, or the treasure they are rumoured to be searching for. You wouldn't happen to know anything about that would you?", "navy");
+   
+  }, 3000);
+
+
 
 }
 
-function navyResponse1() {
-  // Define a handler function for the send button click event
-  function handleNavyInput() {
-    const input = userInput.value.trim();
-    if (!input) return;
 
-    if (input.toLowerCase().includes('yes') || input.toLowerCase().includes('aye')) {
-      displayMessage('Excellent, we shall be able to help each other', 'navy');
-    } else if (input.toLowerCase().includes('no')) {
-      displayMessage('Liar, I know you are helping the pirates!', 'navy');
-    }
-
-    // Remove the event listener to stop further processing
-    sendBtn.removeEventListener('click', handleNavyInput);
-    userInput.value = ""; // Clear the input field after processing
-  }
-
-  // Add the event listener for the send button
-  sendBtn.addEventListener('click', handleNavyInput);
-}
 
 
 
@@ -1566,19 +1658,111 @@ function showNavyFlag() {
 
 function navyInstructions() {
   // Display the first message
- 
-  displayMessage("When you get the answer to your next clue, tell me what it is, and the King's Navy will forever be in your debt.", "navy");
+setTimeout(() => {
+  displayMessage("Here's the deal: When you get the answer to your next clue, tell me what it is, and the King's Navy will forever be in your debt.", "navy");
+  }, 3000);
 
   // Set a timeout to display the second message after 3 seconds
   setTimeout(() => {
-     displayMessage("You can speak to me anytime by shouting 'ahoy!'", "navy");
+    displayMessage("You can speak to me anytime by shouting 'ahoy!'", "navy");
+    addPendingAction('clueReminder')
     removePendingAction('navyInstructions')
-  }, 3000); // 3000 milliseconds = 3 seconds
+  }, 6000); // 3000 milliseconds = 3 seconds
+  
+    setTimeout(() => {
+    clueReminder();
+  }, 12000); // 3000 milliseconds = 3 seconds
+}
+
+function clueReminder() {
+  // Check if the stage is 2
+  if (stage === 2) {
+    // Access the current clue from the clues array
+    const currentClue = clues[currentClueIndex];
+
+    // Display the reminder message with the current clue
+    displayMessage(`Remember your current clue is: "${currentClue.clue}"`, "pirate", true);
+
+    // Define pirate responses for the second message
+    const pirateResponses = [
+      'If they happen to contact you, not a word to the Navy!',
+      'Remember, keep it quiet. This treasure is ours!',
+      'Keep your lips sealed, or the Navy will be on us in no time!'
+    ];
+
+    // Randomly select a pirate response
+    const randomResponse = pirateResponses[Math.floor(Math.random() * pirateResponses.length)];
+
+    // Set a 2-second timeout before displaying the second message
+    setTimeout(() => {
+      displayMessage(randomResponse, "pirate");
+      removePendingAction('clueReminder')
+    }, 4000); // 2-second delay
+  }
+}
+
+function saveCheckpointState() {
+  // Add a 2-second delay before saving the checkpoint state
+  setTimeout(() => {
+    // Use the currentClueIndex as the key for each checkpoint
+    const checkpointKey = `checkpoint_clue_${currentClueIndex}`;
+
+    // Save the current state into a special checkpoint in localStorage
+    const chatbotState = {
+      chatLog: document.getElementById('chatLog').innerHTML,
+      stage: stage,
+      navyStage: navyStage,
+      currentClueIndex: currentClueIndex,
+      userName: userName,
+      navySupported: navySupported,
+      totalPausedTime: totalPausedTime,
+      pauseStartTime: pauseStartTime,
+      hintsRequested: clues[currentClueIndex].hintsRequested
+    };
+
+    // Save the checkpoint state as a JSON string in local storage
+    localStorage.setItem(checkpointKey, JSON.stringify(chatbotState));
+    console.log(`Checkpoint saved for clue ${currentClueIndex}`);
+  }, 2000); // 2-second delay
+}
+
+
+function recallCheckpoint(clueIndex) {
+  const checkpointKey = `checkpoint_clue_${clueIndex}`;
+
+  // Get the saved checkpoint from local storage
+  const savedState = localStorage.getItem(checkpointKey);
+
+  if (savedState) {
+    // Parse the saved JSON string back to an object
+    const chatbotState = JSON.parse(savedState);
+
+    // Restore the chatbot state from the saved data
+    document.getElementById('chatLog').innerHTML = chatbotState.chatLog;
+    stage = chatbotState.stage;
+    navyStage = chatbotState.navyStage;
+    currentClueIndex = chatbotState.currentClueIndex;
+    userName = chatbotState.userName;
+    navySupported = chatbotState.navySupported;
+    totalPausedTime = chatbotState.totalPausedTime;
+    pauseStartTime = chatbotState.pauseStartTime;
+    clues[currentClueIndex].hintsRequested = chatbotState.hintsRequested;
+
+    console.log(`Restored chatbot state from clue ${clueIndex}`);
+  } else {
+    console.log(`No saved checkpoint found for clue ${clueIndex}`);
+  }
 }
 
 
 
 
+
+// Add an event listener for the 'click' event
+helpButton.addEventListener('click', function() {
+  // Call the openHelp function when the button is clicked
+  openHelp();
+});
 
 
 sendBtn.addEventListener("click", () => {
@@ -1601,21 +1785,34 @@ sendBtn.addEventListener("click", () => {
   }
 
   if (input.toLowerCase() === "resetcoderet1") {
-    
+
     userInput.value = ""; // Clear the input field
     navyStage--;
     readyMessage();
     return; // Exit the function to prevent further processing
   }
-  
-   if (input.toLowerCase() === "resetcoderet2") {
-    
+
+  if (input.toLowerCase() === "resetcoderet2") {
+
     userInput.value = ""; // Clear the input field
     currentClueIndex--;
     navyStage = 0;
-    
+
     readyMessage();
     return; // Exit the function to prevent further processing
+  }
+  
+  if (input.startsWith('resetcodeclue')) {
+    // Extract the clue index from the input, e.g., "resetcodeclue0" -> 0
+    const clueIndex = parseInt(input.replace('resetcodeclue', ''), 10);
+
+    if (!isNaN(clueIndex)) {
+      // Call the recallCheckpoint function with the extracted clue index
+      recallCheckpoint(clueIndex);
+
+      userInput.value = ""; // Clear the input field
+      return; // Exit the function to prevent further processing
+    }
   }
 
   if (input.toLowerCase() === "resetcode9999") {
@@ -1641,17 +1838,17 @@ sendBtn.addEventListener("click", () => {
     userInput.value = ""; // Clear the input field after showing the map
     return;
   }
-  
-    if (navyStage === 1 && stage !== 1 && !input.toLowerCase().includes('help') && !input.toLowerCase().includes('map')) {
-    if (input.includes('yes') || input.includes('aye')|| input.includes('maybe')|| input.includes('perhaps') || input.includes('might')) {
+
+  if (navyStage === 1 && stage !== 1 && !input.toLowerCase().includes('help') && !input.toLowerCase().includes('map')) {
+    if (input.includes('yes') || input.includes('aye') || input.includes('maybe') || input.includes('perhaps') || input.includes('might')) {
       displayMessage(input, "user");
       displayMessage('Excellent, we shall be able to help each other', 'navy');
       addPendingAction('navyInstructions')
       navyInstructions();
       navyStage = 2; // Update navyStage to 2
-    } else if (input.includes('no') || input.includes('not')) {
+    } else if (input.includes('no') || input.includes('not') || input.includes('fuck')|| input.includes('go away')) {
       displayMessage(input, "user");
-      displayMessage('Liar, I know you are helping the pirates!', 'navy');
+      displayMessage('Curse you!, I know you are helping the pirates!', 'navy');
       navyStage = 2; // Update navyStage to 2
       addPendingAction('navyInstructions');
       navyInstructions();
@@ -1660,11 +1857,11 @@ sendBtn.addEventListener("click", () => {
       addPendingAction('navyInstructions');
       checkAnswer(input); // Call the function if input doesn't match special cases
       setTimeout(() => {
-      displayMessage('Do not ignore an Admiral of the Navy!', 'navy');
-      n
-      navyInstructions();
-  }, 12000); 
-      
+        displayMessage('Do not ignore an Admiral of the Navy!', 'navy');
+        navyStage = 2;
+        navyInstructions();
+      }, 12000);
+
     }
     userInput.value = ""; // Clear the input field
     return; // Exit the function to prevent further processing
@@ -1695,7 +1892,7 @@ sendBtn.addEventListener("click", () => {
       addPendingAction('giveClue');
       setTimeout(() => {
         giveClue();
-        removePendingAction('giveClue');
+   
       }, 3000); // 3-second delay for giveClue
 
     } else if (input.toLowerCase().includes("yes")) {
@@ -1753,6 +1950,37 @@ userInput.addEventListener("keypress", (e) => {
   }
 });
 
+ piratePasswordInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      pirateSendBtn.click();
+    }
+  });
+
+
+document.getElementById('pirateSendBtn').addEventListener('click', function() {
+  var passwordInput = document.getElementById('piratePasswordInput').value;
+  var correctPassword = "blackbeard"; // You can set your desired password here
+  var errorMessage = document.getElementById('passwordError');
+
+  if (passwordInput === correctPassword) {
+    // Hide the pirate story box
+    document.getElementById('pirateStoryBox').classList.add('hidden');
+    errorMessage.textContent = ''; // Clear any previous error messages
+    // Start the pirate intro
+    disclaimerBox.classList.remove('hidden');
+    
+  } else {
+    // Display error message
+    errorMessage.textContent = 'Incorrect password. Please try again.';
+  }
+});
+
+confirmDisclaimerBtn.addEventListener('click', () => {
+    // Hide the disclaimer box and start the pirate intro
+    disclaimerBox.classList.add('hidden');
+    pirateIntro();
+  });
+
 startBtn.addEventListener("click", () => {
   document.getElementById("initialContainer").style.display = "none";
   startBtn.style.display = "none";
@@ -1762,7 +1990,6 @@ startBtn.addEventListener("click", () => {
 
 
 
-  pirateIntro(); // Ask for the user's name when the start button is clicked
+ document.getElementById('pirateStoryBox').classList.remove('hidden');
 });
-
 
