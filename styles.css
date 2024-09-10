@@ -116,9 +116,22 @@ button:hover {
     
 }
 
+#pirateStoryBox {
+  z-index: 1000; /* Ensure it appears over everything */
+  background-image: url('https://i.ibb.co/7pLdh6s/scroll-310783-1280.png');
+  background-size: 100% 100%; /* Stretch the image to fill the container, warping as needed */
+  background-position: center; /* Centers the background image */
+  background-repeat: no-repeat; /* Prevents repeating the image */
+  width: 80%;
+  background-color: transparent;
+  
+}
+
 .pirate-story-content {
-  background-color: #fff;
+  
+  background-color: transparent;
   padding: 20px;
+  padding-top: 60px;
   width: 80%;
   max-width: 600px;
   max-height: 80%;
