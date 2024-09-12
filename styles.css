@@ -124,6 +124,9 @@ button:hover {
   background-repeat: no-repeat; /* Prevents repeating the image */
   width: 80%;
   background-color: transparent;
+  height: 90vh;
+  text-align: center; /* Center the text within the paragraph */
+  
   
 }
 
@@ -131,9 +134,9 @@ button:hover {
   
   background-color: transparent;
   padding: 20px;
-  padding-top: 60px;
+  padding-left: 30px;
   width: 80%;
-  max-width: 600px;
+  max-width: 300px;
   max-height: 80%;
   overflow: hidden;
   border-radius: 10px;
@@ -141,12 +144,21 @@ button:hover {
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden; /* Hides overflow for container */
+   scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+#password-input-area {
+  margin-top: 0; /* Ensure no additional margin at the top of the input area */
+  padding-top: 0; /* Ensure no additional padding at the top of the input area */
 }
 
 .scrollable-backstory {
   flex: 1;
+  font-family: "La Belle Aurore", cursive;
   overflow-y: auto; /* Adds vertical scrollbar when content overflows */
   max-height: 300px; /* Fixed height for the scrollable area */
+  padding-left: 5px;
 }
 
 
@@ -160,6 +172,12 @@ button:hover {
   font-size: 14px;
   margin-top: 10px;
 }
+
+.map-link {
+  color: blue;
+  text-decoration: underline;
+}
+
 
 #urgentHelpButton {
    font-weight: bold; /* Make text bold */
@@ -368,8 +386,14 @@ button:hover {
   flex-direction: column;
   /* Stack sender name and message bubble vertically */
   max-width: 70%;
-  /* Adjusts the max width of the message content */
+ }
+ 
+ .message-content p {
+  margin: 0; /* Remove default margin from <p> tags */
+  padding: 0; /* Remove default padding from <p> tags */
 }
+
+
 
 .message .thumbnail {
   width: 40px;
@@ -408,6 +432,7 @@ button:hover {
   background-color: #f1f1f1;
   padding: 10px;
   border-radius: 10px;
+  
 }
 
 .user-message .text {
@@ -433,7 +458,7 @@ button:hover {
   font-weight: 500; /* Font weight */
   font-size: 16px; /* Font size */
   color: black; /* Set the text color */
-  padding: 10px 20px; /* Add padding around the text */
+  padding: 9% 7%; /* Add padding around the text */
   border-radius: 0px; /* Add rounded corners */
   
   background-color: transparent; /* Make the background color transparent */
@@ -441,12 +466,30 @@ button:hover {
   background-size: 100% 127%; /* Make the image 20% larger than the text area */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
+  box-sizing: border-box; /* Include padding in width/height calculations */
+  max-width: 100%;
+  
+  
+}
+
+.pirate-message.isSmall .text {
+ padding: 10px 20px; 
   
 }
 
 .pirate-message.clue .text {
   background-image: url('https://i.postimg.cc/SKK9FKzj/scrollforclue.png');
+ 
 }
+
+
+
+.pirate-message.isImageOnly .text {
+  padding: 0; /* Remove padding for image-only messages */
+  background-color: transparent; /* Ensure background is transparent for image-only messages */
+  background-image: none;
+}
+
 
 
 
@@ -457,7 +500,7 @@ button:hover {
   font-family: "La Belle Aurore", cursive; /* Apply the Pangolin font, with cursive as a fallback */
   font-weight: 600; /* Regular weight */
   font-size: 18px;
-  padding: 10px 20px;
+  padding: 15px 20px;
   background-color: transparent; /* Make the background color transparent */
   background-image: url('https://i.ibb.co/Kztg4fb/papyrus-146302-1280.png'); /* Set the background image */
   background-size: 100% 100%; /* Make the image 20% larger than the text area */
@@ -709,22 +752,25 @@ button:hover {
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
  
 }
-
-/* Target the scrollbar */
-.chat-box::-webkit-scrollbar {
+/* Target the scrollbar for chat-box and pirateStoryBox */
+.chat-box::-webkit-scrollbar,
+#pirateStoryBox::-webkit-scrollbar {
   width: 4px; /* Make the scrollbar thinner */
 }
 
 /* Track */
-.chat-box::-webkit-scrollbar-track {
+.chat-box::-webkit-scrollbar-track,
+#pirateStoryBox::-webkit-scrollbar-track {
   background: transparent; /* Make the track invisible */
 }
 
 /* Handle */
-.chat-box::-webkit-scrollbar-thumb {
+.chat-box::-webkit-scrollbar-thumb,
+#pirateStoryBox::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.2); /* Use a semi-transparent color for the thumb */
   border-radius: 10px; /* Make the scrollbar handle rounded */
 }
+
 
 /* Basic styles for the map section */
 .map-section {
