@@ -22,12 +22,12 @@
           <p>Get your team together at the start location and click 'Begin' when you're ready.</p>
         </div>
         <div class="initial-buttons">
-          
+
           <button id="startmap-btn" class="start-btn">Map</button>
           <button id="help-btn" class="start-btn">Help</button>
-          
+
         </div>
-          <button id="start-btn" class="start-btn">Begin</button>
+        <button id="start-btn" class="start-btn">Begin</button>
       </div>
 
       <!-- The main chat container -->
@@ -46,61 +46,61 @@
         </div>
       </div>
     </div>
-    
+
     <!-- New Pirate Story Box that will be shown when Begin is clicked -->
-<div id="pirateStoryBox" class="help-container hidden">
-  <div class="pirate-story-content">
-    <div class="scrollable-backstory">
-      <p>
-        <!-- Your pirate backstory goes here -->
-       Ahoy, matey! Step aboard the notorious ship, The Salty Cutlass, captained by the infamous Ida Patch. Captain Patch and her crew have recently come into possession of a mysterious set of clues said to lead to a legendary treasure. How did they get these clues, you ask? Well, let’s just say it was all in good pirate fun. It seems a certain treasure hunter from a rival ship “accidentally” fell into their hands after a slight misunderstanding at a tavern...
+    <div id="pirateStoryBox" class="help-container hidden">
+      <div class="pirate-story-content">
+        <div class="scrollable-backstory">
+          <p>
+            <!-- Your pirate backstory goes here -->
+            Ahoy, matey! Step aboard the notorious ship, The Salty Cutlass, captained by the infamous Ida Patch. Captain Patch and her crew have recently come into possession of a mysterious set of clues said to lead to a legendary treasure. How did they get these clues, you ask? Well, let’s just say it was all in good pirate fun. It seems a certain treasure hunter from a rival ship “accidentally” fell into their hands after a slight misunderstanding at a tavern...
 
-The Capture of the Mysterious Stranger
-This treasure hunter, we'll call him Lucky Jack, wasn’t too lucky after all. The poor chap had half the treasure map and a mind full of riddles. Unfortunately for the pirates, Jack had run into trouble of his own—a run-in with the navy, who weren’t too pleased with his antics either. Let’s just say Lucky Jack’s tongue was... “misplaced” somewhere along the way. Now he can’t speak, but thanks to a bit of gentle “persuasion,” he’s agreed to help Captain Patch and her crew. Whenever the crew comes up with an answer to one of the treasure’s clues, Jack can nod or shake his head to confirm whether they’re on the right track. Sure, it’s not a perfect system, but it’s better than nothing!
+            The Capture of the Mysterious Stranger
+            This treasure hunter, we'll call him Lucky Jack, wasn’t too lucky after all. The poor chap had half the treasure map and a mind full of riddles. Unfortunately for the pirates, Jack had run into trouble of his own—a run-in with the navy, who weren’t too pleased with his antics either. Let’s just say Lucky Jack’s tongue was... “misplaced” somewhere along the way. Now he can’t speak, but thanks to a bit of gentle “persuasion,” he’s agreed to help Captain Patch and her crew. Whenever the crew comes up with an answer to one of the treasure’s clues, Jack can nod or shake his head to confirm whether they’re on the right track. Sure, it’s not a perfect system, but it’s better than nothing!
 
-The Navy’s Scheming Plan
-But don’t get too comfortable with these pirates, mate. The navy’s hot on their heels! Commander Sterling, head of the Royal Fleet, knows the pirates have Lucky Jack and those precious clues. To make matters worse, the navy knows you are working with Captain Patch. They want you to play double agent and secretly feed them the location of the treasure. If you hand over the right information, the navy promises you a hefty reward and a shiny medal of honor—maybe even your own ship. But be warned, double-crossing pirates comes with a price…
+            The Navy’s Scheming Plan
+            But don’t get too comfortable with these pirates, mate. The navy’s hot on their heels! Commander Sterling, head of the Royal Fleet, knows the pirates have Lucky Jack and those precious clues. To make matters worse, the navy knows you are working with Captain Patch. They want you to play double agent and secretly feed them the location of the treasure. If you hand over the right information, the navy promises you a hefty reward and a shiny medal of honor—maybe even your own ship. But be warned, double-crossing pirates comes with a price…
 
-A Pirate’s Code… or Not?
-Captain Ida Patch and her crew are a rowdy but clever bunch. They might not know you’ve been chatting with the navy behind their backs... yet. But should you betray the navy and stay loyal to the pirates, Captain Patch could reward you with a share of the treasure itself! After all, what’s better than gold, adventure, and endless stories of plundering with a pirate crew?
+            A Pirate’s Code… or Not?
+            Captain Ida Patch and her crew are a rowdy but clever bunch. They might not know you’ve been chatting with the navy behind their backs... yet. But should you betray the navy and stay loyal to the pirates, Captain Patch could reward you with a share of the treasure itself! After all, what’s better than gold, adventure, and endless stories of plundering with a pirate crew?
 
-Your Choice, Your Adventure
-Now the question is, who will you side with? Help the navy outsmart the pirates by leaking their location and enjoy a cozy, law-abiding life? Or stay true to the pirates, keeping the treasure for those who live by no rules but their own? Either way, there’s always room for a bit more mischief at the end. Perhaps a third betrayal where you pit the navy and pirates against each other? Only time—and your wits—will tell.
+            Your Choice, Your Adventure
+            Now the question is, who will you side with? Help the navy outsmart the pirates by leaking their location and enjoy a cozy, law-abiding life? Or stay true to the pirates, keeping the treasure for those who live by no rules but their own? Either way, there’s always room for a bit more mischief at the end. Perhaps a third betrayal where you pit the navy and pirates against each other? Only time—and your wits—will tell.
 
-The treasure is out there, waiting to be found... but the bigger question is, who will get to it first, and will you stick with the scoundrels of the sea, or swap your eye patch for a navy hat?
-      </p>
+            The treasure is out there, waiting to be found... but the bigger question is, who will get to it first, and will you stick with the scoundrels of the sea, or swap your eye patch for a navy hat?
+          </p>
+        </div>
+        <p>Input your secret password to contact the pirates:</p>
+        <div id="password-input-area" class="input-area">
+          <input id="piratePasswordInput" type="text" placeholder="Enter password...">
+          <button id="pirateSendBtn" class="sendbtn">Send</button>
+        </div>
+        <div id="passwordError" class="error-message"></div> <!-- Error message area -->
+      </div>
     </div>
-    <p>Input your secret password to contact the pirates:</p>
-    <div class="input-area">
-      <input id="piratePasswordInput" type="text" placeholder="Enter password...">
-      <button id="pirateSendBtn" class="sendbtn">Send</button>
-    </div>
-    <div id="passwordError" class="error-message"></div> <!-- Error message area -->
-  </div>
-</div>
 
-<!-- Disclaimer Box -->
-<div id="disclaimerBox" class="disclaimer-box hidden">
-  <div class="disclaimer-content">
-    <p>
-      Please be cautious and stay safe during the treasure hunt. Watch out for traffic, stay hydrated, and make sure to follow all safety guidelines. Your safety is important to us!
-    </p>
-    <button id="confirmDisclaimerBtn" class="confirm-btn">I Understand</button>
-  </div>
-</div>
+    <!-- Disclaimer Box -->
+    <div id="disclaimerBox" class="disclaimer-box hidden">
+      <div class="disclaimer-content">
+        <p>
+          Please be cautious and stay safe during the treasure hunt. Watch out for traffic, stay hydrated, and make sure to follow all safety guidelines. Your safety is important to us!
+        </p>
+        <button id="confirmDisclaimerBtn" class="confirm-btn">I Understand</button>
+      </div>
+    </div>
 
 
 
 
     <!-- New Map Box that will be shown when Start Map is clicked -->
     <div id="mapOverlay" class="map-overlay hidden">
-      <!-- Ensure the 'hidden' class is here -->
       <div class="map-box">
         <img src="your-map-image-url.jpg" alt="Map Image" class="map-image">
-        <p>Instructions: Follow the map to reach the starting location of the treasure hunt. Once there, click "Begin Hunt".</p>
+        <p>Follow the map to reach the <a href="https://maps.app.goo.gl/ewdTrnkoJ1NgNdE98" target="_blank" class="map-link">starting location</a> of the treasure hunt. Once there, click "Begin Hunt".</p>
         <button id="closeStartMapBtn" class="close-start-map-btn">Close Map</button>
       </div>
     </div>
+
 
     <div id="mapSection" class="map-section hidden">
       <button class="close-button" onclick="closeMap()">Close</button>
@@ -151,6 +151,15 @@ The treasure is out there, waiting to be found... but the bigger question is, wh
         <div id="navyLog" class="help-log"></div>
       </div>
     </div>
+
+
+
+
+
+    <script src="script.js"></script>
+  </body>
+
+</html>
 
 
 
