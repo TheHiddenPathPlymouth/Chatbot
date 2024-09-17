@@ -1,5 +1,8 @@
 let navySupported = false;
+let sendNavyInstructions = false;
 let navyStage = 0;
+let accessible = false;
+let navyReminderSent = false;
 let currentClueIndex = 0;
 let stage = 0;
 let userName = ""; // Variable to store the user's name
@@ -7,7 +10,7 @@ let startTime; // Save the start time of the treasure hunt
 let totalPausedTime = 0; // Total paused time in milliseconds
 let pauseStartTime; // Time when the game was last paused
 let isPaused = false;
-let navyReminderSent = false;
+
 let currentPersonality = "pirate";
 let incorrectAttempts = 0; // Initialize a variable to track incorrect attempts
 
@@ -27,12 +30,14 @@ const helpButton = document.getElementById('help-btn');
 
 
 const clues = [{
-    clue: "I'm three in May and though I grow no older, I'm 16 in November, what am I on the first of October?",
+    clue: "I'm 3 in May and though I grow no older, I'm 16 at the start of November. What am I at the start of October?",
     hint: "Look at the small information stones surrounding The Sundial.",
-    hint2: ["https://cdn.pixabay.com/photo/2012/04/15/17/58/scroll-34696_1280.png", "My sources tell me we may find the answer here."],
+    hint2: ["https://cdn.pixabay.com/photo/2012/04/15/17/58/scroll-34696_1280.png", "We're looking for a number. My sources tell me we may find the answer here."],
     answer: ["ten", "10"],
     mistakenAnswer: ["1","2","3","4","5","6","7","8","9","0","one","two","three","four","five","six","seven","eight","nine","eleven","twelve","thirteen","twenty","fifteen","thirty","forty"],
     mistakenAnswerResponse: "Aye, that's a number, but not the right one!",
+    mistakenAnswer2: ["time","equation","difference"],
+    mistakenAnswerResponse2: "You're on the right track m'hearties, but we need a number.",
     explanation: "If ye were mathematically inclined you could use the equation of time to work out the exact time in Plymouth from this 'ere sundial.",
     afterClueMessage: "Ye shouldn't need to look far for the answer to this one. My charts tell me you're already in position.",
     afterAnswerMessage: "But it's probably easier to just look at yer clock.",
@@ -48,7 +53,7 @@ const clues = [{
     mistakenAnswer: ["sic","parvis","magna","design","original","drake","francis"],
     mistakenAnswerResponse: "Hmm, those are words on a drum, but are they the exact words under the stars?",
     explanation: "Sic parvis magna: Greatness from small beginnings. Some say old Francis Drake used it as his motto.",
-    afterClueMessage: "Head South, then look left before the water for your answer. I've updated your map. Type 'map' to view it.",
+    afterClueMessage: "Head South, then look left before the water for the answer to this next clue. I've updated your map. Type 'map' to view it.",
     afterAnswerMessage: "I don't agree with that privateer navy scum on much, but I'll agree it's a fine saying.",
     hintsRequested: 0,
     delayAfterClue: 3000, // Delay in milliseconds
@@ -58,7 +63,7 @@ const clues = [{
     clue: "An astronomer has six, an architect has three, a metal-worker has none at all. What could I be?",
     hint: "Look at the statues on the side of the guildhall, can you see an astronomer, metal-worker or an architect perhaps?",
     hint2: "Look at the desks of the architect and astronomer.",
-    answer: ["flower","flowers"],
+    answer: ["flower","flowers","a flower"],
     mistakenAnswer: "globe",
     mistakenAnswerResponse: "close",
     explanation: "A map represents geographical features like cities, mountains, and seas.",
@@ -89,7 +94,7 @@ const clues = [{
   {
     clue: "Eternal flowers lay on my cheeks, though neither side's the same. Place your hands in mine, and tell me: What's my name?",
     hint: "Look down low. If you see nothing, an information board may help you find what you're looking for (It's directly in front of the sign).",
-    hint2: "It's often shared among friends.",
+    hint2: "The order of the names on the information board correspond to their positions in the photo.",
     answer: ["john lennon","john","lennon"],
     mistakenAnswer: ["paul","mccartney","ringo","starr","george","harrison","beatle"],
     mistakenAnswerResponse: "Ah, ye be close, but you need to pick the right Beatle. The information board might help ye!",
@@ -132,8 +137,8 @@ const clues = [{
     clue: "A face and a goblet, three pears on a crest, a bird, cross and croissants, three lions, what comes next?",
     hint: "Look for sheilds on the Armada memorial. Maybe there'll be a sequence.",
     hint2: "On the sheild next to the three lions, what letter does the pattern look like? How many of them are there?",
-    answer: ["three Js", "3 Js"],
-    mistakenAnswer: ["three","J","3","hook"],
+    answer: ["three js", "3 js", "three j's", "3 j's", "three jays", "three jay's", "3 jays", "3 jay's"],
+    mistakenAnswer: ["three","j","3","hook","jay"],
     mistakenAnswerResponse: "Close, what letter does the pattern look like? How many of them are there?",
     explanation: "A joke can be cracked, made, told, and played for amusement.",
     afterClueMessage: "This one could be tricky. My sources can't confirm the location of the answer, but three possible locations are marked on your map now. Ye better check them all.",
@@ -143,11 +148,11 @@ const clues = [{
     delayAfterAnswer: 6000
   },
   {
-    clue: "Could a legendary emporor know the answer? Maybe. What comes between Dartmoor and The Royal Navy.",
+    clue: "Could a legendary emperor know the answer? Maybe. What comes between Dartmoor and The Royal Navy.",
     hint: "Check both plaques on the Napolean commemerative stone.",
     hint2: "What words do you see on the plaque with two flags, between 'Dartmoor' and 'The Royal Navy?'?",
-    answer: ["the french navy"],
-    mistakenAnswer: ["three","J","3","hook"],
+    answer: ["the french navy","french navy"],
+    mistakenAnswer: ["three","j","3","hook","jay"],
     mistakenAnswerResponse: "Close, what letter does the pattern look like? How many of them are there?",
     explanation: "A joke can be cracked, made, told, and played for amusement.",
     afterClueMessage: "This one could be tricky. My sources can't confirm the location of the answer, but three possible locations are marked on your map now. Ye better check them all.",
@@ -171,11 +176,25 @@ const clues = [{
     delayAfterAnswer: 6000
   },
   {
+    clue: "Life was hard in days of old. What does the woman in the window hold?",
+    hint: "Look up!",
+    hint2: "On the sheild next to the three lions, what letter does the pattern look like? How many of them are there?",
+    answer: ["pot","chamberpot","chamber pot","bowl","pan","bucket","toilet"],
+    mistakenAnswer: ["slop","poo","brown"],
+    mistakenAnswerResponse: "Eeew! Luckily for her that's not what's in her hand. Try again.",
+    explanation: "It's a chamber pot. Course that's unnecessary on a ship. It all goes straight over the side. Much cleaner if you ask me.",
+    afterClueMessage: "This one could be tricky. My sources can't confirm the location of the answer, but three possible locations are marked on your map now. Ye better check them all.",
+    afterAnswerMessage: "Aaah we're back on track thanks to you! Ye be a fine crew of scallywags",
+    hintsRequested: 0,
+    delayAfterClue: 3000, // Delay in milliseconds
+    delayAfterAnswer: 6000
+  },
+   {
     clue: "With Plymouth to stern, the Atlantic to starboard, what ship provides a companion for Charlotte?",
     hint: "Look for sheilds on the Armada memorial. Maybe there'll be a sequence.",
     hint2: "On the sheild next to the three lions, what letter does the pattern look like? How many of them are there?",
     answer: "friendship",
-    mistakenAnswer: ["three","J","3","hook"],
+    mistakenAnswer: ["three","J","3","hook","jay"],
     mistakenAnswerResponse: "Close, what letter does the pattern look like? How many of them are there?",
     explanation: "A joke can be cracked, made, told, and played for amusement.",
     afterClueMessage: "This one could be tricky. My sources can't confirm the location of the answer, but three possible locations are marked on your map now. Ye better check them all.",
@@ -184,7 +203,26 @@ const clues = [{
     delayAfterClue: 3000, // Delay in milliseconds
     delayAfterAnswer: 6000
   },
+  
   {
+    clue: "The hill may be steep but our legs are trusty. When you reach the secret garden, tell me: Who is lusty?",
+    hint: "Look for sheilds on the Armada memorial. Maybe there'll be a sequence.",
+    hint2: "On the sheild next to the three lions, what letter does the pattern look like? How many of them are there?",
+    answer: ["landlubbers", "land lubbers"],
+    mistakenAnswer: ["three","J","3","hook"],
+    mistakenAnswerResponse: "Close, what letter does the pattern look like? How many of them are there?",
+    explanation: "A joke can be cracked, made, told, and played for amusement.",
+    afterClueMessage: "This one could be tricky. My sources can't confirm the location of the answer, but three possible locations are marked on your map now. Ye better check them all.",
+    afterAnswerMessage: "Aaah we're back on track thanks to you! Ye be a fine crew of scallywags",
+    hintsRequested: 0,
+    delayAfterClue: 3000, // Delay in milliseconds
+    delayAfterAnswer: 6000
+  }
+];
+
+const accessibleClues = [
+  {
+    index: 9, // This corresponds to the 9th clue in the normal flow
     clue: "On a fishy sheild, this answer will lie. What do explorers do? It's under the eye.",
     hint: "Look for sheilds on the Armada memorial. Maybe there'll be a sequence.",
     hint2: "On the sheild next to the three lions, what letter does the pattern look like? How many of them are there?",
@@ -199,20 +237,15 @@ const clues = [{
     delayAfterAnswer: 6000
   },
   {
-    clue: "The hill may be steep but our legs are trusty. When you raech the secret garden, tell me: Who is lusty?",
-    hint: "Look for sheilds on the Armada memorial. Maybe there'll be a sequence.",
-    hint2: "On the sheild next to the three lions, what letter does the pattern look like? How many of them are there?",
-    answer: ["landlubbers", "land lubbers"],
-    mistakenAnswer: ["three","J","3","hook"],
-    mistakenAnswerResponse: "Close, what letter does the pattern look like? How many of them are there?",
-    explanation: "A joke can be cracked, made, told, and played for amusement.",
-    afterClueMessage: "This one could be tricky. My sources can't confirm the location of the answer, but three possible locations are marked on your map now. Ye better check them all.",
-    afterAnswerMessage: "Aaah we're back on track thanks to you! Ye be a fine crew of scallywags",
-    hintsRequested: 0,
-    delayAfterClue: 3000, // Delay in milliseconds
-    delayAfterAnswer: 6000
+    index: 10, // This corresponds to the 10th clue in the normal flow
+    clue: "Accessible alternative clue for clue 10",
+    answer: "accessible answer 10",
+    hint: "accessible hint for clue 10",
+    afterAnswerMessage: "Great job on the accessible version of clue 10!",
+    delayAfterAnswer: 2000
   }
 ];
+
 
 
 // Declare the pendingActions array globally
@@ -268,6 +301,7 @@ const actionMap = {
   'afterClueMessage' : afterClueMessage,
   'clueReminder' : clueReminder,
   'giveHint': giveHint,
+  'avoidCobbles': avoidCobbles,
   'instructions': instructions
 
 };
@@ -299,6 +333,8 @@ function saveChatbotState() {
   localStorage.setItem('navySupported', navySupported);
   localStorage.setItem('totalPausedTime', totalPausedTime);
   localStorage.setItem('pauseStartTime', pauseStartTime);
+  localStorage.setItem('navyReminderSent', navyReminderSent);
+  localStorage.setItem('accessible', accessible);
   localStorage.setItem('hintsRequested', clues[currentClueIndex].hintsRequested);
 }
 
@@ -324,6 +360,8 @@ function loadChatbotState() {
   const savedTotalPausedTime = localStorage.getItem('totalPausedTime');
   const savedPauseStartTime = localStorage.getItem('pauseStartTime');
   const savedStartTime = localStorage.getItem('startTime');
+  const savedAccessible = localStorage.getItem('accessible');
+  const savedNavyReminderSent = localStorage.getItem('navyReminderSent');
 
 
   const chatLog = document.getElementById('chatLog'); // Use chatLog instead of mainChat
@@ -363,6 +401,14 @@ function loadChatbotState() {
 
   if (savedNavySupported) {
     navySupported = (savedNavySupported === 'true');
+  }
+  
+   if (savedAccessible) {
+    accessible = (savedAccessible === 'true');
+  }
+  
+  if (savedNavyReminderSent) {
+    navyReminderSent = (savedNavyReminderSent === 'true');
   }
 
   // Handle loading of totalPausedTime and pauseStartTime
@@ -786,10 +832,10 @@ function instructions() {
 }
 
 function navyReminder() {
-  if (navyStage === 2 && navyReminderSent === false) {
+  if (navyStage === 2 && currentClueIndex > 5 && navyReminderSent === false) {
    addPendingAction ('navyReminder')
     setTimeout(() => {
-      displayMessage("I hear whispers in the wind that you've confirmed the answer to your clue. Shout 'ahoy!' if you have some information for me.", "navy");
+      displayMessage("I hear whispers in the wind that you've confirmed the answer to your latest clue. Shout 'ahoy!' if you have some information for me.", "navy");
       navyReminderSent = true;
       removePendingAction('navyReminder');
     }, 15000); // 15-second delay
@@ -805,6 +851,9 @@ function navyReminder() {
 function readyMessage() {
   stage = 1;
   navyReminder();
+ if (sendNavyInstructions === true){
+ return;
+ }
 
   if (currentClueIndex > 0) {
     const message = currentClueIndex === clues.length - 1 ?
@@ -812,7 +861,7 @@ function readyMessage() {
       "Are you ready for the next clue? If so say aye!";
 
     setTimeout(() => {
-      displayMessage(message, "pirate", true);
+      displayMessage(message, "pirate", true, false, true);
       saveCheckpointState();
       removePendingAction('readyMessage');
     }, 6000); // 6-second delay if currentClueIndex > 0
@@ -828,7 +877,20 @@ function readyMessage() {
 
 
 function giveClue() {
-  const currentClue = clues[currentClueIndex];
+  let currentClue;
+
+  if (accessible) {
+    // Find the alternative clue that matches the currentClueIndex
+    currentClue = accessibleClues.find(clue => clue.index === currentClueIndex);
+  } else {
+    // Use the normal clues array if Accessible is false
+    currentClue = clues[currentClueIndex];
+  }
+  
+  if (!currentClue) {
+    currentClue = clues[currentClueIndex];
+  }
+  
   stage = 2;
   startInactivityTimer();
   resumeTimer();
@@ -852,17 +914,16 @@ function giveClue() {
     displayMessage(`Here is your clue: ${currentClue.clue}`, "pirate", true);
   }
 
-  addPendingAction('afterClueMessage');
+  
   removePendingAction('giveClue');
-  afterClueMessage();
+  
 
   // Add navyMessage logic if conditions are met
   if (currentClueIndex === 3 && stage >= 2 && navyStage === 0) {
     addPendingAction('navyMessage');
     setTimeout(() => {
       navyMessage();
-      removePendingAction('navyMessage');
-    }, 6000); // 6-second delay for navyMessage
+    }, 20000); // 6-second delay for navyMessage
   }
 
   // Add navyMessage2 logic if conditions are met
@@ -871,23 +932,41 @@ function giveClue() {
     setTimeout(() => {
       navyMessage2();
       removePendingAction('navyMessage2');
-    }, 8000); // 8-second delay for navyMessage2
+    }, 12000); // 8-second delay for navyMessage2
   }
 }
 
 
 function afterClueMessage (){
 const currentClue = clues[currentClueIndex];
+
+displayMessage(currentClue.afterClueMessage, "pirate");
+addPendingAction('giveClue');
+removePendingAction('afterClueMessage');
+
 setTimeout(() => {
-    displayMessage(currentClue.afterClueMessage, "pirate");
-    removePendingAction('afterClueMessage')
+    
+    giveClue();
+    
   }, currentClue.delayAfterClue);
   
   }
 
 
 function checkAnswer(input) {
-  const currentClue = clues[currentClueIndex];
+  // Determine the current clue to use based on the accessible state
+  let clueToUse;
+
+  if (accessible) {
+    // Find the clue in accessibleClues that matches the current index
+    clueToUse = accessibleClues.find(clue => clue.index === currentClueIndex);
+  }
+
+  // Fallback to the main clues array if no matching accessible clue is found
+  if (!clueToUse) {
+    clueToUse = clues[currentClueIndex];
+  }
+
   const correctResponses = [
     "Arrr! Ye got it right!",
     "Aye aye, that be the answer!",
@@ -899,12 +978,14 @@ function checkAnswer(input) {
   const incorrectResponses = [
     "Try again, ye scallywag!",
     "Close, but no treasure this time!",
-    "Aye, that be a fine try, but not quite right!",
+    "That be a fine try, but not quite right!",
     "Nay, that be not the answer. Give it another go!"
   ];
 
-  let answers = Array.isArray(currentClue.answer) ? currentClue.answer : [currentClue.answer];
+  // Ensure the clue's answers are treated as an array
+  let answers = Array.isArray(clueToUse.answer) ? clueToUse.answer : [clueToUse.answer];
 
+  // Correct answer check
   if (answers.some(answer => input.toLowerCase().trim() === answer.toLowerCase())) {
     const randomResponse = correctResponses[Math.floor(Math.random() * correctResponses.length)];
     stage = 0;
@@ -916,39 +997,64 @@ function checkAnswer(input) {
       displayMessage(randomResponse, "pirate", false, false, true);
       clueMessages();
     }, 2000); // 2-second delay
+    return; // Exit after handling the correct answer
+  }
 
-  } else if (answers.some(answer => input.toLowerCase().includes(answer.toLowerCase()))) {
+  // Partial correct answer (too many words)
+  if (answers.some(answer => input.toLowerCase().includes(answer.toLowerCase()))) {
     const pirateCorrection = "Arrr, the right answer's in there! But yer answer be includin' too many words. Strip it down to the bones, matey, and try again!";
     displayMessage(pirateCorrection, "pirate");
+    return; // Exit after handling the partial correct answer
+  }
 
-  } else if (input.toLowerCase().includes("hint")) {
+  // Hint request
+  if (input.toLowerCase().includes("hint")) {
     giveHint();
+    return; // Exit after handling the hint request
+  }
 
-  } else {
-    if (currentClue.mistakenAnswer && Array.isArray(currentClue.mistakenAnswer)) {
-      if (currentClue.mistakenAnswer.some(mistake => input.toLowerCase().includes(mistake.toLowerCase()))) {
-        displayMessage(currentClue.mistakenAnswerResponse, "pirate");
+  // Handle mistakenAnswer logic
+  let mistakenAnswers = Array.isArray(clueToUse.mistakenAnswer) ? clueToUse.mistakenAnswer : [clueToUse.mistakenAnswer];
+  if (mistakenAnswers.some(mistake => input.toLowerCase().includes(mistake.toLowerCase()))) {
+    displayMessage(clueToUse.mistakenAnswerResponse, "pirate");
 
-        setTimeout(() => {
-          displayMessage("Type 'hint' if you need more information.", "pirate", false, false, true);
-        }, 4000); // 4-second delay
-        return;
-      }
-    }
+    setTimeout(() => {
+      displayMessage("Type 'hint' if you need more information.", "pirate", false, false, true);
+    }, 4000); // 4-second delay
+    return; // Exit after handling the mistaken answer
+  }
 
-    const randomIncorrectResponse = incorrectResponses[Math.floor(Math.random() * incorrectResponses.length)];
-    displayMessage(randomIncorrectResponse, "pirate", false, false, true);
+  // Incorrect response
+  const randomIncorrectResponse = incorrectResponses[Math.floor(Math.random() * incorrectResponses.length)];
+  displayMessage(randomIncorrectResponse, "pirate", false, false, true);
 
-    // Add a 2-second delay before showing the reminder message
-    if (incorrectAttempts === 0 || incorrectAttempts === 3) {
-      setTimeout(() => {
-        displayMessage("Remember, you can type 'hint' if you need more information, or 'map' to check you're in the right place.", "pirate");
-      }, 2000); // 2-second delay
-    }
+  // Add a 2-second delay before showing the reminder message
+  if (incorrectAttempts === 0 || incorrectAttempts === 3) {
+    setTimeout(() => {
+      displayMessage("Remember, you can type 'hint' if you need more information, or 'map' to check you're in the right place.", "pirate");
+    }, 2000); // 2-second delay
   }
 
   incorrectAttempts++; // Increment incorrect attempts
 }
+
+
+function avoidCobbles() {
+  // Display the message about avoiding hills and cobbles
+  
+  displayMessage("For our next clue we're heading in to rougher waters. If ye would like to avoid hills and cobbles type 'change course' for an alternative route.", "pirate");
+  addPendingAction('readyMessage');
+  removePendingAction('avoidCobbles');
+  setTimeout(() => {
+   readyMessage();
+  }, 4000); // 2-second delay
+
+ 
+
+  
+}
+
+
 
 
 
@@ -971,20 +1077,30 @@ function clueMessages() {
   }, 3000);
 
   setTimeout(() => {
+  // Display the after answer message for the current clue
+  displayMessage(currentClue.afterAnswerMessage, "pirate");
 
-    displayMessage(currentClue.afterAnswerMessage, "pirate");
-    
+  // Check if currentClueIndex is not 8
+  if (currentClueIndex !== 8) {
     addPendingAction('readyMessage');
-    removePendingAction('clueMessages');
-    incorrectAttempts = 0;
-    currentClueIndex++;
+    setTimeout(() => {
     readyMessage();
+     }, 5000);
+  } else {
+    // If currentClueIndex is 8, add 'avoidCobbles' action and call avoidCobbles function
+    addPendingAction('avoidCobbles');
+    setTimeout(() => {
+    avoidCobbles();
+    }, 3000);
+  }
 
-  }, currentClue.delayAfterAnswer);
+  // Other logic remains the same for both cases
+  removePendingAction('clueMessages');
+  incorrectAttempts = 0;
+  currentClueIndex++;
 
-    
-   
-    
+}, currentClue.delayAfterAnswer);
+
     
   } else {
     setTimeout(() => {
@@ -1012,6 +1128,21 @@ function clueMessages() {
 
 }
 
+function showCongratsBox(message) {
+  const congratsBox = document.getElementById('congratsBox');
+  const congratsMessageContent = document.getElementById('congratsMessage');
+
+  // Update the content of the congratulatory box
+  congratsMessageContent.innerHTML = message;
+
+  // Show the box
+  congratsBox.style.display = 'block';
+
+  // Add event listener to close button
+  document.getElementById('closeCongratsBox').addEventListener('click', () => {
+    congratsBox.style.display = 'none';
+  });
+}
 
 
 
@@ -1031,32 +1162,33 @@ function congratulations() {
   const finalTime = `${elapsedMinutes} minute${elapsedMinutes !== 1 ? 's' : ''} and ${elapsedSeconds} second${elapsedSeconds !== 1 ? 's' : ''}`;
 
   let message;
+  let congratsMessage;
 
   if (navySupported) {
-
-    let message = `Congratulations, you found the treasure, ${userName}! As a true member of the Queen's Navy, you have proven your loyalty and wit! Your final time was ${finalTime}.`;
+    message = `Congratulations, you found the treasure, ${userName}! As a true member of the Queen's Navy, you have proven your loyalty and wit! Your final time was ${finalTime}.`;
     displayMessage(message, "navy");
+    congratsMessage = message;
 
     // Delay before switching to Pirate personality and displaying the next message
     setTimeout(() => {
-
       message = `Scupper me kippers you betrayed me to the Navy!`;
       displayMessage(message, "pirate");
     }, 4000); // 4-second delay
 
   } else {
-
-    let message = `Ahoy, ${userName}! Ye found the treasure! Ye've got the cunning of a true pirate, and the spoils are yours! Yarrr! Your final time was ${finalTime}.`;
+    message = `Ahoy, ${userName}! Ye found the treasure! Ye've got the cunning of a true pirate, and the spoils are yours! Yarrr! Your final time was ${finalTime}.`;
     displayMessage(message, "pirate", true);
+    congratsMessage = message;
 
     // Delay before switching to Navy personality and displaying the next message
     setTimeout(() => {
-
       message = `Curses be upon you, ${userName}! The Navy shall never forgive you for this!`;
       displayMessage(message, "navy");
     }, 4000); // 4-second delay
   }
 
+  // Show the congratulatory message in the new box
+  showCongratsBox(congratsMessage);
 
   // Stop the timer permanently
   stopTimer();
@@ -1064,6 +1196,7 @@ function congratulations() {
   startCoinEffect();
   saveStateAndLog();
 }
+
 
 let coinInterval;
 const coinDuration = 10000; // Duration for which coins should fall (10 seconds)
@@ -1185,6 +1318,32 @@ function closeHelp() {
 
 }
 
+// Helper function to handle FAQ logic
+function handleFAQClick(answerText) {
+  const answerContainer = document.getElementById('answerContainer');
+  answerContainer.innerHTML = ""; // Clear previous answer
+  answerContainer.innerHTML += `<p>${answerText}</p>`; // Display the answer
+  
+  // Hide FAQ buttons
+  document.querySelector('.FAQButtons').style.display = 'none';
+
+  // Remove introductory text if it exists
+  const introText = document.getElementById('introText');
+  if (introText) introText.remove();
+
+  // Adjust opacity
+  document.querySelector('.help-box-bg').style.opacity = '0.5'; // Change opacity to 0.5
+
+  // Add a back button to return to FAQs
+  answerContainer.innerHTML += `<button id="backtoFAQs">Back to FAQs</button>`;
+
+  // Add event listener to the new back button
+  document.getElementById('backtoFAQs').addEventListener('click', () => {
+    FAQs(); // Reload the FAQs
+    document.querySelector('.help-box-bg').style.opacity = '0.8'; // Change opacity to 0.8
+  });
+}
+
 function FAQs() {
   const helpLog = document.getElementById('helpLog');
   helpLog.innerHTML = ""; // Clear the helpLog initially
@@ -1196,43 +1355,48 @@ function FAQs() {
   });
 
   // Add the introductory text and buttons for FAQs
-  helpLog.innerHTML += `<p>If you can't find what you're looking for, check our website.</p>`;
+  helpLog.innerHTML += `<p id="introText">If you can't find what you're looking for, check our website.</p>`;
   helpLog.innerHTML += `
-        <button id="FAQ1Btn">FAQ1</button>
-        <button id="FAQ2Btn">FAQ2</button>
-        <button id="FAQback">Back</button>
+        <div class="FAQButtons">
+          <button id="FAQ1Btn">Are there toilets along the route?</button>
+          <button id="FAQ2Btn">Is the route accessible?</button>
+          <button id="FAQ3Btn">Do I need to bring anything?</button>
+          <button id="FAQ4Btn">Is the route suitable for dogs?</button>
+        
+          <button id="FAQback">Back</button>
+        </div>
     `;
 
   // Add a container for the answer text
   helpLog.innerHTML += `<div id="answerContainer"></div>`;
 
-  // Attach event listeners to the buttons
+  // Attach event listeners to the FAQ buttons using the helper function
   document.getElementById('FAQ1Btn').addEventListener('click', () => {
-    const answerContainer = document.getElementById('answerContainer');
-    answerContainer.innerHTML = ""; // Clear the previous answer
-    answerContainer.innerHTML += `<p>Answer 1</p>`;
+    handleFAQClick(`Yes, there are several public toilets that will be marked on the map to your next clue. There's also plenty of pubs and cafes along the way where you can stop for refreshments and toilet breaks.`);
   });
 
   document.getElementById('FAQ2Btn').addEventListener('click', () => {
-    const answerContainer = document.getElementById('answerContainer');
-    answerContainer.innerHTML = ""; // Clear the previous answer
-    answerContainer.innerHTML += `<p>Answer 2</p>`;
+    handleFAQClick(`The route has some short hills and no steps. If you want to avoid the cobbles and hill later in the route the game will give you the option to select another route. Contact us if you would like to discuss the accessibility of the route further.`);
   });
+
+  document.getElementById('FAQ3Btn').addEventListener('click', () => {
+    handleFAQClick(`Just your smartphone or tablet with plenty of charge, and a willing crew! We recommend you have good shoes for walking, and make sure you're prepared for the weather!`);
+  });
+
+  document.getElementById('FAQ4Btn').addEventListener('click', () => {
+    handleFAQClick(`Yes, bring your furry friends! We'll point out dog-friendly places to stop for refreshments on your map.`);
+  });
+
   document.getElementById('FAQback').addEventListener('click', () => {
     // Clear the FAQ content
-    const helpLog = document.getElementById('helpLog');
     helpLog.innerHTML = ""; // Clear the FAQ content
-    bottomBox.style.display = 'block'; // Hide the bottom-box
+    bottomBox.style.display = 'block'; // Show the bottom-box again
 
     // Show the previously hidden buttons and text
     document.querySelectorAll('.help-box button, .help-box p').forEach(element => {
       element.style.display = ''; // Reset the display property to default
     });
-
-
   });
-
-
 }
 
 
@@ -1735,8 +1899,9 @@ function navyMessage() {
 
   setTimeout(() => {
     displayMessage("The King will pay a high price to any who report on the whereabouts of pirates, or the treasure they are rumoured to be searching for. You wouldn't happen to know anything about that would you?", "navy");
+    removePendingAction('navyMessage');
    
-  }, 3000);
+  }, 6000);
 
 
 
@@ -1841,17 +2006,32 @@ function navyInstructions() {
   // Display the first message
 setTimeout(() => {
   displayMessage("Here's the deal: When you get the answer to your next clue, tell me what it is, and the King's Navy will forever be in your debt.", "navy");
-  }, 3000);
+  }, 3500);
 
   // Set a timeout to display the second message after 3 seconds
   setTimeout(() => {
     displayMessage("You can speak to me anytime by shouting 'ahoy!'", "navy");
+    
     addPendingAction('clueReminder')
-    removePendingAction('navyInstructions')
-  }, 6000); // 3000 milliseconds = 3 seconds
+    
+    
+  
+  }, 8000); // 3000 milliseconds = 3 seconds
   
     setTimeout(() => {
+    displayMessage("I could have sworn I saw a Navy ship approaching, keep your eyes peeled for mischief from those filthy deck rats.","pirate", false, false, true)
+    removePendingAction('navyInstructions')
     clueReminder();
+    if (sendNavyInstructions === true) { 
+    sendNavyInstructions = false;
+    setTimeout(() => {
+    readyMessage();
+    
+     }, 1);
+ 
+    }
+    
+    
   }, 12000); // 3000 milliseconds = 3 seconds
 }
 
@@ -1866,20 +2046,26 @@ function clueReminder() {
       // Display reminder text before clue parts
       displayMessage(`Remember your current clue is:`, "pirate", true, false, true);
       setTimeout(() => {
-      // Loop through each element in the clue array
-      currentClue.clue.forEach((cluePart, index) => {
+        // Loop through each element in the clue array
+        currentClue.clue.forEach((cluePart, index) => {
+          setTimeout(() => {
+            if (cluePart.startsWith('http')) {
+              // If cluePart is an image URL
+              const imageMessage = `<img src="${cluePart}" alt="Clue Image" style="max-width: 100%; height: auto; margin-top: 10px;">`;
+              displayMessage(imageMessage, "pirate", false, true); // isImageOnly true
+            } else {
+              // If cluePart is text
+              displayMessage(cluePart, "pirate", true, false); // isClue and isSmall true
+            }
+          }, index * 2000);
+        });
+
+        // Remove the pending action after all clue parts are displayed
         setTimeout(() => {
-          if (cluePart.startsWith('http')) {
-            // If cluePart is an image URL
-            const imageMessage = `<img src="${cluePart}" alt="Clue Image" style="max-width: 100%; height: auto; margin-top: 10px;">`;
-            displayMessage(imageMessage, "pirate", false, true); // isImageOnly true
-          } else {
-            // If cluePart is text
-            displayMessage(cluePart, "pirate", true, false); // isClue and isSmall true
-          }
-        }, index * 2000);
-        }, 3000);
-      });
+          removePendingAction('clueReminder');
+        }, currentClue.clue.length * 2000 + 3000); // Adjust timing to ensure all clue parts are shown
+
+      }, 3000); // Initial delay before displaying the clue
     } else {
       // If the clue is a single text or image
       if (currentClue.clue.startsWith('http')) {
@@ -1890,6 +2076,9 @@ function clueReminder() {
         // If clue is text
         displayMessage(`Remember your current clue is: "${currentClue.clue}"`, "pirate", true);
       }
+
+      // Remove the pending action after displaying the clue
+      removePendingAction('clueReminder');
     }
 
     // Define pirate responses for the second message
@@ -1907,6 +2096,10 @@ function clueReminder() {
       displayMessage(randomResponse, "pirate", false, false, true); // isSmall true
       removePendingAction('clueReminder');
     }, 4000); // 4-second delay
+
+  } else {
+    // If stage is not 2, remove the pending action
+    removePendingAction('clueReminder');
   }
 }
 
@@ -1927,6 +2120,8 @@ function saveCheckpointState() {
       navySupported: navySupported,
       totalPausedTime: totalPausedTime,
       pauseStartTime: pauseStartTime,
+      navyReminderSent: navyReminderSent,
+      accessible: accessible,
       hintsRequested: clues[currentClueIndex].hintsRequested
     };
 
@@ -1946,6 +2141,10 @@ function recallCheckpoint(clueIndex) {
   if (savedState) {
     // Parse the saved JSON string back to an object
     const chatbotState = JSON.parse(savedState);
+    pendingActions.length = 0; // This empties the array
+
+    // Update localStorage to reflect the cleared pending actions
+    localStorage.setItem('pendingActions', JSON.stringify(pendingActions));
 
     // Restore the chatbot state from the saved data
     document.getElementById('chatLog').innerHTML = chatbotState.chatLog;
@@ -1956,6 +2155,8 @@ function recallCheckpoint(clueIndex) {
     navySupported = chatbotState.navySupported;
     totalPausedTime = chatbotState.totalPausedTime;
     pauseStartTime = chatbotState.pauseStartTime;
+    navyReminderSent = chatbotState.navyReminderSent;
+    accessible = chatbotState.accessible;
     clues[currentClueIndex].hintsRequested = chatbotState.hintsRequested;
 
     console.log(`Restored chatbot state from clue ${clueIndex}`);
@@ -2036,6 +2237,24 @@ sendBtn.addEventListener("click", () => {
     userInput.value = ""; // Clear the input field after showing help
     return;
   }
+  
+  if (input.toLowerCase().includes("change course") && currentClueIndex >= 8) {
+    displayMessage(input, "user");
+    accessible = true;
+    userInput.value = "";
+    addPendingAction('readyMessage')
+    displayMessage("Our course has been altered. Smooth sailing ahead!", "pirate", false, false, true); // isSmall true
+    
+    if (stage === 1) {
+    setTimeout(() => {
+ 
+        // If paused, display the reminder message
+        displayMessage("Remember to say 'aye' when you're ready for your next clue", "pirate", true, false, true);  }, 6000);
+        
+        }
+    
+    return;
+  }
 
   if (input.toLowerCase().includes("ahoy") && navyStage >= 1) {
     if (document.getElementById('helpSection').classList.contains('hidden')) {
@@ -2064,11 +2283,14 @@ sendBtn.addEventListener("click", () => {
       navyInstructions();
     } else {
       displayMessage(input, "user");
-      addPendingAction('navyInstructions');
+      navyStage = 2;
+      sendNavyInstructions = true;
+      addPendingAction('navyInstructions')
       checkAnswer(input); // Call the function if input doesn't match special cases
       setTimeout(() => {
         displayMessage('Do not ignore an Admiral of the Navy!', 'navy');
-        navyStage = 2;
+        
+        
         navyInstructions();
       }, 12000);
 
@@ -2099,9 +2321,9 @@ sendBtn.addEventListener("click", () => {
         startTimer(); // Start the timer if it's the first clue
       }
 
-      addPendingAction('giveClue');
+      addPendingAction('afterClueMessage');
       setTimeout(() => {
-        giveClue();
+        afterClueMessage();
    
       }, 3000); // 3-second delay for giveClue
 
