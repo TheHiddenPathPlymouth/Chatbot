@@ -115,28 +115,31 @@
     <div id="coin-container"></div>
 
 
-
-    <div id="helpSection" class="help-container hidden">
-      <div class="help-box">
-        <button onclick="FAQs()">FAQs</button>
-        <button onclick="changeName()">Change team name</button>
-        <button id="urgentHelpButton" onclick="urgentHelp()">I need urgent help</button>
-        <button onclick="closeHelp()">Close</button>
-        <div id="helpLog" class="help-log"></div>
-      </div>
-
-      <!-- New fixed box for displaying the text -->
-      <div class="bottom-box">
-        <div class="option-grid">
-          <div>Hint = show hint</div>
-          <div>Map = show map</div>
-          <div class="navy-line hidden">Ahoy = talk to the Navy</div>
-
-        </div>
-
-
-      </div>
+<div id="helpSection" class="help-container hidden">
+  <div class="help-box">
+    <!-- This is the wrapper for the background image -->
+    <div class="help-box-bg"></div>
+    
+    <!-- Your actual content goes here -->
+    <div class="help-content">
+      <button onclick="FAQs()">FAQs</button>
+      <button onclick="changeName()">Change team name</button>
+      <button id="urgentHelpButton" onclick="urgentHelp()">I need urgent help</button>
+      <button onclick="closeHelp()">Close</button>
+      <div id="helpLog" class="help-log"></div>
     </div>
+  </div>
+
+  <!-- Bottom box for displaying additional information -->
+  <div class="bottom-box">
+    <div class="option-grid">
+      <div>Hint = show hint</div>
+      <div>Map = show map</div>
+      <div class="navy-line hidden">Ahoy = talk to the Navy</div>
+    </div>
+  </div>
+</div>
+
 
 
     <div id="navySection" class="help-container hidden">
@@ -151,6 +154,11 @@
         <div id="navyLog" class="help-log"></div>
       </div>
     </div>
+    
+    <div id="congratsBox" class="help-container hidden">
+  <div id="congratsMessage" class="congrats-message-content"></div>
+  <button id="closeCongratsBox">Close</button>
+</div>
 
 
 
