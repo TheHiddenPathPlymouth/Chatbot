@@ -99,6 +99,10 @@ button:hover {
   padding: 20px;
 }
 
+.congrats-message-content {
+  margin-bottom: 20px;
+}
+
 .help-container {
   position: fixed;
   z-index: 10;
@@ -192,7 +196,7 @@ button:hover {
   overflow: hidden; /* Ensure the pseudo-element does not overflow */
 }
 
-#helpSection .help-box::before {
+.help-box-bg {
   content: "";
   position: absolute;
   top: 0;
@@ -204,8 +208,27 @@ button:hover {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.75; /* Adjust opacity of the background */
-  z-index: -1; /* Ensure it is behind the text */
+  opacity: 0.8; /* Initial opacity */
+  z-index: -1; /* Behind the content */
+}
+
+#introText {
+  font-weight: bold;
+}
+
+
+
+.help-content {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px; /* Remove border-radius if you want sharp edges */
+    text-align: center;
+    padding: 0;
+    z-index: 1000;
+    
 }
 
 
@@ -378,6 +401,7 @@ button:hover {
 
 .message.user-message {
   flex-direction: row-reverse;
+  
   /* User messages aligned to the right */
 }
 
@@ -392,7 +416,6 @@ button:hover {
   margin: 0; /* Remove default margin from <p> tags */
   padding: 0; /* Remove default padding from <p> tags */
 }
-
 
 
 .message .thumbnail {
@@ -441,14 +464,15 @@ button:hover {
   font-family: "Indie Flower", cursive; /* Apply the Pangolin font, with cursive as a fallback */
   font-weight: 600; /* Regular weight */
   font-style: normal; /* Normal style */
-  padding: 9px 15px; /* Optional: Add padding for better readability */
+  padding: 12px 20px 12px 15px; /* Optional: Add padding for better readability */
   border-radius: 0px; /* Optional: Add rounded corners */
   font-size: 16px;
   background-color: transparent; /* Make the background color transparent */
   background-image: url('https://i.ibb.co/6n46nP5/parchment-scroll.png" alt="parchment-scroll'); /* Set the background image */
-  background-size: 100% 110%; /* Make the image 20% larger than the text area */
+  background-size: 100% 100%; /* Make the image 20% larger than the text area */
   background-position: center; /* Center the background image */
   background-repeat: no-repeat; /* Prevent the image from repeating */
+  max-width: 125px;
 }
 
 
@@ -500,7 +524,7 @@ button:hover {
   font-family: "La Belle Aurore", cursive; /* Apply the Pangolin font, with cursive as a fallback */
   font-weight: 600; /* Regular weight */
   font-size: 18px;
-  padding: 15px 20px;
+  padding: 20px 20px;
   background-color: transparent; /* Make the background color transparent */
   background-image: url('https://i.ibb.co/Kztg4fb/papyrus-146302-1280.png'); /* Set the background image */
   background-size: 100% 100%; /* Make the image 20% larger than the text area */
